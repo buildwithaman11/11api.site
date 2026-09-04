@@ -461,18 +461,12 @@ audio.segment-audio { width: 100%; height: 32px; margin-top: 4px; }
       <h2>Voiceover lines</h2>
       <div class="segments-actions">
         <label class="checkbox"><input type="checkbox" id="keepOriginalAudio" /> keep original video audio</label>
-        <button id="downloadBtn" class="btn btn-ghost" disabled>⬇ Download</button>
-        <button id="exportBtn" class="btn btn-primary">Export video</button>
+        <button id="downloadBtn" class="btn btn-primary">⬇ Download video with audio</button>
       </div>
     </div>
 
     <div id="exportProgressWrap" class="progress-wrap hidden"><div id="exportProgressBar" class="progress-bar"></div></div>
     <p id="exportStepText" class="export-step-text hidden"></p>
-    <div id="exportResult" class="panel hidden">
-      <h3>Export ready</h3>
-      <video id="exportPreview" controls playsinline style="width:100%;border-radius:var(--radius);background:#000;max-height:40vh"></video>
-      <a id="exportDownloadLink" class="btn btn-primary" style="display:block;text-align:center;margin-top:12px;text-decoration:none" download="11api-export.mp4">Download video</a>
-    </div>
 
     <ul id="segmentList" class="segment-list"></ul>
     <p id="emptyState" class="empty-state">No voiceover lines yet. Play the video to the spot you need, then tap "+ Voiceover at current time".</p>
@@ -539,16 +533,12 @@ const els = {
   markerLayer: document.getElementById('markerLayer'),
   segmentList: document.getElementById('segmentList'),
   emptyState: document.getElementById('emptyState'),
-  exportBtn: document.getElementById('exportBtn'),
   downloadBtn: document.getElementById('downloadBtn'),
   exportStepText: document.getElementById('exportStepText'),
   keepOriginalAudio: document.getElementById('keepOriginalAudio'),
   statusBar: document.getElementById('statusBar'),
   exportProgressWrap: document.getElementById('exportProgressWrap'),
   exportProgressBar: document.getElementById('exportProgressBar'),
-  exportResult: document.getElementById('exportResult'),
-  exportPreview: document.getElementById('exportPreview'),
-  exportDownloadLink: document.getElementById('exportDownloadLink'),
 };
 
 // ---------- API key manager (multiple saved keys per engine, switchable) ----------
@@ -1108,7 +1098,7 @@ function removeSegment(id) {
 
 function updateExportAvailability() {
   const readyCount = state.segments.filter(s => s.status === 'ready').length;
-  els.exportBtn.textContent = readyCount ? `Export video (${readyCount})` : 'Export video';
+  els.downloadBtn.textContent = readyCount ? `⬇ Download video with audio (${readyCount})` : '⬇ Download video with audio';
 }
 
 function renderSegments() {
@@ -1333,13 +1323,12 @@ async function ensureFFmpeg() {
   ffmpegReady = true;
 }
 
-els.exportBtn.addEventListener('click', async () => {
+els.downloadBtn.addEventListener('click', async () => {
   const ready = state.segments.filter(s => s.status === 'ready');
-  if (ready.length === 0) { showStatus('Generate at least one voice line before exporting', 'error'); return; }
+  if (ready.length === 0) { showStatus('Generate at least one voice line before downloading', 'error'); return; }
   if (!state.videoFile) { showStatus('Load a video first', 'error'); return; }
 
-  els.exportBtn.disabled = true;
-  els.exportResult.classList.add('hidden');
+  els.downloadBtn.disabled = true;
   els.exportProgressWrap.classList.remove('hidden');
   els.exportProgressBar.style.width = '0%';
   els.exportStepText.classList.add('hidden');
@@ -1388,37 +1377,20 @@ els.exportBtn.addEventListener('click', async () => {
 
     if (state.lastExportUrl) URL.revokeObjectURL(state.lastExportUrl);
     state.lastExportUrl = url;
-    els.downloadBtn.disabled = false;
-
-    // Show a visible result: some mobile browsers silently swallow a programmatic
-    // download click once it happens long after the original tap (export can take
-    // a while), so give the user something on-screen plus an explicit link to tap,
-    // plus a persistent Download button in the header that works any time after.
-    els.exportPreview.src = url;
-    els.exportDownloadLink.href = url;
-    els.exportResult.classList.remove('hidden');
-    els.exportResult.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 
     const a = document.createElement('a');
     a.href = url; a.download = '11api-export.mp4';
     document.body.appendChild(a); a.click(); a.remove();
 
-    setExportStep('Done — tap Download above if your browser didn\'t start it automatically.');
-    showStatus('Export ready — see the preview below', 'success');
+    setExportStep('Done — your download should have started.');
+    showStatus('Video with generated audio is ready and downloading', 'success');
   } catch (err) {
     console.error(err);
-    setExportStep('Export failed — see the message below for details.');
-    showStatus('Export failed: ' + err.message, 'error');
+    setExportStep('Download failed — see the message below for details.');
+    showStatus('Download failed: ' + err.message, 'error');
   }
-  els.exportBtn.disabled = false;
+  els.downloadBtn.disabled = false;
   els.exportProgressWrap.classList.add('hidden');
-});
-
-els.downloadBtn.addEventListener('click', () => {
-  if (!state.lastExportUrl) return;
-  const a = document.createElement('a');
-  a.href = state.lastExportUrl; a.download = '11api-export.mp4';
-  document.body.appendChild(a); a.click(); a.remove();
 });
 </script>
 </body>
