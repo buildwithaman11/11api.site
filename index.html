@@ -1,0 +1,1425 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+<title>11API — Voiceover Timeline</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #121319;
+  --bg-raised: #1a1c24;
+  --bg-inset: #0c0d12;
+  --bg-hover: #23252f;
+  --line: #2a2c37;
+  --line-soft: #212330;
+  --text: #edeef2;
+  --text-dim: #8c8fa1;
+  --text-faint: #56596a;
+  --accent: #e8a75c;
+  --accent-strong: #f3b876;
+  --accent-ink: #221507;
+  --accent-soft: rgba(232, 167, 92, .14);
+  --ready: #55c99b;
+  --ready-ink: #052318;
+  --ready-soft: rgba(85, 201, 155, .14);
+  --danger: #e6685c;
+  --danger-soft: rgba(230, 104, 92, .12);
+  --scrub: #6fd3e6;
+  --radius: 9px;
+  --radius-lg: 14px;
+  --font-display: 'Sora', system-ui, sans-serif;
+  --font-body: -apple-system, "Segoe UI", system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', "SF Mono", Menlo, monospace;
+  font-family: var(--font-body);
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
+}
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+html, body { margin: 0; width: 100%; overflow-x: hidden; }
+body {
+  background:
+    radial-gradient(900px 420px at 15% -10%, rgba(232, 167, 92, .07), transparent 60%),
+    radial-gradient(700px 380px at 100% 0%, rgba(111, 211, 230, .05), transparent 55%),
+    var(--bg);
+  color: var(--text); min-height: 100vh;
+}
+:focus-visible { outline: 2px solid var(--scrub); outline-offset: 2px; border-radius: 4px; }
+
+@keyframes fadeSlideUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes popIn { from { opacity: 0; transform: translateY(6px) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+@keyframes barPulse { 0%, 100% { box-shadow: 0 0 0 0 var(--ready-soft); } 50% { box-shadow: 0 0 0 5px var(--ready-soft); } }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes shimmer { 0% { background-position: 0 0; } 100% { background-position: 40px 0; } }
+
+.topbar {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 13px 22px; border-bottom: 1px solid var(--line); background: rgba(26, 28, 36, .82);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  flex-wrap: wrap; gap: 10px; position: sticky; top: 0; z-index: 20;
+  animation: fadeSlideUp .5s cubic-bezier(.2,.8,.2,1) both;
+}
+.brand { display: flex; align-items: center; gap: 11px; }
+.brand-mark {
+  font-family: var(--font-mono); font-size: 12px; font-weight: 600; letter-spacing: .02em;
+  color: var(--accent-ink); background: linear-gradient(135deg, var(--accent-strong), var(--accent));
+  padding: 4px 8px; border-radius: 6px; box-shadow: 0 2px 10px rgba(232, 167, 92, .25);
+}
+.brand-name { font-family: var(--font-display); font-size: 15.5px; font-weight: 600; letter-spacing: -.01em; }
+.icon-btn {
+  background: var(--bg-raised); border: 1px solid var(--line); color: var(--text-dim);
+  border-radius: var(--radius); padding: 9px 15px; font-size: 13px; cursor: pointer;
+  touch-action: manipulation; transition: color .15s, border-color .15s, background .15s, transform .1s;
+}
+.icon-btn:hover { color: var(--text); border-color: var(--accent); background: var(--bg-hover); }
+.icon-btn:active { transform: scale(.97); }
+
+main { max-width: 960px; margin: 0 auto; padding: 22px 20px 100px; width: 100%; }
+
+.panel {
+  background: var(--bg-raised); border: 1px solid var(--line); border-radius: var(--radius-lg);
+  padding: 18px; margin-bottom: 20px; animation: fadeSlideUp .35s ease both;
+}
+.panel h3 { margin: 0 0 12px; font-family: var(--font-display); font-size: 13px; color: var(--text-dim); font-weight: 600; letter-spacing: .01em; }
+.field-row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 10px; }
+.field { flex: 1; min-width: 180px; display: flex; flex-direction: column; gap: 5px; }
+.field label { font-size: 11px; color: var(--text-dim); }
+.field input, .field select {
+  background: var(--bg-inset); border: 1px solid var(--line); color: var(--text);
+  border-radius: var(--radius); padding: 10px 12px; font-size: 14px; width: 100%;
+  transition: border-color .15s, box-shadow .15s;
+}
+.field input:focus, .field select:focus, textarea:focus {
+  outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft);
+}
+.hint { font-size: 11.5px; color: var(--text-dim); margin-top: 2px; line-height: 1.55; }
+.voice-select-row { display: flex; gap: 8px; }
+.voice-select-row select { flex: 1; }
+.voice-status { font-size: 11px; color: var(--text-dim); margin-top: 4px; min-height: 14px; }
+
+/* ---------- API key manager ---------- */
+.key-select-row { display: flex; gap: 8px; }
+.key-select-row select { flex: 1; }
+.add-key-form {
+  display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px;
+  background: var(--bg-inset); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 12px; animation: popIn .2s cubic-bezier(.2,.8,.2,1) both;
+}
+.add-key-form input {
+  flex: 1; min-width: 140px; background: var(--bg-raised); border: 1px solid var(--line); color: var(--text);
+  border-radius: var(--radius); padding: 9px 11px; font-size: 13px; transition: border-color .15s, box-shadow .15s;
+}
+.add-key-form input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.add-key-form-actions { display: flex; gap: 8px; }
+
+/* ---------- Quota / usage displays ---------- */
+.quota-box {
+  margin-top: 12px; background: var(--bg-inset); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 11px 13px; animation: popIn .2s cubic-bezier(.2,.8,.2,1) both;
+}
+.quota-row { display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: 11.5px; color: var(--text-dim); margin-bottom: 7px; }
+.quota-row strong { color: var(--text); font-family: var(--font-mono); font-weight: 600; }
+.quota-refresh {
+  background: none; border: none; color: var(--text-dim); cursor: pointer; font-size: 13px; padding: 2px 4px;
+  border-radius: 5px; line-height: 1; transition: color .15s, background .15s;
+}
+.quota-refresh:hover { color: var(--accent); background: var(--bg-hover); }
+.quota-bar-track { height: 6px; background: var(--bg-raised); border-radius: 3px; overflow: hidden; }
+.quota-bar-fill { height: 100%; width: 0%; background: var(--ready); transition: width .35s ease, background .35s ease; }
+.quota-text { font-size: 11.5px; color: var(--text-dim); line-height: 1.55; }
+.quota-text-actions { margin-top: 6px; }
+.quota-badge {
+  font-family: var(--font-mono); font-size: 11px; color: var(--text-dim);
+  background: var(--bg-raised); border: 1px solid var(--line); border-radius: 999px;
+  padding: 5px 11px; white-space: nowrap;
+}
+
+.topbar-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.brand-sub {
+  font-size: 11px; color: var(--text-dim); border-left: 1px solid var(--line);
+  padding-left: 10px; margin-left: 1px; letter-spacing: .01em;
+}
+
+.dropzone {
+  border: 1.5px dashed var(--line); border-radius: var(--radius-lg); padding: 52px 20px; text-align: center;
+  cursor: pointer; transition: border-color .18s, background .18s, transform .18s;
+  animation: fadeSlideUp .4s ease both;
+}
+.dropzone:hover { border-color: var(--accent); background: var(--bg-raised); transform: translateY(-2px); }
+.dropzone.dragover { border-color: var(--scrub); background: var(--bg-raised); transform: scale(1.01); }
+.dropzone-icon {
+  width: 40px; height: 40px; margin: 0 auto 14px; color: var(--accent);
+  display: flex; align-items: center; justify-content: center;
+}
+.dropzone-icon svg { width: 100%; height: 100%; }
+.dropzone-title { font-family: var(--font-display); font-size: 16px; font-weight: 600; margin: 0 0 6px; }
+.dropzone-sub { font-size: 13px; color: var(--text-dim); margin: 0; }
+
+.hidden { display: none !important; }
+
+.stage { background: black; border-radius: var(--radius-lg); overflow: hidden; line-height: 0; animation: fadeSlideUp .4s ease both; }
+video { width: 100%; max-height: 55vh; display: block; background: black; }
+
+.timeline-wrap { margin-top: 18px; }
+.timeline-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px; }
+.time-readout { font-family: var(--font-mono); font-size: 12px; color: var(--text-dim); letter-spacing: .01em; }
+
+.timeline {
+  position: relative; height: 68px; background: var(--bg-inset);
+  border: 1px solid var(--line); border-radius: var(--radius); cursor: pointer;
+  touch-action: none; overflow: hidden;
+}
+.playhead {
+  position: absolute; top: 0; bottom: 0; width: 2px; background: var(--scrub); left: 0; pointer-events: none; z-index: 1;
+  box-shadow: 0 0 8px rgba(111, 211, 230, .7); transition: left .05s linear;
+}
+.marker-layer { position: absolute; inset: 0; }
+
+.marker-range {
+  position: absolute; top: 10px; bottom: 10px; min-width: 14px;
+  background: var(--accent-soft); border: 1px solid var(--accent);
+  border-radius: 5px; cursor: grab; animation: popIn .25s cubic-bezier(.2,.8,.2,1) both;
+  transition: background .2s, border-color .2s;
+}
+.marker-range:active { cursor: grabbing; }
+.marker-range.ready { background: var(--ready-soft); border-color: var(--ready); animation: popIn .25s cubic-bezier(.2,.8,.2,1) both, barPulse 1.6s ease .25s 1; }
+.marker-range::after {
+  content: attr(data-label); position: absolute; top: -20px; left: 0;
+  font-size: 10px; color: var(--text-dim); white-space: nowrap; font-family: var(--font-mono);
+}
+.handle {
+  position: absolute; top: -2px; bottom: -2px; width: 16px;
+  cursor: ew-resize; touch-action: none;
+}
+.handle::before {
+  content: ""; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: 4px; height: 60%; border-radius: 2px; background: var(--accent); transition: background .2s;
+}
+.marker-range.ready .handle::before { background: var(--ready); }
+.handle-start { left: -8px; }
+.handle-end { right: -8px; }
+
+.segments-header { display: flex; justify-content: space-between; align-items: center; margin-top: 30px; flex-wrap: wrap; gap: 10px; }
+.segments-header h2 { font-family: var(--font-display); font-size: 15.5px; font-weight: 600; margin: 0; letter-spacing: -.01em; }
+.segments-actions { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+.checkbox { font-size: 12px; color: var(--text-dim); display: flex; align-items: center; gap: 6px; }
+
+.btn {
+  border: none; border-radius: var(--radius); padding: 10px 16px; font-size: 13px; font-weight: 600;
+  cursor: pointer; transition: transform .1s, box-shadow .15s, opacity .12s, background .15s; touch-action: manipulation; white-space: nowrap;
+}
+.btn:hover { opacity: .93; }
+.btn:active { transform: scale(.96); }
+.btn:disabled { opacity: .4; cursor: not-allowed; transform: none; }
+.btn-accent { background: linear-gradient(135deg, var(--accent-strong), var(--accent)); color: var(--accent-ink); box-shadow: 0 3px 12px rgba(232, 167, 92, .22); }
+.btn-primary { background: linear-gradient(135deg, #6bd6ab, var(--ready)); color: var(--ready-ink); box-shadow: 0 3px 12px rgba(85, 201, 155, .22); }
+.btn-ghost { background: var(--bg-inset); border: 1px solid var(--line); color: var(--text); }
+.btn-ghost:hover { border-color: var(--accent); background: var(--bg-hover); }
+.btn-danger-ghost { background: transparent; border: 1px solid var(--line); color: var(--danger); }
+.btn-danger-ghost:hover { border-color: var(--danger); background: var(--danger-soft); }
+.btn-small { padding: 6px 10px; font-size: 11.5px; }
+
+.segment-list { list-style: none; margin: 14px 0 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
+
+.segment {
+  background: var(--bg-raised); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 14px;
+  display: grid; grid-template-columns: 1fr; gap: 12px;
+  animation: popIn .3s cubic-bezier(.2,.8,.2,1) both; transition: border-color .2s;
+}
+.segment-range-row { display: flex; gap: 10px; align-items: flex-end; flex-wrap: wrap; }
+.time-field { display: flex; flex-direction: column; gap: 4px; }
+.time-field label { font-size: 10.5px; color: var(--text-dim); text-transform: uppercase; letter-spacing: .04em; }
+.time-field-inputs { display: flex; gap: 4px; }
+.time-field input {
+  width: 68px; background: var(--bg-inset); border: 1px solid var(--line); color: var(--accent);
+  border-radius: var(--radius); padding: 7px 8px; font-size: 13px; font-family: var(--font-mono);
+  transition: border-color .15s, box-shadow .15s;
+}
+.time-field input:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.duration-tag { font-family: var(--font-mono); font-size: 11px; color: var(--text-dim); align-self: center; padding-bottom: 8px; }
+
+.segment-text {
+  width: 100%; min-height: 96px; resize: vertical; background: var(--bg-inset);
+  border: 1px solid var(--line); border-radius: var(--radius); color: var(--text);
+  padding: 12px 14px; font-size: 15px; line-height: 1.55; font-family: var(--font-body);
+  transition: border-color .15s, box-shadow .15s;
+}
+
+.segment-bottom-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+.segment-controls { display: flex; gap: 8px; flex-wrap: wrap; }
+.segment-status { font-size: 11px; color: var(--text-dim); transition: color .2s; }
+.segment-status.ready { color: var(--ready); }
+.segment-status.error { color: var(--danger); }
+.segment-status.warn { color: var(--accent); }
+audio.segment-audio { width: 100%; height: 32px; margin-top: 4px; }
+
+.empty-state { color: var(--text-dim); font-size: 13px; margin-top: 18px; text-align: center; }
+
+.status-bar {
+  position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%);
+  background: var(--bg-raised); border: 1px solid var(--line); padding: 11px 18px; border-radius: var(--radius);
+  font-size: 13px; box-shadow: 0 12px 32px rgba(0,0,0,.4); max-width: 92vw; text-align: center; z-index: 30;
+  animation: fadeSlideUp .25s cubic-bezier(.2,.8,.2,1) both;
+}
+.status-bar.error { border-color: var(--danger); color: var(--danger); padding-right: 36px; }
+.status-bar.success { border-color: var(--ready); color: var(--ready); }
+.status-close {
+  position: absolute; top: 6px; right: 6px; background: transparent; border: none; color: inherit;
+  font-size: 15px; line-height: 1; cursor: pointer; padding: 5px 7px; border-radius: 5px; opacity: .8;
+}
+.status-close:hover { opacity: 1; background: rgba(255,255,255,.06); }
+.export-step-text { font-size: 12px; color: var(--text-dim); margin-top: 7px; text-align: center; line-height: 1.5; }
+
+.progress-wrap { height: 5px; background: var(--bg-inset); border-radius: 3px; overflow: hidden; margin-top: 10px; }
+.progress-bar {
+  height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-strong));
+  background-image: linear-gradient(90deg, var(--accent), var(--accent-strong)),
+    repeating-linear-gradient(45deg, rgba(255,255,255,.18) 0 6px, transparent 6px 12px);
+  width: 0%; transition: width .2s ease; animation: shimmer 1s linear infinite;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 640px) {
+  main { padding: 16px 12px 100px; }
+  .topbar { padding: 10px 14px; }
+  .brand-name { font-size: 14px; }
+  video { max-height: 32vh; }
+  .timeline { height: 76px; }
+  .field-row { flex-direction: column; }
+  .field { min-width: 0; }
+  .timeline-header, .segments-header { flex-direction: column; align-items: stretch; }
+  .segments-actions { justify-content: space-between; }
+  .segment-bottom-row { flex-direction: column; align-items: stretch; }
+  .segment-controls { justify-content: stretch; }
+  .segment-controls .btn { flex: 1; }
+  .btn-accent, .btn-danger-ghost { width: auto; }
+  .dropzone { padding: 42px 16px; }
+  .segment-text { min-height: 110px; font-size: 16px; }
+  .key-select-row { flex-direction: column; align-items: stretch; }
+  .add-key-form { flex-direction: column; }
+  .brand-sub { display: none; }
+}
+@media (max-width: 400px) {
+  .time-field input { width: 58px; }
+}
+</style>
+
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark">11</span>
+    <span class="brand-name">11API</span>
+    <span class="brand-sub">voiceover timeline</span>
+  </div>
+  <div class="topbar-right">
+    <span id="quotaBadge" class="quota-badge hidden"></span>
+    <button id="settingsToggle" class="icon-btn">⚙ Voice engine settings</button>
+  </div>
+</header>
+
+<main>
+
+  <section id="settingsPanel" class="panel hidden">
+    <h3>Voice engine</h3>
+    <div class="field-row">
+      <div class="field">
+        <label for="provider">Engine</label>
+        <select id="provider">
+          <option value="elevenlabs">ElevenLabs</option>
+          <option value="gemini">Gemini</option>
+        </select>
+      </div>
+    </div>
+    <div id="elevenFields">
+      <div class="field-row">
+        <div class="field">
+          <label for="elevenKeySelect">ElevenLabs API key</label>
+          <div class="key-select-row">
+            <select id="elevenKeySelect"><option value="">No keys saved — add one</option></select>
+            <button id="elevenAddKeyBtn" class="btn btn-ghost btn-small" type="button">+ Add</button>
+            <button id="elevenRemoveKeyBtn" class="btn btn-danger-ghost btn-small" type="button">Remove</button>
+          </div>
+        </div>
+        <div class="field" style="max-width:190px">
+          <label>&nbsp;</label>
+          <button id="elevenLoadVoicesBtn" class="btn btn-ghost" type="button" style="width:100%">Load voices &amp; models</button>
+        </div>
+      </div>
+      <div id="elevenAddKeyForm" class="add-key-form hidden">
+        <input id="elevenNewKeyLabel" type="text" placeholder="Label, e.g. Personal account" autocomplete="off" />
+        <input id="elevenNewKeyValue" type="password" placeholder="xi-api-key" autocomplete="off" />
+        <div class="add-key-form-actions">
+          <button id="elevenSaveKeyBtn" class="btn btn-accent btn-small" type="button">Save key</button>
+          <button id="elevenCancelKeyBtn" class="btn btn-ghost btn-small" type="button">Cancel</button>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="elevenModelSelect">Model</label>
+          <select id="elevenModelSelect"></select>
+        </div>
+        <div class="field">
+          <label for="elevenVoiceSelect">Voice</label>
+          <div class="voice-select-row">
+            <select id="elevenVoiceSelect"><option value="">No voices loaded yet</option></select>
+            <button id="elevenPreviewBtn" class="btn btn-ghost btn-small" type="button">▶ Preview</button>
+          </div>
+          <input id="elevenVoiceCustom" type="text" class="hidden" placeholder="paste a voice ID" />
+        </div>
+      </div>
+      <div id="elevenVoiceStatus" class="voice-status"></div>
+      <div id="elevenQuota" class="quota-box hidden">
+        <div class="quota-row">
+          <span>Usage this billing period</span>
+          <span><strong id="elevenQuotaPct"></strong></span>
+          <button id="elevenQuotaRefreshBtn" class="quota-refresh" type="button" title="Refresh">↻</button>
+        </div>
+        <div class="quota-bar-track"><div id="elevenQuotaFill" class="quota-bar-fill"></div></div>
+      </div>
+    </div>
+    <div id="geminiFields" class="hidden">
+      <div class="field-row">
+        <div class="field">
+          <label for="geminiKeySelect">Gemini API key</label>
+          <div class="key-select-row">
+            <select id="geminiKeySelect"><option value="">No keys saved — add one</option></select>
+            <button id="geminiAddKeyBtn" class="btn btn-ghost btn-small" type="button">+ Add</button>
+            <button id="geminiRemoveKeyBtn" class="btn btn-danger-ghost btn-small" type="button">Remove</button>
+          </div>
+        </div>
+      </div>
+      <div id="geminiAddKeyForm" class="add-key-form hidden">
+        <input id="geminiNewKeyLabel" type="text" placeholder="Label, e.g. Personal account" autocomplete="off" />
+        <input id="geminiNewKeyValue" type="password" placeholder="AIza..." autocomplete="off" />
+        <div class="add-key-form-actions">
+          <button id="geminiSaveKeyBtn" class="btn btn-accent btn-small" type="button">Save key</button>
+          <button id="geminiCancelKeyBtn" class="btn btn-ghost btn-small" type="button">Cancel</button>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="geminiModelSelect">Model</label>
+          <select id="geminiModelSelect">
+            <option value="gemini-2.5-flash-preview-tts">Flash — fast &amp; cheaper</option>
+            <option value="gemini-2.5-pro-preview-tts">Pro — higher quality</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="geminiVoiceSelect">Voice</label>
+          <div class="voice-select-row">
+            <select id="geminiVoiceSelect"></select>
+            <button id="geminiPreviewBtn" class="btn btn-ghost btn-small" type="button">▶ Preview</button>
+          </div>
+        </div>
+      </div>
+      <div id="geminiVoiceStatus" class="voice-status"></div>
+      <div id="geminiQuota" class="quota-box hidden">
+        <div class="quota-row">
+          <span>Token usage</span>
+          <button id="geminiResetUsageBtn" class="quota-refresh" type="button" title="Reset counter">reset</button>
+        </div>
+        <div id="geminiQuotaText" class="quota-text"></div>
+      </div>
+    </div>
+    <p class="hint">Keys are saved only in this browser's local storage and sent directly to each provider's API — never to any server of ours (there isn't one). Save as many keys per engine as you like and switch the active one anytime.</p>
+  </section>
+
+  <section id="dropzone" class="dropzone">
+    <input type="file" id="videoInput" accept="video/*" hidden />
+    <div class="dropzone-inner">
+      <div class="dropzone-icon">
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6 22V18M13 26V14M20 30V10M27 26V14M34 22V18" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <p class="dropzone-title">Drop a video, or tap to choose one</p>
+      <p class="dropzone-sub">Stays entirely on this device until you export</p>
+    </div>
+  </section>
+
+  <section id="editor" class="editor hidden">
+    <div class="stage"><video id="videoPlayer" controls playsinline></video></div>
+
+    <div class="timeline-wrap">
+      <div class="timeline-header">
+        <button id="addMarkerBtn" class="btn btn-accent">+ Voiceover at current time</button>
+        <span id="timeReadout" class="time-readout">00:00.0 / 00:00.0</span>
+      </div>
+      <div id="timeline" class="timeline">
+        <div id="playhead" class="playhead"></div>
+        <div id="markerLayer" class="marker-layer"></div>
+      </div>
+      <p class="hint">Drag either edge of a range to set where the line starts and ends. Drag the middle to move it.</p>
+    </div>
+
+    <div class="segments-header">
+      <h2>Voiceover lines</h2>
+      <div class="segments-actions">
+        <label class="checkbox"><input type="checkbox" id="keepOriginalAudio" /> keep original video audio</label>
+        <button id="downloadBtn" class="btn btn-ghost" disabled>⬇ Download</button>
+        <button id="exportBtn" class="btn btn-primary">Export video</button>
+      </div>
+    </div>
+
+    <div id="exportProgressWrap" class="progress-wrap hidden"><div id="exportProgressBar" class="progress-bar"></div></div>
+    <p id="exportStepText" class="export-step-text hidden"></p>
+    <div id="exportResult" class="panel hidden">
+      <h3>Export ready</h3>
+      <video id="exportPreview" controls playsinline style="width:100%;border-radius:var(--radius);background:#000;max-height:40vh"></video>
+      <a id="exportDownloadLink" class="btn btn-primary" style="display:block;text-align:center;margin-top:12px;text-decoration:none" download="11api-export.mp4">Download video</a>
+    </div>
+
+    <ul id="segmentList" class="segment-list"></ul>
+    <p id="emptyState" class="empty-state">No voiceover lines yet. Play the video to the spot you need, then tap "+ Voiceover at current time".</p>
+  </section>
+
+  <div id="statusBar" class="status-bar hidden"></div>
+</main>
+
+<script type="module">
+import { FFmpeg } from "https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.10/dist/esm/index.js";
+import { fetchFile, toBlobURL } from "https://cdn.jsdelivr.net/npm/@ffmpeg/util@0.12.1/dist/esm/index.js";
+
+const state = { videoFile: null, duration: 0, segments: [], lastExportUrl: null };
+let ffmpeg = null, ffmpegReady = false;
+
+const els = {
+  settingsToggle: document.getElementById('settingsToggle'),
+  settingsPanel: document.getElementById('settingsPanel'),
+  provider: document.getElementById('provider'),
+  elevenFields: document.getElementById('elevenFields'),
+  geminiFields: document.getElementById('geminiFields'),
+  elevenModelSelect: document.getElementById('elevenModelSelect'),
+  elevenVoiceSelect: document.getElementById('elevenVoiceSelect'),
+  elevenLoadVoicesBtn: document.getElementById('elevenLoadVoicesBtn'),
+  elevenPreviewBtn: document.getElementById('elevenPreviewBtn'),
+  elevenVoiceCustom: document.getElementById('elevenVoiceCustom'),
+  elevenVoiceStatus: document.getElementById('elevenVoiceStatus'),
+  elevenKeySelect: document.getElementById('elevenKeySelect'),
+  elevenAddKeyBtn: document.getElementById('elevenAddKeyBtn'),
+  elevenRemoveKeyBtn: document.getElementById('elevenRemoveKeyBtn'),
+  elevenAddKeyForm: document.getElementById('elevenAddKeyForm'),
+  elevenNewKeyLabel: document.getElementById('elevenNewKeyLabel'),
+  elevenNewKeyValue: document.getElementById('elevenNewKeyValue'),
+  elevenSaveKeyBtn: document.getElementById('elevenSaveKeyBtn'),
+  elevenCancelKeyBtn: document.getElementById('elevenCancelKeyBtn'),
+  elevenQuota: document.getElementById('elevenQuota'),
+  elevenQuotaPct: document.getElementById('elevenQuotaPct'),
+  elevenQuotaFill: document.getElementById('elevenQuotaFill'),
+  elevenQuotaRefreshBtn: document.getElementById('elevenQuotaRefreshBtn'),
+  geminiModelSelect: document.getElementById('geminiModelSelect'),
+  geminiVoiceSelect: document.getElementById('geminiVoiceSelect'),
+  geminiPreviewBtn: document.getElementById('geminiPreviewBtn'),
+  geminiVoiceStatus: document.getElementById('geminiVoiceStatus'),
+  geminiKeySelect: document.getElementById('geminiKeySelect'),
+  geminiAddKeyBtn: document.getElementById('geminiAddKeyBtn'),
+  geminiRemoveKeyBtn: document.getElementById('geminiRemoveKeyBtn'),
+  geminiAddKeyForm: document.getElementById('geminiAddKeyForm'),
+  geminiNewKeyLabel: document.getElementById('geminiNewKeyLabel'),
+  geminiNewKeyValue: document.getElementById('geminiNewKeyValue'),
+  geminiSaveKeyBtn: document.getElementById('geminiSaveKeyBtn'),
+  geminiCancelKeyBtn: document.getElementById('geminiCancelKeyBtn'),
+  geminiQuota: document.getElementById('geminiQuota'),
+  geminiQuotaText: document.getElementById('geminiQuotaText'),
+  geminiResetUsageBtn: document.getElementById('geminiResetUsageBtn'),
+  quotaBadge: document.getElementById('quotaBadge'),
+  dropzone: document.getElementById('dropzone'),
+  videoInput: document.getElementById('videoInput'),
+  editor: document.getElementById('editor'),
+  video: document.getElementById('videoPlayer'),
+  addMarkerBtn: document.getElementById('addMarkerBtn'),
+  timeReadout: document.getElementById('timeReadout'),
+  timeline: document.getElementById('timeline'),
+  playhead: document.getElementById('playhead'),
+  markerLayer: document.getElementById('markerLayer'),
+  segmentList: document.getElementById('segmentList'),
+  emptyState: document.getElementById('emptyState'),
+  exportBtn: document.getElementById('exportBtn'),
+  downloadBtn: document.getElementById('downloadBtn'),
+  exportStepText: document.getElementById('exportStepText'),
+  keepOriginalAudio: document.getElementById('keepOriginalAudio'),
+  statusBar: document.getElementById('statusBar'),
+  exportProgressWrap: document.getElementById('exportProgressWrap'),
+  exportProgressBar: document.getElementById('exportProgressBar'),
+  exportResult: document.getElementById('exportResult'),
+  exportPreview: document.getElementById('exportPreview'),
+  exportDownloadLink: document.getElementById('exportDownloadLink'),
+};
+
+// ---------- API key manager (multiple saved keys per engine, switchable) ----------
+const KEYS_STORE_KEY = 'vo11_keys_v1';
+const ACTIVE_KEY_STORE = 'vo11_active_key_v1';
+
+function loadKeysStore() { try { return JSON.parse(localStorage.getItem(KEYS_STORE_KEY) || '{}'); } catch { return {}; } }
+function saveKeysStore() { localStorage.setItem(KEYS_STORE_KEY, JSON.stringify(keysStore)); }
+function loadActiveMap() { try { return JSON.parse(localStorage.getItem(ACTIVE_KEY_STORE) || '{}'); } catch { return {}; } }
+function saveActiveMap() { localStorage.setItem(ACTIVE_KEY_STORE, JSON.stringify(activeKeyMap)); }
+
+let keysStore = loadKeysStore();       // { elevenlabs: [{id,label,key}], gemini: [...] }
+let activeKeyMap = loadActiveMap();    // { elevenlabs: id, gemini: id }
+
+function ensureProviderArr(provider) {
+  if (!Array.isArray(keysStore[provider])) keysStore[provider] = [];
+  return keysStore[provider];
+}
+function getActiveKeyId(provider) { return activeKeyMap[provider] || ''; }
+function getActiveKey(provider) {
+  const found = ensureProviderArr(provider).find(k => k.id === getActiveKeyId(provider));
+  return found ? found.key : '';
+}
+function setActiveKey(provider, id) { activeKeyMap[provider] = id; saveActiveMap(); }
+function addKey(provider, label, key) {
+  const arr = ensureProviderArr(provider);
+  const id = crypto.randomUUID();
+  arr.push({ id, label: label || `Key ${arr.length + 1}`, key });
+  saveKeysStore();
+  setActiveKey(provider, id);
+  return id;
+}
+function removeKey(provider, id) {
+  keysStore[provider] = ensureProviderArr(provider).filter(k => k.id !== id);
+  saveKeysStore();
+  if (getActiveKeyId(provider) === id) {
+    const remaining = keysStore[provider];
+    setActiveKey(provider, remaining.length ? remaining[0].id : '');
+  }
+}
+function maskKey(key) {
+  if (!key) return '';
+  return key.length <= 8 ? '••••' : `${key.slice(0, 3)}••••${key.slice(-4)}`;
+}
+function migrateOldKeysIfNeeded() {
+  let old = {};
+  try { old = JSON.parse(localStorage.getItem('vo_timeline_settings_v1') || '{}'); } catch {}
+  if (old.elevenKey && ensureProviderArr('elevenlabs').length === 0) addKey('elevenlabs', 'Imported key', old.elevenKey);
+  if (old.geminiKey && ensureProviderArr('gemini').length === 0) addKey('gemini', 'Imported key', old.geminiKey);
+}
+function renderKeySelect(provider) {
+  const selectEl = provider === 'elevenlabs' ? els.elevenKeySelect : els.geminiKeySelect;
+  const arr = ensureProviderArr(provider);
+  selectEl.innerHTML = '';
+  if (!arr.length) {
+    const opt = document.createElement('option');
+    opt.value = ''; opt.textContent = 'No keys saved — add one';
+    selectEl.appendChild(opt);
+    return;
+  }
+  arr.forEach(k => {
+    const opt = document.createElement('option');
+    opt.value = k.id;
+    opt.textContent = `${k.label} (${maskKey(k.key)})`;
+    selectEl.appendChild(opt);
+  });
+  const activeId = getActiveKeyId(provider);
+  if (arr.some(k => k.id === activeId)) selectEl.value = activeId;
+  else { selectEl.value = arr[0].id; setActiveKey(provider, arr[0].id); }
+}
+
+function wireKeyManager(provider, e) {
+  e.addKeyBtn.addEventListener('click', () => e.addKeyForm.classList.remove('hidden'));
+  e.cancelKeyBtn.addEventListener('click', () => {
+    e.addKeyForm.classList.add('hidden'); e.newKeyLabel.value = ''; e.newKeyValue.value = '';
+  });
+  e.saveKeyBtn.addEventListener('click', () => {
+    const label = e.newKeyLabel.value.trim();
+    const key = e.newKeyValue.value.trim();
+    if (!key) { showStatus('Paste an API key first', 'error'); return; }
+    addKey(provider, label, key);
+    renderKeySelect(provider);
+    e.addKeyForm.classList.add('hidden');
+    e.newKeyLabel.value = ''; e.newKeyValue.value = '';
+    onActiveKeyChanged(provider);
+  });
+  e.removeKeyBtn.addEventListener('click', () => {
+    const id = e.keySelect.value;
+    if (!id) return;
+    if (!confirm('Remove this saved key from this browser?')) return;
+    removeKey(provider, id);
+    renderKeySelect(provider);
+    onActiveKeyChanged(provider);
+  });
+  e.keySelect.addEventListener('change', () => {
+    setActiveKey(provider, e.keySelect.value);
+    onActiveKeyChanged(provider);
+  });
+}
+
+function onActiveKeyChanged(provider) {
+  if (provider === 'elevenlabs') {
+    elevenVoicesData = [];
+    populateElevenVoices([], '');
+    els.elevenQuota.classList.add('hidden');
+    if (getActiveKey('elevenlabs')) { fetchElevenLabsAccountData(); refreshElevenQuota(); }
+  } else {
+    renderGeminiQuota();
+  }
+  updateQuotaBadge();
+}
+
+// ---------- Gemini prebuilt voices (static list — Gemini has no "list voices" endpoint) ----------
+const GEMINI_VOICES = [
+  ['Zephyr', 'Bright'], ['Puck', 'Upbeat'], ['Charon', 'Informative'], ['Kore', 'Firm'],
+  ['Fenrir', 'Excitable'], ['Leda', 'Youthful'], ['Orus', 'Firm'], ['Aoede', 'Breezy'],
+  ['Callirrhoe', 'Easy-going'], ['Autonoe', 'Bright'], ['Enceladus', 'Breathy'], ['Iapetus', 'Clear'],
+  ['Umbriel', 'Easy-going'], ['Algieba', 'Smooth'], ['Despina', 'Smooth'], ['Erinome', 'Clear'],
+  ['Algenib', 'Gravelly'], ['Rasalgethi', 'Informative'], ['Laomedeia', 'Upbeat'], ['Achernar', 'Soft'],
+  ['Alnilam', 'Firm'], ['Schedar', 'Even'], ['Gacrux', 'Mature'], ['Pulcherrima', 'Forward'],
+  ['Achird', 'Friendly'], ['Zubenelgenubi', 'Casual'], ['Vindemiatrix', 'Gentle'], ['Sadachbia', 'Lively'],
+  ['Sadaltager', 'Knowledgeable'], ['Sulafat', 'Warm'],
+];
+function populateGeminiVoices(selected) {
+  els.geminiVoiceSelect.innerHTML = '';
+  GEMINI_VOICES.forEach(([name, trait]) => {
+    const opt = document.createElement('option');
+    opt.value = name;
+    opt.textContent = `${name} — ${trait}`;
+    els.geminiVoiceSelect.appendChild(opt);
+  });
+  if (selected && GEMINI_VOICES.some(([n]) => n === selected)) els.geminiVoiceSelect.value = selected;
+}
+
+// Fallback model list, used until /v1/models has been fetched (or if that call fails)
+const ELEVEN_FALLBACK_MODELS = [
+  ['eleven_multilingual_v2', 'Multilingual v2 — most natural, best for narration'],
+  ['eleven_flash_v2_5', 'Flash v2.5 — fastest, lower cost'],
+  ['eleven_turbo_v2_5', 'Turbo v2.5 — balanced speed/quality'],
+  ['eleven_v3', 'v3 — most expressive, alpha'],
+];
+function populateElevenModels(models, selected) {
+  els.elevenModelSelect.innerHTML = '';
+  const list = models && models.length ? models : ELEVEN_FALLBACK_MODELS.map(([id, name]) => ({ model_id: id, name }));
+  list.forEach(m => {
+    const opt = document.createElement('option');
+    opt.value = m.model_id;
+    opt.textContent = m.name || m.model_id;
+    els.elevenModelSelect.appendChild(opt);
+  });
+  const opts = [...els.elevenModelSelect.options];
+  if (selected && opts.some(o => o.value === selected)) {
+    els.elevenModelSelect.value = selected;
+  } else {
+    const def = opts.find(o => o.value === 'eleven_multilingual_v2');
+    if (def) els.elevenModelSelect.value = def.value;
+  }
+}
+
+let elevenVoicesData = []; // full voice objects, kept in memory so preview_url is available
+const geminiPreviewCache = new Map(); // "model|voice" -> object URL, so repeat previews don't re-call the API
+
+// ---------- ElevenLabs voices + models (fetched live from the account behind the pasted key) ----------
+async function fetchElevenLabsAccountData(selectVoice, selectModel) {
+  const key = getActiveKey('elevenlabs');
+  if (!key) { showStatus('Add and select an ElevenLabs API key first', 'error'); return; }
+  els.elevenVoiceStatus.textContent = 'Loading voices & models…';
+  try {
+    const [voicesResp, modelsResp] = await Promise.all([
+      fetch('https://api.elevenlabs.io/v1/voices', { headers: { 'xi-api-key': key } }),
+      fetch('https://api.elevenlabs.io/v1/models', { headers: { 'xi-api-key': key } }),
+    ]);
+    if (!voicesResp.ok) throw new Error(`ElevenLabs voices error ${voicesResp.status}: ${await voicesResp.text()}`);
+    const voicesJson = await voicesResp.json();
+    const voices = voicesJson.voices || [];
+    elevenVoicesData = voices;
+    populateElevenVoices(voices, selectVoice);
+    try { localStorage.setItem('vo_eleven_voices_cache', JSON.stringify(voices)); } catch {}
+
+    let models = [];
+    if (modelsResp.ok) {
+      const modelsJson = await modelsResp.json();
+      models = (Array.isArray(modelsJson) ? modelsJson : modelsJson.models || [])
+        .filter(m => m.can_do_text_to_speech !== false);
+      try { localStorage.setItem('vo_eleven_models_cache', JSON.stringify(models)); } catch {}
+    }
+    populateElevenModels(models, selectModel);
+
+    els.elevenVoiceStatus.textContent = `${voices.length} voices, ${els.elevenModelSelect.options.length} models loaded`;
+  } catch (err) {
+    els.elevenVoiceStatus.textContent = '';
+    showStatus(err.message, 'error');
+  }
+}
+function populateElevenVoices(voices, selected) {
+  els.elevenVoiceSelect.innerHTML = '';
+  voices.forEach(v => {
+    const opt = document.createElement('option');
+    opt.value = v.voice_id;
+    opt.textContent = v.category ? `${v.name} (${v.category})` : v.name;
+    els.elevenVoiceSelect.appendChild(opt);
+  });
+  const customOpt = document.createElement('option');
+  customOpt.value = '__custom__';
+  customOpt.textContent = 'Custom voice ID…';
+  els.elevenVoiceSelect.appendChild(customOpt);
+
+  if (selected && voices.some(v => v.voice_id === selected)) {
+    els.elevenVoiceSelect.value = selected;
+  } else if (selected) {
+    els.elevenVoiceSelect.value = '__custom__';
+    els.elevenVoiceCustom.value = selected;
+  }
+  toggleElevenCustomField();
+}
+function toggleElevenCustomField() {
+  els.elevenVoiceCustom.classList.toggle('hidden', els.elevenVoiceSelect.value !== '__custom__');
+}
+els.elevenLoadVoicesBtn.addEventListener('click', () => fetchElevenLabsAccountData());
+els.elevenVoiceSelect.addEventListener('change', () => { toggleElevenCustomField(); saveSettings(); });
+
+// ---------- Voice preview ----------
+let previewAudioEl = null;
+function playPreviewBlob(blob) {
+  if (previewAudioEl) { previewAudioEl.pause(); }
+  previewAudioEl = new Audio(URL.createObjectURL(blob));
+  previewAudioEl.play().catch(() => {});
+}
+
+els.elevenPreviewBtn.addEventListener('click', async () => {
+  const voiceId = els.elevenVoiceSelect.value === '__custom__' ? els.elevenVoiceCustom.value.trim() : els.elevenVoiceSelect.value;
+  if (!voiceId) { showStatus('Pick a voice first', 'error'); return; }
+
+  const known = elevenVoicesData.find(v => v.voice_id === voiceId);
+  if (known && known.preview_url) {
+    // ElevenLabs already hosts a sample for library voices — instant, no API call needed
+    if (previewAudioEl) previewAudioEl.pause();
+    previewAudioEl = new Audio(known.preview_url);
+    previewAudioEl.play().catch(() => {});
+    return;
+  }
+  // No hosted sample (e.g. a pasted custom voice ID) — generate a short one instead
+  els.elevenPreviewBtn.disabled = true;
+  els.elevenPreviewBtn.textContent = '…';
+  try {
+    const blob = await elevenLabsTTS('Hi, this is a preview of this voice.');
+    playPreviewBlob(blob);
+  } catch (err) {
+    showStatus(err.message, 'error');
+  }
+  els.elevenPreviewBtn.disabled = false;
+  els.elevenPreviewBtn.textContent = '▶ Preview';
+});
+
+els.geminiPreviewBtn.addEventListener('click', async () => {
+  const key = getActiveKey('gemini');
+  if (!key) { showStatus('Add and select a Gemini API key first', 'error'); return; }
+  const cacheKey = `${els.geminiModelSelect.value}|${els.geminiVoiceSelect.value}`;
+  if (geminiPreviewCache.has(cacheKey)) {
+    if (previewAudioEl) previewAudioEl.pause();
+    previewAudioEl = new Audio(geminiPreviewCache.get(cacheKey));
+    previewAudioEl.play().catch(() => {});
+    return;
+  }
+  els.geminiPreviewBtn.disabled = true;
+  els.geminiPreviewBtn.textContent = '…';
+  try {
+    const blob = await geminiTTS('Hi, this is a preview of this voice.');
+    const url = URL.createObjectURL(blob);
+    geminiPreviewCache.set(cacheKey, url);
+    if (previewAudioEl) previewAudioEl.pause();
+    previewAudioEl = new Audio(url);
+    previewAudioEl.play().catch(() => {});
+  } catch (err) {
+    showStatus(err.message, 'error');
+  }
+  els.geminiPreviewBtn.disabled = false;
+  els.geminiPreviewBtn.textContent = '▶ Preview';
+});
+
+// ---------- Quota / usage displays ----------
+let lastElevenQuota = null; // { used, limit, left, pct }
+
+async function refreshElevenQuota() {
+  const key = getActiveKey('elevenlabs');
+  if (!key) { els.elevenQuota.classList.add('hidden'); lastElevenQuota = null; updateQuotaBadge(); return; }
+  try {
+    const resp = await fetch('https://api.elevenlabs.io/v1/user/subscription', { headers: { 'xi-api-key': key } });
+    if (!resp.ok) throw new Error('quota check failed');
+    const data = await resp.json();
+    const used = data.character_count ?? 0;
+    const limit = data.character_limit ?? 0;
+    const left = Math.max(0, limit - used);
+    const pct = limit ? Math.min(100, Math.round((used / limit) * 100)) : 0;
+    els.elevenQuotaPct.textContent = `${left.toLocaleString()} chars left (${used.toLocaleString()}/${limit.toLocaleString()})`;
+    els.elevenQuotaFill.style.width = pct + '%';
+    els.elevenQuotaFill.style.background = pct > 80 ? 'var(--danger)' : pct > 50 ? 'var(--accent)' : 'var(--ready)';
+    els.elevenQuota.classList.remove('hidden');
+    lastElevenQuota = { used, limit, left, pct };
+  } catch (err) {
+    // ElevenLabs subscription endpoint can be unreachable/blocked for some key types — fail quietly, don't break the rest of the app
+    els.elevenQuota.classList.add('hidden');
+    lastElevenQuota = null;
+  }
+  updateQuotaBadge();
+}
+els.elevenQuotaRefreshBtn.addEventListener('click', refreshElevenQuota);
+
+function geminiUsageStorageKey() { return `vo11_gemini_usage_${getActiveKeyId('gemini') || 'none'}`; }
+function getGeminiUsage() { return parseInt(localStorage.getItem(geminiUsageStorageKey()) || '0', 10); }
+function addGeminiUsage(tokens) {
+  if (!tokens) return;
+  localStorage.setItem(geminiUsageStorageKey(), String(getGeminiUsage() + tokens));
+  renderGeminiQuota();
+  updateQuotaBadge();
+}
+function renderGeminiQuota() {
+  if (!getActiveKey('gemini')) { els.geminiQuota.classList.add('hidden'); return; }
+  const used = getGeminiUsage();
+  els.geminiQuotaText.textContent = used
+    ? `${used.toLocaleString()} tokens used this session. Gemini API keys don't expose a remaining-quota endpoint, so this is a running total from each response, not a live balance.`
+    : `No usage recorded yet. Gemini API keys don't expose a remaining-quota endpoint — this will track tokens used from each response instead.`;
+  els.geminiQuota.classList.remove('hidden');
+}
+els.geminiResetUsageBtn.addEventListener('click', () => {
+  localStorage.setItem(geminiUsageStorageKey(), '0');
+  renderGeminiQuota();
+  updateQuotaBadge();
+});
+
+function updateQuotaBadge() {
+  if (els.provider.value === 'elevenlabs' && lastElevenQuota) {
+    els.quotaBadge.textContent = `⚡ ${lastElevenQuota.left.toLocaleString()} chars left`;
+    els.quotaBadge.classList.remove('hidden');
+  } else if (els.provider.value === 'gemini' && getActiveKey('gemini')) {
+    const used = getGeminiUsage();
+    els.quotaBadge.textContent = `⚡ ${used.toLocaleString()} tokens used`;
+    els.quotaBadge.classList.remove('hidden');
+  } else {
+    els.quotaBadge.classList.add('hidden');
+  }
+}
+
+wireKeyManager('elevenlabs', {
+  keySelect: els.elevenKeySelect, addKeyBtn: els.elevenAddKeyBtn, removeKeyBtn: els.elevenRemoveKeyBtn,
+  addKeyForm: els.elevenAddKeyForm, newKeyLabel: els.elevenNewKeyLabel, newKeyValue: els.elevenNewKeyValue,
+  saveKeyBtn: els.elevenSaveKeyBtn, cancelKeyBtn: els.elevenCancelKeyBtn,
+});
+wireKeyManager('gemini', {
+  keySelect: els.geminiKeySelect, addKeyBtn: els.geminiAddKeyBtn, removeKeyBtn: els.geminiRemoveKeyBtn,
+  addKeyForm: els.geminiAddKeyForm, newKeyLabel: els.geminiNewKeyLabel, newKeyValue: els.geminiNewKeyValue,
+  saveKeyBtn: els.geminiSaveKeyBtn, cancelKeyBtn: els.geminiCancelKeyBtn,
+});
+
+// ---------- Settings persistence ----------
+const SETTINGS_KEY = 'vo_timeline_settings_v1';
+function loadSettings() {
+  migrateOldKeysIfNeeded();
+  let s = {};
+  try { s = JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}'); } catch {}
+  if (s.provider) els.provider.value = s.provider;
+  if (s.geminiModel) els.geminiModelSelect.value = s.geminiModel;
+
+  renderKeySelect('elevenlabs');
+  renderKeySelect('gemini');
+
+  populateGeminiVoices(s.geminiVoice);
+  populateElevenModels([], s.elevenModel);
+
+  try {
+    const cachedVoices = JSON.parse(localStorage.getItem('vo_eleven_voices_cache') || '[]');
+    if (cachedVoices.length) { elevenVoicesData = cachedVoices; populateElevenVoices(cachedVoices, s.elevenVoice); }
+    const cachedModels = JSON.parse(localStorage.getItem('vo_eleven_models_cache') || '[]');
+    if (cachedModels.length) populateElevenModels(cachedModels, s.elevenModel);
+  } catch {}
+  if (!elevenVoicesData.length && getActiveKey('elevenlabs')) fetchElevenLabsAccountData(s.elevenVoice, s.elevenModel);
+  if (getActiveKey('elevenlabs')) refreshElevenQuota();
+  renderGeminiQuota();
+
+  toggleProviderFields();
+  updateQuotaBadge();
+}
+function saveSettings() {
+  localStorage.setItem(SETTINGS_KEY, JSON.stringify({
+    provider: els.provider.value,
+    elevenModel: els.elevenModelSelect.value,
+    elevenVoice: els.elevenVoiceSelect.value === '__custom__' ? els.elevenVoiceCustom.value.trim() : els.elevenVoiceSelect.value,
+    elevenVoiceCustom: els.elevenVoiceCustom.value,
+    geminiModel: els.geminiModelSelect.value,
+    geminiVoice: els.geminiVoiceSelect.value,
+  }));
+}
+[els.provider, els.elevenModelSelect, els.elevenVoiceCustom, els.geminiModelSelect, els.geminiVoiceSelect].forEach(el =>
+  el.addEventListener('change', saveSettings)
+);
+function toggleProviderFields() {
+  const isEleven = els.provider.value === 'elevenlabs';
+  els.elevenFields.classList.toggle('hidden', !isEleven);
+  els.geminiFields.classList.toggle('hidden', isEleven);
+  updateQuotaBadge();
+}
+els.provider.addEventListener('change', toggleProviderFields);
+els.settingsToggle.addEventListener('click', () => els.settingsPanel.classList.toggle('hidden'));
+loadSettings();
+
+let statusTimer = null;
+function showStatus(msg, kind) {
+  els.statusBar.innerHTML = '';
+  const span = document.createElement('span');
+  span.textContent = msg;
+  els.statusBar.appendChild(span);
+  els.statusBar.className = 'status-bar' + (kind ? ' ' + kind : '');
+  els.statusBar.classList.remove('hidden');
+  clearTimeout(statusTimer);
+  if (kind === 'error') {
+    // Errors stay up until dismissed instead of auto-hiding — export/API errors are easy to miss otherwise
+    const closeBtn = document.createElement('button');
+    closeBtn.className = 'status-close';
+    closeBtn.type = 'button';
+    closeBtn.textContent = '×';
+    closeBtn.addEventListener('click', () => els.statusBar.classList.add('hidden'));
+    els.statusBar.appendChild(closeBtn);
+  } else {
+    statusTimer = setTimeout(() => els.statusBar.classList.add('hidden'), 4500);
+  }
+}
+function fmtTime(t) {
+  const m = Math.floor(t / 60);
+  const s = (t % 60).toFixed(1);
+  return `${String(m).padStart(2, '0')}:${s.padStart(4, '0')}`;
+}
+function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+
+// ---------- Video loading (local, no upload) ----------
+els.dropzone.addEventListener('click', () => els.videoInput.click());
+els.dropzone.addEventListener('dragover', e => { e.preventDefault(); els.dropzone.classList.add('dragover'); });
+els.dropzone.addEventListener('dragleave', () => els.dropzone.classList.remove('dragover'));
+els.dropzone.addEventListener('drop', e => {
+  e.preventDefault();
+  els.dropzone.classList.remove('dragover');
+  if (e.dataTransfer.files[0]) loadVideo(e.dataTransfer.files[0]);
+});
+els.videoInput.addEventListener('change', e => { if (e.target.files[0]) loadVideo(e.target.files[0]); });
+
+function loadVideo(file) {
+  state.videoFile = file;
+  els.video.src = URL.createObjectURL(file);
+  els.dropzone.classList.add('hidden');
+  els.editor.classList.remove('hidden');
+}
+
+els.video.addEventListener('loadedmetadata', () => { state.duration = els.video.duration; renderMarkers(); });
+
+// ---------- Timeline ----------
+els.video.addEventListener('timeupdate', () => {
+  const pct = state.duration ? (els.video.currentTime / state.duration) * 100 : 0;
+  els.playhead.style.left = pct + '%';
+  els.timeReadout.textContent = `${fmtTime(els.video.currentTime)} / ${fmtTime(state.duration || 0)}`;
+  checkSegmentPlayback();
+});
+els.timeline.addEventListener('click', e => {
+  if (!state.duration || e.target !== els.timeline && e.target !== els.markerLayer) return;
+  const rect = els.timeline.getBoundingClientRect();
+  const pct = (e.clientX - rect.left) / rect.width;
+  els.video.currentTime = clamp(pct * state.duration, 0, state.duration);
+});
+els.addMarkerBtn.addEventListener('click', () => { if (state.duration) addSegment(els.video.currentTime); });
+
+function timeFromClientX(clientX) {
+  const rect = els.timeline.getBoundingClientRect();
+  const pct = (clientX - rect.left) / rect.width;
+  return clamp(pct * state.duration, 0, state.duration);
+}
+
+function renderMarkers() {
+  els.markerLayer.innerHTML = '';
+  state.segments.forEach(seg => {
+    const startPct = state.duration ? (seg.startTime / state.duration) * 100 : 0;
+    const endPct = state.duration ? (seg.endTime / state.duration) * 100 : 0;
+
+    const range = document.createElement('div');
+    range.className = 'marker-range' + (seg.status === 'ready' ? ' ready' : '');
+    range.style.left = startPct + '%';
+    range.style.width = Math.max(0.6, endPct - startPct) + '%';
+    range.dataset.label = `${fmtTime(seg.startTime)}–${fmtTime(seg.endTime)}`;
+    range.title = seg.text ? seg.text.slice(0, 60) : 'empty line';
+
+    const handleStart = document.createElement('div');
+    handleStart.className = 'handle handle-start';
+    const handleEnd = document.createElement('div');
+    handleEnd.className = 'handle handle-end';
+    range.append(handleStart, handleEnd);
+
+    bindRangeDrag(range, handleStart, handleEnd, seg);
+    els.markerLayer.appendChild(range);
+  });
+}
+
+function bindRangeDrag(range, handleStart, handleEnd, seg) {
+  function livePosition() {
+    const startPct = state.duration ? (seg.startTime / state.duration) * 100 : 0;
+    const endPct = state.duration ? (seg.endTime / state.duration) * 100 : 0;
+    range.style.left = startPct + '%';
+    range.style.width = Math.max(0.6, endPct - startPct) + '%';
+    range.dataset.label = `${fmtTime(seg.startTime)}–${fmtTime(seg.endTime)}`;
+  }
+
+  function startDrag(handle, mode, e) {
+    e.stopPropagation();
+    e.preventDefault();
+    handle.setPointerCapture(e.pointerId);
+    const originClientX = e.clientX;
+    const origStart = seg.startTime, origEnd = seg.endTime;
+
+    function onMove(ev) {
+      if (mode === 'start') {
+        seg.startTime = clamp(timeFromClientX(ev.clientX), 0, seg.endTime - 0.2);
+      } else if (mode === 'end') {
+        seg.endTime = clamp(timeFromClientX(ev.clientX), seg.startTime + 0.2, state.duration);
+      } else {
+        const deltaTime = ((ev.clientX - originClientX) / els.timeline.getBoundingClientRect().width) * state.duration;
+        let ns = origStart + deltaTime, ne = origEnd + deltaTime;
+        if (ns < 0) { ne -= ns; ns = 0; }
+        if (ne > state.duration) { ns -= (ne - state.duration); ne = state.duration; }
+        seg.startTime = ns; seg.endTime = ne;
+      }
+      livePosition();
+    }
+    function onUp(ev) {
+      handle.removeEventListener('pointermove', onMove);
+      handle.removeEventListener('pointerup', onUp);
+      state.segments.sort((a, b) => a.startTime - b.startTime);
+      renderSegments();
+      renderMarkers();
+    }
+    handle.addEventListener('pointermove', onMove);
+    handle.addEventListener('pointerup', onUp, { once: true });
+  }
+
+  handleStart.addEventListener('pointerdown', e => startDrag(handleStart, 'start', e));
+  handleEnd.addEventListener('pointerdown', e => startDrag(handleEnd, 'end', e));
+  range.addEventListener('pointerdown', e => startDrag(range, 'move', e));
+}
+
+// ---------- Segments ----------
+function addSegment(startTime) {
+  const endTime = clamp(startTime + 3, startTime + 0.5, state.duration || startTime + 3);
+  const seg = { id: crypto.randomUUID(), startTime, endTime, text: '', blob: null, url: null, duration: null, status: 'draft', audioEl: null, played: false };
+  state.segments.push(seg);
+  state.segments.sort((a, b) => a.startTime - b.startTime);
+  renderSegments(); renderMarkers();
+}
+function removeSegment(id) {
+  state.segments = state.segments.filter(s => s.id !== id);
+  renderSegments(); renderMarkers();
+}
+
+function updateExportAvailability() {
+  const readyCount = state.segments.filter(s => s.status === 'ready').length;
+  els.exportBtn.textContent = readyCount ? `Export video (${readyCount})` : 'Export video';
+}
+
+function renderSegments() {
+  els.segmentList.innerHTML = '';
+  els.emptyState.classList.toggle('hidden', state.segments.length > 0);
+  updateExportAvailability();
+  state.segments.forEach(seg => {
+    const li = document.createElement('li');
+    li.className = 'segment'; li.id = `seg-${seg.id}`;
+
+    // start/end row
+    const rangeRow = document.createElement('div');
+    rangeRow.className = 'segment-range-row';
+
+    const startField = makeTimeField('Start', seg.startTime, v => {
+      seg.startTime = clamp(v, 0, seg.endTime - 0.2);
+      renderMarkers();
+    }, () => { seg.startTime = clamp(els.video.currentTime, 0, seg.endTime - 0.2); renderSegments(); renderMarkers(); });
+
+    const endField = makeTimeField('End', seg.endTime, v => {
+      seg.endTime = clamp(v, seg.startTime + 0.2, state.duration || v);
+      renderMarkers();
+    }, () => { seg.endTime = clamp(els.video.currentTime, seg.startTime + 0.2, state.duration); renderSegments(); renderMarkers(); });
+
+    const durTag = document.createElement('div');
+    durTag.className = 'duration-tag';
+    durTag.textContent = `${(seg.endTime - seg.startTime).toFixed(1)}s window`;
+
+    rangeRow.append(startField, endField, durTag);
+
+    // text
+    const textarea = document.createElement('textarea');
+    textarea.className = 'segment-text';
+    textarea.placeholder = 'What should be said during this window…';
+    textarea.value = seg.text;
+    textarea.addEventListener('input', () => { seg.text = textarea.value; });
+
+    // audio preview
+    let audioEl = null;
+    if (seg.url) {
+      audioEl = document.createElement('audio');
+      audioEl.className = 'segment-audio'; audioEl.controls = true; audioEl.src = seg.url; audioEl.preload = 'auto';
+      seg.audioEl = audioEl;
+    }
+
+    // bottom row
+    const bottomRow = document.createElement('div');
+    bottomRow.className = 'segment-bottom-row';
+
+    const controls = document.createElement('div');
+    controls.className = 'segment-controls';
+    const genBtn = document.createElement('button');
+    genBtn.className = 'btn btn-accent';
+    genBtn.textContent = seg.status === 'ready' ? 'Regenerate' : 'Generate voice';
+    genBtn.addEventListener('click', () => generateVoice(seg));
+    const removeBtn = document.createElement('button');
+    removeBtn.className = 'btn btn-danger-ghost'; removeBtn.textContent = 'Remove';
+    removeBtn.addEventListener('click', () => removeSegment(seg.id));
+    controls.append(genBtn, removeBtn);
+
+    const status = document.createElement('div');
+    let statusText = { draft: 'not generated', generating: 'generating…', ready: 'ready', error: 'failed' }[seg.status];
+    let statusClass = 'segment-status' + (seg.status === 'ready' ? ' ready' : seg.status === 'error' ? ' error' : '');
+    if (seg.status === 'ready' && seg.duration && seg.duration > (seg.endTime - seg.startTime) + 0.15) {
+      statusText += ` — audio is ${seg.duration.toFixed(1)}s, longer than the window`;
+      statusClass = 'segment-status warn';
+    }
+    status.className = statusClass;
+    status.textContent = statusText;
+
+    bottomRow.append(controls, status);
+
+    li.append(rangeRow, textarea, ...(audioEl ? [audioEl] : []), bottomRow);
+    els.segmentList.appendChild(li);
+  });
+}
+
+function makeTimeField(labelText, value, onChange, onNow) {
+  const wrap = document.createElement('div');
+  wrap.className = 'time-field';
+  const label = document.createElement('label');
+  label.textContent = labelText;
+  const inputsRow = document.createElement('div');
+  inputsRow.className = 'time-field-inputs';
+  const input = document.createElement('input');
+  input.type = 'number'; input.step = '0.1'; input.min = '0';
+  input.value = value.toFixed(1);
+  input.addEventListener('change', () => onChange(parseFloat(input.value) || 0));
+  const nowBtn = document.createElement('button');
+  nowBtn.className = 'btn btn-ghost btn-small';
+  nowBtn.textContent = 'now';
+  nowBtn.type = 'button';
+  nowBtn.addEventListener('click', onNow);
+  inputsRow.append(input, nowBtn);
+  wrap.append(label, inputsRow);
+  return wrap;
+}
+
+// ---------- TTS (direct browser calls) ----------
+async function generateVoice(seg) {
+  if (!seg.text.trim()) { showStatus('Write the line for this segment first', 'error'); return; }
+  seg.status = 'generating'; renderSegments();
+  try {
+    const blob = els.provider.value === 'elevenlabs'
+      ? await elevenLabsTTS(seg.text)
+      : await geminiTTS(seg.text);
+    seg.blob = blob;
+    seg.url = URL.createObjectURL(blob);
+    seg.duration = await getAudioDuration(seg.url);
+    seg.status = 'ready';
+    showStatus('Voice line generated', 'success');
+    if (els.provider.value === 'elevenlabs') refreshElevenQuota();
+  } catch (err) {
+    seg.status = 'error';
+    showStatus(err.message, 'error');
+  }
+  renderSegments(); renderMarkers();
+}
+
+function getAudioDuration(url) {
+  return new Promise(resolve => {
+    const a = new Audio(url);
+    a.addEventListener('loadedmetadata', () => resolve(a.duration || null));
+    a.addEventListener('error', () => resolve(null));
+  });
+}
+
+async function elevenLabsTTS(text) {
+  const key = getActiveKey('elevenlabs');
+  const voiceId = els.elevenVoiceSelect.value === '__custom__'
+    ? els.elevenVoiceCustom.value.trim()
+    : els.elevenVoiceSelect.value;
+  if (!key) throw new Error('Add and select an ElevenLabs API key in Voice engine settings');
+  if (!voiceId) throw new Error('Pick a voice (or load voices) in Voice engine settings');
+  const resp = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
+    method: 'POST',
+    headers: { 'xi-api-key': key, 'Content-Type': 'application/json', 'Accept': 'audio/mpeg' },
+    body: JSON.stringify({ text, model_id: els.elevenModelSelect.value || 'eleven_multilingual_v2', voice_settings: { stability: 0.5, similarity_boost: 0.75 } }),
+  });
+  if (!resp.ok) throw new Error(`ElevenLabs error ${resp.status}: ${await resp.text()}`);
+  return await resp.blob();
+}
+
+async function geminiTTS(text) {
+  const key = getActiveKey('gemini');
+  const voiceName = els.geminiVoiceSelect.value || 'Kore';
+  if (!key) throw new Error('Add and select a Gemini API key in Voice engine settings');
+  const model = els.geminiModelSelect.value || 'gemini-2.5-flash-preview-tts';
+  const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent`, {
+    method: 'POST',
+    headers: { 'x-goog-api-key': key, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      contents: [{ role: 'user', parts: [{ text }] }],
+      generationConfig: { responseModalities: ['AUDIO'], speechConfig: { voiceConfig: { prebuiltVoiceConfig: { voiceName } } } },
+    }),
+  });
+  if (!resp.ok) throw new Error(`Gemini error ${resp.status}: ${await resp.text()}`);
+  const data = await resp.json();
+  if (data.usageMetadata?.totalTokenCount) addGeminiUsage(data.usageMetadata.totalTokenCount);
+  const base64 = data.candidates?.[0]?.content?.parts?.[0]?.inlineData?.data;
+  if (!base64) throw new Error('Gemini returned no audio data');
+  return pcmToWavBlob(base64, 24000, 1, 16);
+}
+
+function pcmToWavBlob(base64, sampleRate, channels, bitDepth) {
+  const binary = atob(base64);
+  const pcm = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i++) pcm[i] = binary.charCodeAt(i);
+  const byteRate = sampleRate * channels * (bitDepth / 8);
+  const blockAlign = channels * (bitDepth / 8);
+  const buffer = new ArrayBuffer(44 + pcm.length);
+  const view = new DataView(buffer);
+  const writeStr = (offset, str) => { for (let i = 0; i < str.length; i++) view.setUint8(offset + i, str.charCodeAt(i)); };
+  writeStr(0, 'RIFF'); view.setUint32(4, 36 + pcm.length, true); writeStr(8, 'WAVE');
+  writeStr(12, 'fmt '); view.setUint32(16, 16, true); view.setUint16(20, 1, true);
+  view.setUint16(22, channels, true); view.setUint32(24, sampleRate, true);
+  view.setUint32(28, byteRate, true); view.setUint16(32, blockAlign, true); view.setUint16(34, bitDepth, true);
+  writeStr(36, 'data'); view.setUint32(40, pcm.length, true);
+  new Uint8Array(buffer, 44).set(pcm);
+  return new Blob([buffer], { type: 'audio/wav' });
+}
+
+// ---------- Synced preview ----------
+function checkSegmentPlayback() {
+  const t = els.video.currentTime;
+  state.segments.forEach(seg => {
+    if (!seg.audioEl) return;
+    const withinWindow = t >= seg.startTime && t < seg.startTime + 0.35;
+    if (withinWindow && !seg.played && !els.video.paused) {
+      seg.audioEl.currentTime = 0;
+      seg.audioEl.play().catch(() => {});
+      seg.played = true;
+    }
+    if (t < seg.startTime - 0.2) seg.played = false;
+  });
+}
+els.video.addEventListener('seeked', () => {
+  state.segments.forEach(seg => { seg.played = els.video.currentTime > seg.startTime + 0.35; });
+});
+
+// ---------- Export (ffmpeg.wasm, fully in-browser) ----------
+function setExportStep(text) {
+  els.exportStepText.textContent = text;
+  els.exportStepText.classList.remove('hidden');
+}
+
+async function ensureFFmpeg() {
+  if (ffmpegReady) return;
+  setExportStep('Loading export engine (first time only, ~30MB — can take a bit on a slow connection)…');
+  ffmpeg = new FFmpeg();
+  const coreBaseURL = 'https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.6/dist/esm';
+  const ffmpegBaseURL = 'https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.10/dist/esm';
+  ffmpeg.on('progress', ({ progress }) => {
+    els.exportProgressBar.style.width = `${clamp(Math.round(progress * 100), 0, 100)}%`;
+  });
+  await ffmpeg.load({
+    coreURL: await toBlobURL(`${coreBaseURL}/ffmpeg-core.js`, 'text/javascript'),
+    wasmURL: await toBlobURL(`${coreBaseURL}/ffmpeg-core.wasm`, 'application/wasm'),
+    // The worker script must be same-origin to be constructed as a Worker — blob it like the core files.
+    classWorkerURL: await toBlobURL(`${ffmpegBaseURL}/worker.js`, 'text/javascript'),
+  });
+  ffmpegReady = true;
+}
+
+els.exportBtn.addEventListener('click', async () => {
+  const ready = state.segments.filter(s => s.status === 'ready');
+  if (ready.length === 0) { showStatus('Generate at least one voice line before exporting', 'error'); return; }
+  if (!state.videoFile) { showStatus('Load a video first', 'error'); return; }
+
+  els.exportBtn.disabled = true;
+  els.exportResult.classList.add('hidden');
+  els.exportProgressWrap.classList.remove('hidden');
+  els.exportProgressBar.style.width = '0%';
+  els.exportStepText.classList.add('hidden');
+
+  try {
+    await ensureFFmpeg();
+
+    setExportStep('Preparing video and audio tracks…');
+    const videoExt = (state.videoFile.name.split('.').pop() || 'mp4').toLowerCase();
+    const inName = `input.${videoExt}`;
+    await ffmpeg.writeFile(inName, await fetchFile(state.videoFile));
+
+    const segFiles = [];
+    for (let i = 0; i < ready.length; i++) {
+      const seg = ready[i];
+      const ext = seg.blob.type.includes('wav') ? 'wav' : 'mp3';
+      const name = `seg${i}.${ext}`;
+      await ffmpeg.writeFile(name, await fetchFile(seg.blob));
+      segFiles.push(name);
+    }
+
+    const args = ['-i', inName];
+    segFiles.forEach(f => args.push('-i', f));
+
+    const keepOriginal = els.keepOriginalAudio.checked;
+    const delayedLabels = [];
+    const filterParts = ready.map((seg, i) => {
+      const inputIndex = i + 1;
+      const delayMs = Math.max(0, Math.round(seg.startTime * 1000));
+      const label = `a${i}`;
+      delayedLabels.push(`[${label}]`);
+      return `[${inputIndex}:a]adelay=${delayMs}|${delayMs}[${label}]`;
+    });
+    const mixCount = keepOriginal ? ready.length + 1 : ready.length;
+    const mixSources = keepOriginal ? `${delayedLabels.join('')}[0:a]` : delayedLabels.join('');
+    filterParts.push(`${mixSources}amix=inputs=${mixCount}:normalize=0[aout]`);
+
+    args.push('-filter_complex', filterParts.join(';'));
+    args.push('-map', '0:v', '-map', '[aout]', '-c:v', 'copy', '-c:a', 'aac', '-shortest', 'output.mp4');
+
+    setExportStep('Encoding final video…');
+    await ffmpeg.exec(args);
+    const data = await ffmpeg.readFile('output.mp4');
+    const blob = new Blob([data.buffer], { type: 'video/mp4' });
+    const url = URL.createObjectURL(blob);
+
+    if (state.lastExportUrl) URL.revokeObjectURL(state.lastExportUrl);
+    state.lastExportUrl = url;
+    els.downloadBtn.disabled = false;
+
+    // Show a visible result: some mobile browsers silently swallow a programmatic
+    // download click once it happens long after the original tap (export can take
+    // a while), so give the user something on-screen plus an explicit link to tap,
+    // plus a persistent Download button in the header that works any time after.
+    els.exportPreview.src = url;
+    els.exportDownloadLink.href = url;
+    els.exportResult.classList.remove('hidden');
+    els.exportResult.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+    const a = document.createElement('a');
+    a.href = url; a.download = '11api-export.mp4';
+    document.body.appendChild(a); a.click(); a.remove();
+
+    setExportStep('Done — tap Download above if your browser didn\'t start it automatically.');
+    showStatus('Export ready — see the preview below', 'success');
+  } catch (err) {
+    console.error(err);
+    setExportStep('Export failed — see the message below for details.');
+    showStatus('Export failed: ' + err.message, 'error');
+  }
+  els.exportBtn.disabled = false;
+  els.exportProgressWrap.classList.add('hidden');
+});
+
+els.downloadBtn.addEventListener('click', () => {
+  if (!state.lastExportUrl) return;
+  const a = document.createElement('a');
+  a.href = state.lastExportUrl; a.download = '11api-export.mp4';
+  document.body.appendChild(a); a.click(); a.remove();
+});
+</script>
+</body>
+</html>
