@@ -461,6 +461,7 @@ audio.segment-audio { width: 100%; height: 32px; margin-top: 4px; }
       <h2>Voiceover lines</h2>
       <div class="segments-actions">
         <label class="checkbox"><input type="checkbox" id="keepOriginalAudio" /> keep original video audio</label>
+        <button id="downloadAudioBtn" class="btn btn-ghost">⬇ Download audio only</button>
         <button id="downloadBtn" class="btn btn-primary">⬇ Download video with audio</button>
       </div>
     </div>
@@ -478,6 +479,7 @@ audio.segment-audio { width: 100%; height: 32px; margin-top: 4px; }
 <script type="module">
 import { FFmpeg } from "https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.10/dist/esm/index.js";
 import { fetchFile, toBlobURL } from "https://cdn.jsdelivr.net/npm/@ffmpeg/util@0.12.1/dist/esm/index.js";
+import JSZip from "https://cdn.jsdelivr.net/npm/jszip@3.10.1/+esm";
 
 const state = { videoFile: null, duration: 0, segments: [], lastExportUrl: null };
 let ffmpeg = null, ffmpegReady = false;
@@ -534,6 +536,7 @@ const els = {
   segmentList: document.getElementById('segmentList'),
   emptyState: document.getElementById('emptyState'),
   downloadBtn: document.getElementById('downloadBtn'),
+  downloadAudioBtn: document.getElementById('downloadAudioBtn'),
   exportStepText: document.getElementById('exportStepText'),
   keepOriginalAudio: document.getElementById('keepOriginalAudio'),
   statusBar: document.getElementById('statusBar'),
@@ -971,6 +974,8 @@ function fmtTime(t) {
   return `${String(m).padStart(2, '0')}:${s.padStart(4, '0')}`;
 }
 function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+// Filesystem-safe version of fmtTime for filenames, e.g. 4.20s -> "00-04.20", 62.00s -> "01-02.00"
+function fmtTimeForFile(t) { return fmtTime(t).replace(':', '-'); }
 
 // ---------- Video loading (local, no upload) ----------
 els.dropzone.addEventListener('click', () => els.videoInput.click());
@@ -1322,6 +1327,33 @@ async function ensureFFmpeg() {
   });
   ffmpegReady = true;
 }
+
+els.downloadAudioBtn.addEventListener('click', async () => {
+  const ready = state.segments.filter(s => s.status === 'ready').slice().sort((a, b) => a.startTime - b.startTime);
+  if (ready.length === 0) { showStatus('Generate at least one voice line before downloading', 'error'); return; }
+
+  els.downloadAudioBtn.disabled = true;
+  try {
+    const zip = new JSZip();
+    ready.forEach((seg, i) => {
+      const ext = seg.blob.type.includes('wav') ? 'wav' : 'mp3';
+      const index = String(i + 1).padStart(2, '0');
+      const stamp = fmtTimeForFile(seg.startTime);
+      zip.file(`${index}_${stamp}.${ext}`, seg.blob);
+    });
+    const zipBlob = await zip.generateAsync({ type: 'blob' });
+    const url = URL.createObjectURL(zipBlob);
+    const a = document.createElement('a');
+    a.href = url; a.download = '11api-voiceover-audio.zip';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 4000);
+    showStatus('Audio files downloaded — named by order and start time', 'success');
+  } catch (err) {
+    console.error(err);
+    showStatus('Audio download failed: ' + err.message, 'error');
+  }
+  els.downloadAudioBtn.disabled = false;
+});
 
 els.downloadBtn.addEventListener('click', async () => {
   const ready = state.segments.filter(s => s.status === 'ready');
