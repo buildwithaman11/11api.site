@@ -81,14 +81,21 @@ main { max-width: 960px; margin: 0 auto; padding: 22px 20px 100px; width: 100%; 
 
 .panel {
   background: var(--bg-raised); border: 1px solid var(--line); border-radius: var(--radius-lg);
-  padding: 18px; margin-bottom: 20px; animation: fadeSlideUp .35s ease both;
+  padding: 20px; margin-bottom: 20px; animation: fadeSlideUp .35s ease both;
+  box-shadow: 0 6px 24px rgba(0,0,0,.18);
 }
-.panel h3 { margin: 0 0 12px; font-family: var(--font-display); font-size: 13px; color: var(--text-dim); font-weight: 600; letter-spacing: .01em; }
+.panel h3 {
+  margin: 0 0 14px; font-family: var(--font-display); font-size: 14px; color: var(--text); font-weight: 700;
+  letter-spacing: .01em; padding-bottom: 10px; border-bottom: 1px solid var(--line-soft);
+}
+.settings-section { background: var(--bg-inset); border: 1px solid var(--line-soft); border-radius: var(--radius); padding: 14px; margin-bottom: 14px; }
+.settings-section:last-of-type { margin-bottom: 0; }
+.settings-section-title { font-family: var(--font-display); font-size: 11.5px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: .05em; margin: 0 0 12px; }
 .field-row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 10px; }
 .field { flex: 1; min-width: 180px; display: flex; flex-direction: column; gap: 5px; }
 .field label { font-size: 11px; color: var(--text-dim); }
 .field input, .field select {
-  background: var(--bg-inset); border: 1px solid var(--line); color: var(--text);
+  background: var(--bg-raised); border: 1px solid var(--line); color: var(--text);
   border-radius: var(--radius); padding: 10px 12px; font-size: 14px; width: 100%;
   transition: border-color .15s, box-shadow .15s;
 }
@@ -142,6 +149,47 @@ main { max-width: 960px; margin: 0 auto; padding: 22px 20px 100px; width: 100%; 
   font-size: 11px; color: var(--text-dim); border-left: 1px solid var(--line);
   padding-left: 10px; margin-left: 1px; letter-spacing: .01em;
 }
+
+/* ---------- Notice bar ---------- */
+.notice-bar {
+  display: flex; align-items: center; gap: 12px; justify-content: center;
+  background: linear-gradient(135deg, rgba(232,167,92,.16), rgba(111,211,230,.10));
+  border-bottom: 1px solid var(--line); padding: 10px 44px 10px 20px; position: relative;
+  font-size: 13px; color: var(--text); text-align: center; animation: fadeSlideUp .35s ease both;
+}
+.notice-close {
+  position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+  background: transparent; border: none; color: var(--text-dim); font-size: 17px;
+  line-height: 1; cursor: pointer; padding: 4px 7px; border-radius: 6px;
+}
+.notice-close:hover { color: var(--text); background: rgba(255,255,255,.08); }
+
+/* ---------- Mode tabs ---------- */
+.mode-tabs {
+  display: flex; gap: 6px; background: var(--bg-inset); border: 1px solid var(--line);
+  border-radius: var(--radius-lg); padding: 5px; margin-bottom: 20px; animation: fadeSlideUp .4s ease both;
+}
+.mode-tab {
+  flex: 1; border: none; background: transparent; color: var(--text-dim); font-family: var(--font-display);
+  font-size: 13.5px; font-weight: 600; padding: 11px 14px; border-radius: var(--radius); cursor: pointer;
+  transition: background .18s, color .18s, box-shadow .18s; touch-action: manipulation;
+}
+.mode-tab:hover { color: var(--text); }
+.mode-tab.active {
+  background: linear-gradient(135deg, var(--accent-strong), var(--accent)); color: var(--accent-ink);
+  box-shadow: 0 3px 12px rgba(232, 167, 92, .25);
+}
+
+/* ---------- Connection indicator ---------- */
+.conn-indicator { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text-dim); white-space: nowrap; }
+.conn-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--text-faint); flex-shrink: 0; transition: background .2s, box-shadow .2s; }
+.conn-dot.connected { background: var(--ready); box-shadow: 0 0 0 3px var(--ready-soft); }
+.conn-dot.error { background: var(--danger); box-shadow: 0 0 0 3px var(--danger-soft); }
+.conn-dot.checking { background: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); animation: barPulse 1s ease infinite; }
+.key-row-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+
+/* ---------- Stage header / change video ---------- */
+.stage-header { display: flex; justify-content: flex-end; margin-bottom: 10px; }
 
 .dropzone {
   border: 1.5px dashed var(--line); border-radius: var(--radius-lg); padding: 52px 20px; text-align: center;
@@ -271,16 +319,6 @@ audio.segment-audio { width: 100%; height: 32px; margin-top: 4px; }
   font-size: 15px; line-height: 1; cursor: pointer; padding: 5px 7px; border-radius: 5px; opacity: .8;
 }
 .status-close:hover { opacity: 1; background: rgba(255,255,255,.06); }
-.export-step-text { font-size: 12px; color: var(--text-dim); margin-top: 7px; text-align: center; line-height: 1.5; }
-
-.progress-wrap { height: 5px; background: var(--bg-inset); border-radius: 3px; overflow: hidden; margin-top: 10px; }
-.progress-bar {
-  height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-strong));
-  background-image: linear-gradient(90deg, var(--accent), var(--accent-strong)),
-    repeating-linear-gradient(45deg, rgba(255,255,255,.18) 0 6px, transparent 6px 12px);
-  width: 0%; transition: width .2s ease; animation: shimmer 1s linear infinite;
-}
-
 /* ---------- Responsive ---------- */
 @media (max-width: 640px) {
   main { padding: 16px 12px 100px; }
@@ -318,61 +356,80 @@ audio.segment-audio { width: 100%; height: 32px; margin-top: 4px; }
   </div>
   <div class="topbar-right">
     <span id="quotaBadge" class="quota-badge hidden"></span>
+    <button id="shareBtn" class="icon-btn" type="button" title="Share this tool">🔗 Share</button>
     <button id="settingsToggle" class="icon-btn">⚙ Voice engine settings</button>
   </div>
 </header>
 
+<div id="noticeBar" class="notice-bar hidden">
+  <span id="noticeText"></span>
+  <button id="noticeCloseBtn" class="notice-close" type="button" aria-label="Dismiss notice">×</button>
+</div>
+
 <main>
 
   <section id="settingsPanel" class="panel hidden">
-    <h3>Voice engine</h3>
-    <div class="field-row">
-      <div class="field">
-        <label for="provider">Engine</label>
-        <select id="provider">
-          <option value="elevenlabs">ElevenLabs</option>
-          <option value="gemini">Gemini</option>
-        </select>
+    <h3>⚙ Voice engine settings</h3>
+    <div class="settings-section">
+      <p class="settings-section-title">Engine</p>
+      <div class="field-row">
+        <div class="field">
+          <label for="provider">Which engine generates your voice</label>
+          <select id="provider">
+            <option value="elevenlabs">ElevenLabs</option>
+            <option value="gemini">Gemini</option>
+          </select>
+        </div>
       </div>
     </div>
+
     <div id="elevenFields">
-      <div class="field-row">
-        <div class="field">
-          <label for="elevenKeySelect">ElevenLabs API key</label>
-          <div class="key-select-row">
-            <select id="elevenKeySelect"><option value="">No keys saved — add one</option></select>
-            <button id="elevenAddKeyBtn" class="btn btn-ghost btn-small" type="button">+ Add</button>
-            <button id="elevenRemoveKeyBtn" class="btn btn-danger-ghost btn-small" type="button">Remove</button>
+      <div class="settings-section">
+        <p class="settings-section-title">ElevenLabs API key</p>
+        <div class="key-row-header">
+          <span id="elevenConnLabel" class="conn-indicator"><span id="elevenConnDot" class="conn-dot"></span> Not connected</span>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="elevenKeySelect">Saved keys — switch anytime, no sign-in needed</label>
+            <div class="key-select-row">
+              <select id="elevenKeySelect"><option value="">No keys saved — add one</option></select>
+              <button id="elevenAddKeyBtn" class="btn btn-ghost btn-small" type="button">+ Add</button>
+              <button id="elevenRemoveKeyBtn" class="btn btn-danger-ghost btn-small" type="button">Remove</button>
+            </div>
+          </div>
+          <div class="field" style="max-width:190px">
+            <label>&nbsp;</label>
+            <button id="elevenLoadVoicesBtn" class="btn btn-ghost" type="button" style="width:100%">Load voices &amp; models</button>
           </div>
         </div>
-        <div class="field" style="max-width:190px">
-          <label>&nbsp;</label>
-          <button id="elevenLoadVoicesBtn" class="btn btn-ghost" type="button" style="width:100%">Load voices &amp; models</button>
-        </div>
-      </div>
-      <div id="elevenAddKeyForm" class="add-key-form hidden">
-        <input id="elevenNewKeyLabel" type="text" placeholder="Label, e.g. Personal account" autocomplete="off" />
-        <input id="elevenNewKeyValue" type="password" placeholder="xi-api-key" autocomplete="off" />
-        <div class="add-key-form-actions">
-          <button id="elevenSaveKeyBtn" class="btn btn-accent btn-small" type="button">Save key</button>
-          <button id="elevenCancelKeyBtn" class="btn btn-ghost btn-small" type="button">Cancel</button>
-        </div>
-      </div>
-      <div class="field-row">
-        <div class="field">
-          <label for="elevenModelSelect">Model</label>
-          <select id="elevenModelSelect"></select>
-        </div>
-        <div class="field">
-          <label for="elevenVoiceSelect">Voice</label>
-          <div class="voice-select-row">
-            <select id="elevenVoiceSelect"><option value="">No voices loaded yet</option></select>
-            <button id="elevenPreviewBtn" class="btn btn-ghost btn-small" type="button">▶ Preview</button>
+        <div id="elevenAddKeyForm" class="add-key-form hidden">
+          <input id="elevenNewKeyLabel" type="text" placeholder="Label, e.g. Personal account" autocomplete="off" />
+          <input id="elevenNewKeyValue" type="password" placeholder="xi-api-key" autocomplete="off" />
+          <div class="add-key-form-actions">
+            <button id="elevenSaveKeyBtn" class="btn btn-accent btn-small" type="button">Save key</button>
+            <button id="elevenCancelKeyBtn" class="btn btn-ghost btn-small" type="button">Cancel</button>
           </div>
-          <input id="elevenVoiceCustom" type="text" class="hidden" placeholder="paste a voice ID" />
         </div>
       </div>
-      <div id="elevenVoiceStatus" class="voice-status"></div>
+      <div class="settings-section">
+        <p class="settings-section-title">Voice &amp; model</p>
+        <div class="field-row">
+          <div class="field">
+            <label for="elevenModelSelect">Model</label>
+            <select id="elevenModelSelect"></select>
+          </div>
+          <div class="field">
+            <label for="elevenVoiceSelect">Voice</label>
+            <div class="voice-select-row">
+              <select id="elevenVoiceSelect"><option value="">No voices loaded yet</option></select>
+              <button id="elevenPreviewBtn" class="btn btn-ghost btn-small" type="button">▶ Preview</button>
+            </div>
+            <input id="elevenVoiceCustom" type="text" class="hidden" placeholder="paste a voice ID" />
+          </div>
+        </div>
+        <div id="elevenVoiceStatus" class="voice-status"></div>
+      </div>
       <div id="elevenQuota" class="quota-box hidden">
         <div class="quota-row">
           <span>Usage this billing period</span>
@@ -382,42 +439,52 @@ audio.segment-audio { width: 100%; height: 32px; margin-top: 4px; }
         <div class="quota-bar-track"><div id="elevenQuotaFill" class="quota-bar-fill"></div></div>
       </div>
     </div>
+
     <div id="geminiFields" class="hidden">
-      <div class="field-row">
-        <div class="field">
-          <label for="geminiKeySelect">Gemini API key</label>
-          <div class="key-select-row">
-            <select id="geminiKeySelect"><option value="">No keys saved — add one</option></select>
-            <button id="geminiAddKeyBtn" class="btn btn-ghost btn-small" type="button">+ Add</button>
-            <button id="geminiRemoveKeyBtn" class="btn btn-danger-ghost btn-small" type="button">Remove</button>
+      <div class="settings-section">
+        <p class="settings-section-title">Gemini API key</p>
+        <div class="key-row-header">
+          <span id="geminiConnLabel" class="conn-indicator"><span id="geminiConnDot" class="conn-dot"></span> Not connected</span>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label for="geminiKeySelect">Saved keys — switch anytime, no sign-in needed</label>
+            <div class="key-select-row">
+              <select id="geminiKeySelect"><option value="">No keys saved — add one</option></select>
+              <button id="geminiAddKeyBtn" class="btn btn-ghost btn-small" type="button">+ Add</button>
+              <button id="geminiRemoveKeyBtn" class="btn btn-danger-ghost btn-small" type="button">Remove</button>
+            </div>
+          </div>
+        </div>
+        <div id="geminiAddKeyForm" class="add-key-form hidden">
+          <input id="geminiNewKeyLabel" type="text" placeholder="Label, e.g. Personal account" autocomplete="off" />
+          <input id="geminiNewKeyValue" type="password" placeholder="AIza..." autocomplete="off" />
+          <div class="add-key-form-actions">
+            <button id="geminiSaveKeyBtn" class="btn btn-accent btn-small" type="button">Save key</button>
+            <button id="geminiCancelKeyBtn" class="btn btn-ghost btn-small" type="button">Cancel</button>
           </div>
         </div>
       </div>
-      <div id="geminiAddKeyForm" class="add-key-form hidden">
-        <input id="geminiNewKeyLabel" type="text" placeholder="Label, e.g. Personal account" autocomplete="off" />
-        <input id="geminiNewKeyValue" type="password" placeholder="AIza..." autocomplete="off" />
-        <div class="add-key-form-actions">
-          <button id="geminiSaveKeyBtn" class="btn btn-accent btn-small" type="button">Save key</button>
-          <button id="geminiCancelKeyBtn" class="btn btn-ghost btn-small" type="button">Cancel</button>
-        </div>
-      </div>
-      <div class="field-row">
-        <div class="field">
-          <label for="geminiModelSelect">Model</label>
-          <select id="geminiModelSelect">
-            <option value="gemini-2.5-flash-preview-tts">Flash — fast &amp; cheaper</option>
-            <option value="gemini-2.5-pro-preview-tts">Pro — higher quality</option>
-          </select>
-        </div>
-        <div class="field">
-          <label for="geminiVoiceSelect">Voice</label>
-          <div class="voice-select-row">
-            <select id="geminiVoiceSelect"></select>
-            <button id="geminiPreviewBtn" class="btn btn-ghost btn-small" type="button">▶ Preview</button>
+      <div class="settings-section">
+        <p class="settings-section-title">Voice &amp; model</p>
+        <div class="field-row">
+          <div class="field">
+            <label for="geminiModelSelect">Model</label>
+            <select id="geminiModelSelect">
+              <option value="gemini-2.5-flash-preview-tts">Flash — fast &amp; cheaper</option>
+              <option value="gemini-2.5-pro-preview-tts">Pro — higher quality</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="geminiVoiceSelect">Voice</label>
+            <div class="voice-select-row">
+              <select id="geminiVoiceSelect"></select>
+              <button id="geminiPreviewBtn" class="btn btn-ghost btn-small" type="button">▶ Preview</button>
+            </div>
           </div>
         </div>
+        <div id="geminiVoiceStatus" class="voice-status"></div>
       </div>
-      <div id="geminiVoiceStatus" class="voice-status"></div>
       <div id="geminiQuota" class="quota-box hidden">
         <div class="quota-row">
           <span>Token usage</span>
@@ -429,62 +496,93 @@ audio.segment-audio { width: 100%; height: 32px; margin-top: 4px; }
     <p class="hint">Keys are saved only in this browser's local storage and sent directly to each provider's API — never to any server of ours (there isn't one). Save as many keys per engine as you like and switch the active one anytime.</p>
   </section>
 
-  <section id="dropzone" class="dropzone">
-    <input type="file" id="videoInput" accept="video/*" hidden />
-    <div class="dropzone-inner">
-      <div class="dropzone-icon">
-        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M6 22V18M13 26V14M20 30V10M27 26V14M34 22V18" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
-        </svg>
-      </div>
-      <p class="dropzone-title">Drop a video, or tap to choose one</p>
-      <p class="dropzone-sub">Stays entirely on this device until you export</p>
-    </div>
-  </section>
+  <div class="mode-tabs">
+    <button id="tabVoiceoverOnly" class="mode-tab active" type="button" data-mode="voiceover">🎙 Voiceover only</button>
+    <button id="tabVideoTimeline" class="mode-tab" type="button" data-mode="video">🎬 Video + Voiceover</button>
+  </div>
 
-  <section id="editor" class="editor hidden">
-    <div class="stage"><video id="videoPlayer" controls playsinline></video></div>
-
-    <div class="timeline-wrap">
-      <div class="timeline-header">
-        <button id="addMarkerBtn" class="btn btn-accent">+ Voiceover at current time</button>
-        <span id="timeReadout" class="time-readout">00:00.0 / 00:00.0</span>
-      </div>
-      <div id="timeline" class="timeline">
-        <div id="playhead" class="playhead"></div>
-        <div id="markerLayer" class="marker-layer"></div>
-      </div>
-      <p class="hint">Drag either edge of a range to set where the line starts and ends. Drag the middle to move it.</p>
-    </div>
-
+  <section id="voiceoverOnlySection" class="voiceover-only">
     <div class="segments-header">
-      <h2>Voiceover lines</h2>
+      <h2>Voice lines</h2>
       <div class="segments-actions">
-        <label class="checkbox"><input type="checkbox" id="keepOriginalAudio" /> keep original video audio</label>
-        <button id="downloadAudioBtn" class="btn btn-ghost">⬇ Download audio only</button>
-        <button id="downloadBtn" class="btn btn-primary">⬇ Download video with audio</button>
+        <button id="addClipBtn" class="btn btn-accent">+ Add line</button>
+        <button id="downloadClipsBtn" class="btn btn-ghost">⬇ Download audio</button>
       </div>
     </div>
-
-    <div id="exportProgressWrap" class="progress-wrap hidden"><div id="exportProgressBar" class="progress-bar"></div></div>
-    <p id="exportStepText" class="export-step-text hidden"></p>
-
-    <ul id="segmentList" class="segment-list"></ul>
-    <p id="emptyState" class="empty-state">No voiceover lines yet. Play the video to the spot you need, then tap "+ Voiceover at current time".</p>
+    <ul id="clipList" class="segment-list"></ul>
+    <p id="clipEmptyState" class="empty-state">No voice lines yet. Tap "+ Add line" to write your first one — no video needed.</p>
   </section>
+
+  <div id="videoModeSection" class="hidden">
+    <section id="dropzone" class="dropzone">
+      <input type="file" id="videoInput" accept="video/*" hidden />
+      <div class="dropzone-inner">
+        <div class="dropzone-icon">
+          <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6 22V18M13 26V14M20 30V10M27 26V14M34 22V18" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <p class="dropzone-title">Drop a video, or tap to choose one</p>
+        <p class="dropzone-sub">Stays entirely on this device — nothing is uploaded</p>
+      </div>
+    </section>
+
+    <section id="editor" class="editor hidden">
+      <div class="stage-header">
+        <button id="changeVideoBtn" class="btn btn-ghost btn-small" type="button">🔄 Change video</button>
+      </div>
+      <div class="stage"><video id="videoPlayer" controls playsinline></video></div>
+
+      <div class="timeline-wrap">
+        <div class="timeline-header">
+          <button id="addMarkerBtn" class="btn btn-accent">+ Voiceover at current time</button>
+          <span id="timeReadout" class="time-readout">00:00.0 / 00:00.0</span>
+        </div>
+        <div id="timeline" class="timeline">
+          <div id="playhead" class="playhead"></div>
+          <div id="markerLayer" class="marker-layer"></div>
+        </div>
+        <p class="hint">Drag either edge of a range to set where the line starts and ends. Drag the middle to move it.</p>
+      </div>
+
+      <div class="segments-header">
+        <h2>Voiceover lines</h2>
+        <div class="segments-actions">
+          <button id="downloadAudioBtn" class="btn btn-primary">⬇ Download audio</button>
+        </div>
+      </div>
+
+      <ul id="segmentList" class="segment-list"></ul>
+      <p id="emptyState" class="empty-state">No voiceover lines yet. Play the video to the spot you need, then tap "+ Voiceover at current time".</p>
+    </section>
+  </div>
 
   <div id="statusBar" class="status-bar hidden"></div>
 </main>
 
 <script type="module">
-import { FFmpeg } from "https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.10/dist/esm/index.js";
-import { fetchFile, toBlobURL } from "https://cdn.jsdelivr.net/npm/@ffmpeg/util@0.12.1/dist/esm/index.js";
 import JSZip from "https://cdn.jsdelivr.net/npm/jszip@3.10.1/+esm";
 
-const state = { videoFile: null, duration: 0, segments: [], lastExportUrl: null };
-let ffmpeg = null, ffmpegReady = false;
+const state = { mode: 'voiceover', videoFile: null, duration: 0, segments: [], clips: [] };
 
 const els = {
+  noticeBar: document.getElementById('noticeBar'),
+  noticeText: document.getElementById('noticeText'),
+  noticeCloseBtn: document.getElementById('noticeCloseBtn'),
+  shareBtn: document.getElementById('shareBtn'),
+  tabVoiceoverOnly: document.getElementById('tabVoiceoverOnly'),
+  tabVideoTimeline: document.getElementById('tabVideoTimeline'),
+  voiceoverOnlySection: document.getElementById('voiceoverOnlySection'),
+  videoModeSection: document.getElementById('videoModeSection'),
+  clipList: document.getElementById('clipList'),
+  clipEmptyState: document.getElementById('clipEmptyState'),
+  addClipBtn: document.getElementById('addClipBtn'),
+  downloadClipsBtn: document.getElementById('downloadClipsBtn'),
+  changeVideoBtn: document.getElementById('changeVideoBtn'),
+  elevenConnDot: document.getElementById('elevenConnDot'),
+  elevenConnLabel: document.getElementById('elevenConnLabel'),
+  geminiConnDot: document.getElementById('geminiConnDot'),
+  geminiConnLabel: document.getElementById('geminiConnLabel'),
   settingsToggle: document.getElementById('settingsToggle'),
   settingsPanel: document.getElementById('settingsPanel'),
   provider: document.getElementById('provider'),
@@ -535,13 +633,8 @@ const els = {
   markerLayer: document.getElementById('markerLayer'),
   segmentList: document.getElementById('segmentList'),
   emptyState: document.getElementById('emptyState'),
-  downloadBtn: document.getElementById('downloadBtn'),
   downloadAudioBtn: document.getElementById('downloadAudioBtn'),
-  exportStepText: document.getElementById('exportStepText'),
-  keepOriginalAudio: document.getElementById('keepOriginalAudio'),
   statusBar: document.getElementById('statusBar'),
-  exportProgressWrap: document.getElementById('exportProgressWrap'),
-  exportProgressBar: document.getElementById('exportProgressBar'),
 };
 
 // ---------- API key manager (multiple saved keys per engine, switchable) ----------
@@ -642,14 +735,37 @@ function wireKeyManager(provider, e) {
   });
 }
 
+function setConnState(provider, connState) {
+  // connState: 'unknown' | 'checking' | 'connected' | 'error'
+  const dot = provider === 'elevenlabs' ? els.elevenConnDot : els.geminiConnDot;
+  const label = provider === 'elevenlabs' ? els.elevenConnLabel : els.geminiConnLabel;
+  dot.className = 'conn-dot' + (connState === 'unknown' ? '' : ' ' + connState);
+  const text = { unknown: 'Not connected', checking: 'Checking…', connected: 'Connected', error: 'Connection failed' }[connState];
+  label.lastChild.textContent = ` ${text}`;
+}
+
+async function validateGeminiKey() {
+  const key = getActiveKey('gemini');
+  if (!key) { setConnState('gemini', 'unknown'); return; }
+  setConnState('gemini', 'checking');
+  try {
+    const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models?key=${encodeURIComponent(key)}`);
+    setConnState('gemini', resp.ok ? 'connected' : 'error');
+  } catch {
+    setConnState('gemini', 'error');
+  }
+}
+
 function onActiveKeyChanged(provider) {
   if (provider === 'elevenlabs') {
     elevenVoicesData = [];
     populateElevenVoices([], '');
     els.elevenQuota.classList.add('hidden');
     if (getActiveKey('elevenlabs')) { fetchElevenLabsAccountData(); refreshElevenQuota(); }
+    else setConnState('elevenlabs', 'unknown');
   } else {
     renderGeminiQuota();
+    validateGeminiKey();
   }
   updateQuotaBadge();
 }
@@ -707,8 +823,9 @@ const geminiPreviewCache = new Map(); // "model|voice" -> object URL, so repeat 
 // ---------- ElevenLabs voices + models (fetched live from the account behind the pasted key) ----------
 async function fetchElevenLabsAccountData(selectVoice, selectModel) {
   const key = getActiveKey('elevenlabs');
-  if (!key) { showStatus('Add and select an ElevenLabs API key first', 'error'); return; }
+  if (!key) { showStatus('Add and select an ElevenLabs API key first', 'error'); setConnState('elevenlabs', 'unknown'); return; }
   els.elevenVoiceStatus.textContent = 'Loading voices & models…';
+  setConnState('elevenlabs', 'checking');
   try {
     const [voicesResp, modelsResp] = await Promise.all([
       fetch('https://api.elevenlabs.io/v1/voices', { headers: { 'xi-api-key': key } }),
@@ -731,9 +848,11 @@ async function fetchElevenLabsAccountData(selectVoice, selectModel) {
     populateElevenModels(models, selectModel);
 
     els.elevenVoiceStatus.textContent = `${voices.length} voices, ${els.elevenModelSelect.options.length} models loaded`;
+    setConnState('elevenlabs', 'connected');
   } catch (err) {
     els.elevenVoiceStatus.textContent = '';
-    showStatus(err.message, 'error');
+    showStatus(friendlyError(err), 'error');
+    setConnState('elevenlabs', 'error');
   }
 }
 function populateElevenVoices(voices, selected) {
@@ -790,7 +909,7 @@ els.elevenPreviewBtn.addEventListener('click', async () => {
     const blob = await elevenLabsTTS('Hi, this is a preview of this voice.');
     playPreviewBlob(blob);
   } catch (err) {
-    showStatus(err.message, 'error');
+    showStatus(friendlyError(err), 'error');
   }
   els.elevenPreviewBtn.disabled = false;
   els.elevenPreviewBtn.textContent = '▶ Preview';
@@ -816,7 +935,7 @@ els.geminiPreviewBtn.addEventListener('click', async () => {
     previewAudioEl = new Audio(url);
     previewAudioEl.play().catch(() => {});
   } catch (err) {
-    showStatus(err.message, 'error');
+    showStatus(friendlyError(err), 'error');
   }
   els.geminiPreviewBtn.disabled = false;
   els.geminiPreviewBtn.textContent = '▶ Preview';
@@ -920,6 +1039,7 @@ function loadSettings() {
   if (!elevenVoicesData.length && getActiveKey('elevenlabs')) fetchElevenLabsAccountData(s.elevenVoice, s.elevenModel);
   if (getActiveKey('elevenlabs')) refreshElevenQuota();
   renderGeminiQuota();
+  if (getActiveKey('gemini')) validateGeminiKey();
 
   toggleProviderFields();
   updateQuotaBadge();
@@ -947,6 +1067,63 @@ els.provider.addEventListener('change', toggleProviderFields);
 els.settingsToggle.addEventListener('click', () => els.settingsPanel.classList.toggle('hidden'));
 loadSettings();
 
+// ---------- Mode switch: voiceover-only vs video + voiceover ----------
+function setMode(mode) {
+  state.mode = mode;
+  els.tabVoiceoverOnly.classList.toggle('active', mode === 'voiceover');
+  els.tabVideoTimeline.classList.toggle('active', mode === 'video');
+  els.voiceoverOnlySection.classList.toggle('hidden', mode !== 'voiceover');
+  els.videoModeSection.classList.toggle('hidden', mode !== 'video');
+}
+els.tabVoiceoverOnly.addEventListener('click', () => setMode('voiceover'));
+els.tabVideoTimeline.addEventListener('click', () => setMode('video'));
+setMode('voiceover');
+if (state.clips.length === 0) addClip();
+
+// ---------- Notice bar ----------
+// Edit NOTICE_MESSAGE to change what visitors see. Leave it empty ('') to show no notice.
+// Changing the text automatically shows it again even to people who dismissed an older notice.
+const NOTICE_MESSAGE = "You can now generate voice lines without uploading a video — use the tabs above to switch.";
+if (NOTICE_MESSAGE) {
+  const noticeId = 'n_' + NOTICE_MESSAGE.length + '_' + NOTICE_MESSAGE.slice(0, 12).replace(/\s+/g, '');
+  if (localStorage.getItem('vo11_dismissed_notice') !== noticeId) {
+    els.noticeText.textContent = NOTICE_MESSAGE;
+    els.noticeBar.classList.remove('hidden');
+  }
+  els.noticeCloseBtn.addEventListener('click', () => {
+    els.noticeBar.classList.add('hidden');
+    localStorage.setItem('vo11_dismissed_notice', noticeId);
+  });
+}
+
+// ---------- Share ----------
+els.shareBtn.addEventListener('click', async () => {
+  const shareData = {
+    title: '11API — Voiceover Timeline',
+    text: 'Generate AI voiceovers and line them up with your video — free, right in the browser.',
+    url: location.href,
+  };
+  if (navigator.share) {
+    try { await navigator.share(shareData); } catch {}
+    return;
+  }
+  try {
+    await navigator.clipboard.writeText(location.href);
+    showStatus('Link copied — share it anywhere', 'success');
+  } catch {
+    showStatus('Copy this page\'s address from your browser bar to share it', 'error');
+  }
+});
+
+// ---------- Change video ----------
+els.changeVideoBtn.addEventListener('click', () => {
+  if (state.segments.length > 0) {
+    const ok = confirm('Changing the video keeps your existing voice lines and their timestamps, but they may no longer line up with the new video. Continue?');
+    if (!ok) return;
+  }
+  els.videoInput.click();
+});
+
 let statusTimer = null;
 function showStatus(msg, kind) {
   els.statusBar.innerHTML = '';
@@ -967,6 +1144,21 @@ function showStatus(msg, kind) {
   } else {
     statusTimer = setTimeout(() => els.statusBar.classList.add('hidden'), 4500);
   }
+}
+// Turns raw fetch/API errors (often full of status codes and JSON) into a short, plain-language message.
+function friendlyError(err) {
+  const raw = (err && err.message) || String(err || '');
+  const statusMatch = raw.match(/\b(\d{3})\b/);
+  const status = statusMatch ? parseInt(statusMatch[1], 10) : null;
+  if (status === 401 || /unauthorized/i.test(raw)) return 'That API key looks invalid — double-check it and try again.';
+  if (status === 403) return "That key doesn't have permission for this — check your plan or key permissions.";
+  if (status === 429) return 'Rate limit reached — switch to another saved key or wait a moment.';
+  if (status && status >= 500) return 'The voice service is having issues right now — please try again shortly.';
+  if (/failed to fetch|network/i.test(raw)) return "Couldn't reach the voice service — check your internet connection.";
+  if (/no voices loaded|pick a voice/i.test(raw)) return 'Pick a voice first, or load voices in Voice engine settings.';
+  let clean = raw.replace(/[{}\[\]"]/g, ' ').replace(/\s+/g, ' ').trim();
+  if (clean.length > 110) clean = clean.slice(0, 110).trim() + '…';
+  return clean || 'Something went wrong — please try again.';
 }
 function fmtTime(t) {
   const m = Math.floor(t / 60);
@@ -1103,7 +1295,7 @@ function removeSegment(id) {
 
 function updateExportAvailability() {
   const readyCount = state.segments.filter(s => s.status === 'ready').length;
-  els.downloadBtn.textContent = readyCount ? `⬇ Download video with audio (${readyCount})` : '⬇ Download video with audio';
+  els.downloadAudioBtn.textContent = readyCount ? `⬇ Download audio (${readyCount})` : '⬇ Download audio';
 }
 
 function renderSegments() {
@@ -1158,7 +1350,7 @@ function renderSegments() {
     const genBtn = document.createElement('button');
     genBtn.className = 'btn btn-accent';
     genBtn.textContent = seg.status === 'ready' ? 'Regenerate' : 'Generate voice';
-    genBtn.addEventListener('click', () => generateVoice(seg));
+    genBtn.addEventListener('click', () => generateVoice(seg, () => { renderSegments(); renderMarkers(); }));
     const removeBtn = document.createElement('button');
     removeBtn.className = 'btn btn-danger-ghost'; removeBtn.textContent = 'Remove';
     removeBtn.addEventListener('click', () => removeSegment(seg.id));
@@ -1202,25 +1394,90 @@ function makeTimeField(labelText, value, onChange, onNow) {
   return wrap;
 }
 
+// ---------- Voiceover-only clips (no video needed) ----------
+function addClip() {
+  const clip = { id: crypto.randomUUID(), text: '', blob: null, url: null, duration: null, status: 'draft' };
+  state.clips.push(clip);
+  renderClips();
+}
+function removeClip(id) {
+  state.clips = state.clips.filter(c => c.id !== id);
+  renderClips();
+}
+function updateClipDownloadAvailability() {
+  const readyCount = state.clips.filter(c => c.status === 'ready').length;
+  els.downloadClipsBtn.textContent = readyCount ? `⬇ Download audio (${readyCount})` : '⬇ Download audio';
+}
+function renderClips() {
+  els.clipList.innerHTML = '';
+  els.clipEmptyState.classList.toggle('hidden', state.clips.length > 0);
+  updateClipDownloadAvailability();
+  state.clips.forEach((clip, i) => {
+    const li = document.createElement('li');
+    li.className = 'segment'; li.id = `clip-${clip.id}`;
+
+    const header = document.createElement('div');
+    header.className = 'duration-tag';
+    header.textContent = `Line ${i + 1}`;
+
+    const textarea = document.createElement('textarea');
+    textarea.className = 'segment-text';
+    textarea.placeholder = 'What should this line say…';
+    textarea.value = clip.text;
+    textarea.addEventListener('input', () => { clip.text = textarea.value; });
+
+    let audioEl = null;
+    if (clip.url) {
+      audioEl = document.createElement('audio');
+      audioEl.className = 'segment-audio'; audioEl.controls = true; audioEl.src = clip.url; audioEl.preload = 'auto';
+    }
+
+    const bottomRow = document.createElement('div');
+    bottomRow.className = 'segment-bottom-row';
+
+    const controls = document.createElement('div');
+    controls.className = 'segment-controls';
+    const genBtn = document.createElement('button');
+    genBtn.className = 'btn btn-accent';
+    genBtn.textContent = clip.status === 'ready' ? 'Regenerate' : 'Generate voice';
+    genBtn.addEventListener('click', () => generateVoice(clip, renderClips));
+    const removeBtn = document.createElement('button');
+    removeBtn.className = 'btn btn-danger-ghost'; removeBtn.textContent = 'Remove';
+    removeBtn.addEventListener('click', () => removeClip(clip.id));
+    controls.append(genBtn, removeBtn);
+
+    const status = document.createElement('div');
+    const statusText = { draft: 'not generated', generating: 'generating…', ready: 'ready', error: 'failed' }[clip.status];
+    status.className = 'segment-status' + (clip.status === 'ready' ? ' ready' : clip.status === 'error' ? ' error' : '');
+    status.textContent = statusText;
+
+    bottomRow.append(controls, status);
+
+    li.append(header, textarea, ...(audioEl ? [audioEl] : []), bottomRow);
+    els.clipList.appendChild(li);
+  });
+}
+els.addClipBtn.addEventListener('click', addClip);
+
 // ---------- TTS (direct browser calls) ----------
-async function generateVoice(seg) {
-  if (!seg.text.trim()) { showStatus('Write the line for this segment first', 'error'); return; }
-  seg.status = 'generating'; renderSegments();
+async function generateVoice(item, onUpdate) {
+  if (!item.text.trim()) { showStatus('Write the line first', 'error'); return; }
+  item.status = 'generating'; onUpdate();
   try {
     const blob = els.provider.value === 'elevenlabs'
-      ? await elevenLabsTTS(seg.text)
-      : await geminiTTS(seg.text);
-    seg.blob = blob;
-    seg.url = URL.createObjectURL(blob);
-    seg.duration = await getAudioDuration(seg.url);
-    seg.status = 'ready';
+      ? await elevenLabsTTS(item.text)
+      : await geminiTTS(item.text);
+    item.blob = blob;
+    item.url = URL.createObjectURL(blob);
+    item.duration = await getAudioDuration(item.url);
+    item.status = 'ready';
     showStatus('Voice line generated', 'success');
     if (els.provider.value === 'elevenlabs') refreshElevenQuota();
   } catch (err) {
-    seg.status = 'error';
-    showStatus(err.message, 'error');
+    item.status = 'error';
+    showStatus(friendlyError(err), 'error');
   }
-  renderSegments(); renderMarkers();
+  onUpdate();
 }
 
 function getAudioDuration(url) {
@@ -1304,126 +1561,41 @@ els.video.addEventListener('seeked', () => {
   state.segments.forEach(seg => { seg.played = els.video.currentTime > seg.startTime + 0.35; });
 });
 
-// ---------- Export (ffmpeg.wasm, fully in-browser) ----------
-function setExportStep(text) {
-  els.exportStepText.textContent = text;
-  els.exportStepText.classList.remove('hidden');
-}
-
-async function ensureFFmpeg() {
-  if (ffmpegReady) return;
-  setExportStep('Loading export engine (first time only, ~30MB — can take a bit on a slow connection)…');
-  ffmpeg = new FFmpeg();
-  const coreBaseURL = 'https://cdn.jsdelivr.net/npm/@ffmpeg/core@0.12.6/dist/esm';
-  const ffmpegBaseURL = 'https://cdn.jsdelivr.net/npm/@ffmpeg/ffmpeg@0.12.10/dist/esm';
-  ffmpeg.on('progress', ({ progress }) => {
-    els.exportProgressBar.style.width = `${clamp(Math.round(progress * 100), 0, 100)}%`;
-  });
-  await ffmpeg.load({
-    coreURL: await toBlobURL(`${coreBaseURL}/ffmpeg-core.js`, 'text/javascript'),
-    wasmURL: await toBlobURL(`${coreBaseURL}/ffmpeg-core.wasm`, 'application/wasm'),
-    // The worker script must be same-origin to be constructed as a Worker — blob it like the core files.
-    classWorkerURL: await toBlobURL(`${ffmpegBaseURL}/worker.js`, 'text/javascript'),
-  });
-  ffmpegReady = true;
-}
-
-els.downloadAudioBtn.addEventListener('click', async () => {
-  const ready = state.segments.filter(s => s.status === 'ready').slice().sort((a, b) => a.startTime - b.startTime);
+// ---------- Download audio as a zip (shared by video-mode segments and voiceover-only clips) ----------
+async function downloadAsZip(items, { withTimestamps, filename, button }) {
+  const ready = items.filter(s => s.status === 'ready').slice();
+  if (withTimestamps) ready.sort((a, b) => a.startTime - b.startTime);
   if (ready.length === 0) { showStatus('Generate at least one voice line before downloading', 'error'); return; }
 
-  els.downloadAudioBtn.disabled = true;
+  button.disabled = true;
   try {
     const zip = new JSZip();
-    ready.forEach((seg, i) => {
-      const ext = seg.blob.type.includes('wav') ? 'wav' : 'mp3';
+    ready.forEach((item, i) => {
+      const ext = item.blob.type.includes('wav') ? 'wav' : 'mp3';
       const index = String(i + 1).padStart(2, '0');
-      const stamp = fmtTimeForFile(seg.startTime);
-      zip.file(`${index}_${stamp}.${ext}`, seg.blob);
+      const name = withTimestamps ? `${index}_${fmtTimeForFile(item.startTime)}.${ext}` : `${index}.${ext}`;
+      zip.file(name, item.blob);
     });
     const zipBlob = await zip.generateAsync({ type: 'blob' });
     const url = URL.createObjectURL(zipBlob);
     const a = document.createElement('a');
-    a.href = url; a.download = '11api-voiceover-audio.zip';
+    a.href = url; a.download = filename;
     document.body.appendChild(a); a.click(); a.remove();
     setTimeout(() => URL.revokeObjectURL(url), 4000);
-    showStatus('Audio files downloaded — named by order and start time', 'success');
+    showStatus('Your audio is downloading', 'success');
   } catch (err) {
     console.error(err);
-    showStatus('Audio download failed: ' + err.message, 'error');
+    showStatus('Could not create the audio download — please try again.', 'error');
   }
-  els.downloadAudioBtn.disabled = false;
-});
+  button.disabled = false;
+}
 
-els.downloadBtn.addEventListener('click', async () => {
-  const ready = state.segments.filter(s => s.status === 'ready');
-  if (ready.length === 0) { showStatus('Generate at least one voice line before downloading', 'error'); return; }
-  if (!state.videoFile) { showStatus('Load a video first', 'error'); return; }
-
-  els.downloadBtn.disabled = true;
-  els.exportProgressWrap.classList.remove('hidden');
-  els.exportProgressBar.style.width = '0%';
-  els.exportStepText.classList.add('hidden');
-
-  try {
-    await ensureFFmpeg();
-
-    setExportStep('Preparing video and audio tracks…');
-    const videoExt = (state.videoFile.name.split('.').pop() || 'mp4').toLowerCase();
-    const inName = `input.${videoExt}`;
-    await ffmpeg.writeFile(inName, await fetchFile(state.videoFile));
-
-    const segFiles = [];
-    for (let i = 0; i < ready.length; i++) {
-      const seg = ready[i];
-      const ext = seg.blob.type.includes('wav') ? 'wav' : 'mp3';
-      const name = `seg${i}.${ext}`;
-      await ffmpeg.writeFile(name, await fetchFile(seg.blob));
-      segFiles.push(name);
-    }
-
-    const args = ['-i', inName];
-    segFiles.forEach(f => args.push('-i', f));
-
-    const keepOriginal = els.keepOriginalAudio.checked;
-    const delayedLabels = [];
-    const filterParts = ready.map((seg, i) => {
-      const inputIndex = i + 1;
-      const delayMs = Math.max(0, Math.round(seg.startTime * 1000));
-      const label = `a${i}`;
-      delayedLabels.push(`[${label}]`);
-      return `[${inputIndex}:a]adelay=${delayMs}|${delayMs}[${label}]`;
-    });
-    const mixCount = keepOriginal ? ready.length + 1 : ready.length;
-    const mixSources = keepOriginal ? `${delayedLabels.join('')}[0:a]` : delayedLabels.join('');
-    filterParts.push(`${mixSources}amix=inputs=${mixCount}:normalize=0[aout]`);
-
-    args.push('-filter_complex', filterParts.join(';'));
-    args.push('-map', '0:v', '-map', '[aout]', '-c:v', 'copy', '-c:a', 'aac', '-shortest', 'output.mp4');
-
-    setExportStep('Encoding final video…');
-    await ffmpeg.exec(args);
-    const data = await ffmpeg.readFile('output.mp4');
-    const blob = new Blob([data.buffer], { type: 'video/mp4' });
-    const url = URL.createObjectURL(blob);
-
-    if (state.lastExportUrl) URL.revokeObjectURL(state.lastExportUrl);
-    state.lastExportUrl = url;
-
-    const a = document.createElement('a');
-    a.href = url; a.download = '11api-export.mp4';
-    document.body.appendChild(a); a.click(); a.remove();
-
-    setExportStep('Done — your download should have started.');
-    showStatus('Video with generated audio is ready and downloading', 'success');
-  } catch (err) {
-    console.error(err);
-    setExportStep('Download failed — see the message below for details.');
-    showStatus('Download failed: ' + err.message, 'error');
-  }
-  els.downloadBtn.disabled = false;
-  els.exportProgressWrap.classList.add('hidden');
-});
+els.downloadAudioBtn.addEventListener('click', () => downloadAsZip(state.segments, {
+  withTimestamps: true, filename: '11api-voiceover-audio.zip', button: els.downloadAudioBtn,
+}));
+els.downloadClipsBtn.addEventListener('click', () => downloadAsZip(state.clips, {
+  withTimestamps: false, filename: '11api-voice-lines.zip', button: els.downloadClipsBtn,
+}));
 </script>
 </body>
 </html>
