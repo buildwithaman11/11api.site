@@ -1092,7 +1092,7 @@ if (state.clips.length === 0) addClip();
 // ---------- Notice bar ----------
 // Edit NOTICE_MESSAGE to change what visitors see. Leave it empty ('') to show no notice.
 // Changing the text automatically shows it again even to people who dismissed an older notice.
-const NOTICE_MESSAGE = "You can now generate voice lines without uploading a video — use the tabs above to switch.";
+const NOTICE_MESSAGE = "please connect your api key before you try to generate anything, elevenlab or gemini.";
 if (NOTICE_MESSAGE) {
   const noticeId = 'n_' + NOTICE_MESSAGE.length + '_' + NOTICE_MESSAGE.slice(0, 12).replace(/\s+/g, '');
   if (localStorage.getItem('vo11_dismissed_notice') !== noticeId) {
