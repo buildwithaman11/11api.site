@@ -12,7 +12,106 @@
 </script>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-<title>11API — Voiceover Timeline</title>
+<title>11API — Free AI Voiceover Generator & Video Voiceover Timeline</title>
+<meta name="description" content="Generate AI voiceovers with ElevenLabs or Gemini and line them up with your video timeline — free, browser-based, no upload, no sign-in. Bring your own API key." />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://11api.site/" />
+<link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
+<meta name="theme-color" content="#121319" />
+
+<!-- Open Graph / Facebook, LinkedIn, Discord, etc. -->
+<meta property="og:type" content="website" />
+<meta property="og:url" content="https://11api.site/" />
+<meta property="og:site_name" content="11API" />
+<meta property="og:title" content="11API — Free AI Voiceover Generator & Video Voiceover Timeline" />
+<meta property="og:description" content="Generate AI voiceovers with ElevenLabs or Gemini and line them up with your video timeline — free, browser-based, no upload, no sign-in." />
+<meta property="og:image" content="https://11api.site/og-image.png" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+
+<!-- Twitter / X card -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="11API — Free AI Voiceover Generator & Video Voiceover Timeline" />
+<meta name="twitter:description" content="Generate AI voiceovers with ElevenLabs or Gemini and line them up with your video timeline — free, browser-based, no sign-in." />
+<meta name="twitter:image" content="https://11api.site/og-image.png" />
+
+<!-- Favicon -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23e8a75c'/%3E%3Ctext x='16' y='22' font-family='Arial, sans-serif' font-weight='700' font-size='15' text-anchor='middle' fill='%23221507'%3E11%3C/text%3E%3C/svg%3E" />
+
+<!-- Structured data: describes this page as a free web tool to search engines -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "11API",
+  "url": "https://11api.site/",
+  "description": "Generate AI voiceovers with ElevenLabs or Gemini and line them up with a video timeline — free, browser-based, no sign-in required.",
+  "applicationCategory": "MultimediaApplication",
+  "operatingSystem": "Any (runs in-browser)",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Is 11API actually free?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes. 11API itself doesn't charge anything and has no account or subscription. You bring your own ElevenLabs or Gemini API key, and you only pay whatever that provider charges for the characters or tokens you generate — usually covered by their free tier for light use."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do I need to sign up or create an account?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. There's no sign-in anywhere in 11API. You paste your ElevenLabs or Gemini API key into Voice engine settings, and it's saved only in your browser's local storage — never sent anywhere except directly to that provider's API."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is my video or audio uploaded to a server?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Everything runs client-side in your browser. Your video file never leaves your device, and generated voice lines are streamed straight from ElevenLabs or Gemini's API to your browser — 11API has no backend of its own."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What's the difference between ElevenLabs and Gemini for voiceovers?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "ElevenLabs generally sounds more natural for narration and offers a large voice library plus voice cloning, while Gemini's text-to-speech is a solid free-tier option with a fixed set of prebuilt voices. 11API lets you switch between the two anytime and keep separate saved API keys for each."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I generate voice lines without uploading a video?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes — switch to the Voiceover only tab. It lets you write and generate any number of standalone voice lines and download them as audio files, with no video timeline involved."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I line voice lines up with my video?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Switch to Video + Voiceover, drop in your video, then play to the moment you want narration and tap Voiceover at current time. Drag the range's edges on the timeline to adjust exactly when each line starts and ends, then generate and download the audio once you're happy with the timing."
+      }
+    }
+  ]
+}
+</script>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
@@ -77,7 +176,7 @@ body {
   color: var(--accent-ink); background: linear-gradient(135deg, var(--accent-strong), var(--accent));
   padding: 4px 8px; border-radius: 6px; box-shadow: 0 2px 10px rgba(232, 167, 92, .25);
 }
-.brand-name { font-family: var(--font-display); font-size: 15.5px; font-weight: 600; letter-spacing: -.01em; }
+.brand-name { font-family: var(--font-display); font-size: 15.5px; font-weight: 600; letter-spacing: -.01em; margin: 0; }
 .icon-btn {
   background: var(--bg-raised); border: 1px solid var(--line); color: var(--text-dim);
   border-radius: var(--radius); padding: 9px 15px; font-size: 13px; cursor: pointer;
@@ -87,6 +186,11 @@ body {
 .icon-btn:active { transform: scale(.97); }
 
 main { max-width: 960px; margin: 0 auto; padding: 22px 20px 100px; width: 100%; }
+.page-intro {
+  font-size: 13.5px; color: var(--text-dim); line-height: 1.65; max-width: 62ch;
+  margin: 0 0 20px; animation: fadeSlideUp .4s ease both;
+}
+.page-intro strong { color: var(--text); font-weight: 600; }
 
 .panel {
   background: var(--bg-raised); border: 1px solid var(--line); border-radius: var(--radius-lg);
@@ -328,6 +432,88 @@ audio.segment-audio { width: 100%; height: 32px; margin-top: 4px; }
   font-size: 15px; line-height: 1; cursor: pointer; padding: 5px 7px; border-radius: 5px; opacity: .8;
 }
 .status-close:hover { opacity: 1; background: rgba(255,255,255,.06); }
+
+/* ---------- Icons ---------- */
+.icon { width: 15px; height: 15px; flex-shrink: 0; display: inline-block; vertical-align: -3px; }
+.btn .icon, .icon-btn .icon { vertical-align: -2.5px; margin-right: 1px; }
+.mode-tab .icon { vertical-align: -3px; margin-right: 5px; }
+
+/* ---------- Global connection pill (topbar) ---------- */
+.conn-pill {
+  display: flex; align-items: center; gap: 7px; background: var(--bg-raised); border: 1px solid var(--line);
+  color: var(--text-dim); border-radius: 999px; padding: 7px 13px 7px 11px; font-size: 12.5px; font-weight: 600;
+  cursor: pointer; touch-action: manipulation; transition: border-color .15s, background .15s, color .15s, transform .1s;
+  font-family: var(--font-display);
+}
+.conn-pill:hover { border-color: var(--text-faint); }
+.conn-pill:active { transform: scale(.97); }
+.conn-pill .bulb-icon { color: var(--text-faint); transition: color .2s, filter .2s; }
+.conn-pill.connected { color: var(--ready); border-color: var(--ready); background: var(--ready-soft); }
+.conn-pill.connected .bulb-icon { color: var(--ready); filter: drop-shadow(0 0 4px var(--ready-soft)); }
+.conn-pill.error { color: var(--danger); border-color: var(--danger); background: var(--danger-soft); }
+.conn-pill.error .bulb-icon { color: var(--danger); }
+.conn-pill.checking { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
+.conn-pill.checking .bulb-icon { color: var(--accent); animation: barPulse 1s ease infinite; }
+.conn-pill-provider { color: var(--text-faint); font-weight: 500; }
+.conn-pill.connected .conn-pill-provider, .conn-pill.error .conn-pill-provider { color: inherit; opacity: .75; }
+
+/* ---------- Connect-API banner (inline, above voice lines) ---------- */
+.connect-banner {
+  display: flex; align-items: center; gap: 12px; background: var(--accent-soft);
+  border: 1px solid rgba(232, 167, 92, .35); border-radius: var(--radius-lg); padding: 13px 16px;
+  margin-bottom: 16px; animation: popIn .3s cubic-bezier(.2,.8,.2,1) both;
+}
+.connect-banner-icon {
+  width: 30px; height: 30px; flex-shrink: 0; border-radius: 50%; background: var(--bg-raised);
+  display: flex; align-items: center; justify-content: center; color: var(--accent-strong);
+}
+.connect-banner-body { flex: 1; min-width: 160px; }
+.connect-banner-title { font-family: var(--font-display); font-size: 13.5px; font-weight: 700; color: var(--text); margin: 0 0 2px; }
+.connect-banner-sub { font-size: 12px; color: var(--text-dim); margin: 0; line-height: 1.5; }
+.connect-banner .btn { flex-shrink: 0; }
+
+/* ---------- Status pill (segment status as a chip, not plain text) ---------- */
+.segment-status {
+  display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600;
+  padding: 5px 10px; border-radius: 999px; background: var(--bg-inset); border: 1px solid var(--line);
+  color: var(--text-dim); font-family: var(--font-display); letter-spacing: .01em;
+}
+.segment-status::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
+.segment-status.ready { color: var(--ready); background: var(--ready-soft); border-color: rgba(85,201,155,.3); }
+.segment-status.error { color: var(--danger); background: var(--danger-soft); border-color: rgba(230,104,92,.3); }
+.segment-status.warn { color: var(--accent); background: var(--accent-soft); border-color: rgba(232,167,92,.3); }
+.segment-status.generating::before { animation: barPulse 1s ease infinite; }
+
+/* ---------- Segment index badge + panel section icon ---------- */
+.segment-index {
+  font-family: var(--font-mono); font-size: 11px; color: var(--accent); background: var(--accent-soft);
+  border: 1px solid rgba(232,167,92,.3); border-radius: 6px; padding: 3px 8px; font-weight: 600;
+}
+.segment-top-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.panel h3 { display: flex; align-items: center; gap: 9px; }
+.panel h3 .icon { color: var(--accent); vertical-align: -3px; }
+
+/* ---------- FAQ ---------- */
+.faq-panel { margin-top: 28px; }
+.faq-list { display: flex; flex-direction: column; gap: 8px; }
+.faq-item {
+  background: var(--bg-inset); border: 1px solid var(--line-soft); border-radius: var(--radius);
+  padding: 2px 14px; transition: border-color .15s, background .15s;
+}
+.faq-item[open] { background: var(--bg-hover); border-color: var(--line); }
+.faq-item summary {
+  cursor: pointer; padding: 13px 22px 13px 0; font-family: var(--font-display); font-size: 13.5px;
+  font-weight: 600; color: var(--text); list-style: none; position: relative; touch-action: manipulation;
+}
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary::after {
+  content: ""; position: absolute; right: 2px; top: 50%; width: 9px; height: 9px;
+  border-right: 1.6px solid var(--text-dim); border-bottom: 1.6px solid var(--text-dim);
+  transform: translateY(-70%) rotate(45deg); transition: transform .2s ease;
+}
+.faq-item[open] summary::after { transform: translateY(-30%) rotate(-135deg); }
+.faq-item p { margin: 0 0 14px; font-size: 13px; color: var(--text-dim); line-height: 1.6; max-width: 68ch; }
+
 /* ---------- Responsive ---------- */
 @media (max-width: 640px) {
   main { padding: 16px 12px 100px; }
@@ -348,6 +534,9 @@ audio.segment-audio { width: 100%; height: 32px; margin-top: 4px; }
   .key-select-row { flex-direction: column; align-items: stretch; }
   .add-key-form { flex-direction: column; }
   .brand-sub { display: none; }
+  .connect-banner { flex-wrap: wrap; }
+  .connect-banner .btn { width: 100%; }
+  .conn-pill-provider { display: none; }
 }
 @media (max-width: 400px) {
   .time-field input { width: 58px; }
@@ -359,26 +548,44 @@ audio.segment-audio { width: 100%; height: 32px; margin-top: 4px; }
 
 <header class="topbar">
   <div class="brand">
-    <span class="brand-mark">11</span>
-    <span class="brand-name">11API</span>
+    <span class="brand-mark" aria-hidden="true">11</span>
+    <h1 class="brand-name">11API</h1>
     <span class="brand-sub">voiceover timeline</span>
   </div>
   <div class="topbar-right">
     <span id="quotaBadge" class="quota-badge hidden"></span>
-    <button id="shareBtn" class="icon-btn" type="button" title="Share this tool">🔗 Share</button>
-    <button id="settingsToggle" class="icon-btn">⚙ Voice engine settings</button>
+    <button id="globalConnBtn" class="conn-pill" type="button" title="API connection status — click to open settings">
+      <svg class="icon bulb-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.5.4.85 1 .95 1.65L9.5 17h5l.15-1.55c.1-.65.45-1.25.95-1.65A6 6 0 0 0 12 3Z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span id="globalConnText">Not connected</span>
+      <span id="globalConnProvider" class="conn-pill-provider"></span>
+    </button>
+    <button id="shareBtn" class="icon-btn" type="button" title="Share this tool">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8.5 10.5 15.5 7M8.5 13.5l7 3.5M17 6a2.5 2.5 0 1 0 0-.01V6Zm0 15a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5ZM7 14.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Share
+    </button>
+    <button id="settingsToggle" class="icon-btn">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" stroke="currentColor" stroke-width="1.7"/><path d="M19.4 13.5a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V19.4a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1.08-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H4.6a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 6.2 8.6a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 10.5 4.2h.09A1.65 1.65 0 0 0 12.1 3v-.09a2 2 0 1 1 4 0V3a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.09c.26.63.85 1.06 1.51 1.06h.09a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+      Voice engine settings
+    </button>
   </div>
 </header>
 
 <div id="noticeBar" class="notice-bar hidden">
+  <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="color:var(--accent-strong)"><path d="M12 8v5M12 16h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/></svg>
   <span id="noticeText"></span>
-  <button id="noticeCloseBtn" class="notice-close" type="button" aria-label="Dismiss notice">×</button>
+  <button id="noticeCloseBtn" class="notice-close" type="button" aria-label="Dismiss notice">
+    <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+  </button>
 </div>
 
 <main>
 
+  <p class="page-intro">Turn text into natural-sounding speech right in your browser. 11API connects directly to your own <strong>ElevenLabs</strong> or <strong>Gemini</strong> API key to generate voice lines, then lets you line each one up against your video's timeline — no uploads, no account, and nothing ever touches a server in between.</p>
+
   <section id="settingsPanel" class="panel hidden">
-    <h3>⚙ Voice engine settings</h3>
+    <h3><svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" stroke="currentColor" stroke-width="1.7"/><path d="M19.4 13.5a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V19.4a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1.08-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H4.6a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 6.2 8.6a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 10.5 4.2h.09A1.65 1.65 0 0 0 12.1 3v-.09a2 2 0 1 1 4 0V3a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.09c.26.63.85 1.06 1.51 1.06h.09a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>Voice engine settings</h3>
     <div class="settings-section">
       <p class="settings-section-title">Engine</p>
       <div class="field-row">
@@ -506,20 +713,34 @@ audio.segment-audio { width: 100%; height: 32px; margin-top: 4px; }
   </section>
 
   <div class="mode-tabs">
-    <button id="tabVoiceoverOnly" class="mode-tab active" type="button" data-mode="voiceover">🎙 Voiceover only</button>
-    <button id="tabVideoTimeline" class="mode-tab" type="button" data-mode="video">🎬 Video + Voiceover</button>
+    <button id="tabVoiceoverOnly" class="mode-tab active" type="button" data-mode="voiceover">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Z" stroke="currentColor" stroke-width="1.7"/><path d="M19 11a7 7 0 0 1-14 0M12 18v3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>Voiceover only
+    </button>
+    <button id="tabVideoTimeline" class="mode-tab" type="button" data-mode="video">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M3 9h18M8 5 6 9M13 5l-2 4M18 5l-2 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Video + Voiceover
+    </button>
   </div>
 
   <section id="voiceoverOnlySection" class="voiceover-only">
+    <div id="clipsConnBanner" class="connect-banner hidden">
+      <span class="connect-banner-icon">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.5.4.85 1 .95 1.65L9.5 17h5l.15-1.55c.1-.65.45-1.25.95-1.65A6 6 0 0 0 12 3Z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </span>
+      <div class="connect-banner-body">
+        <p class="connect-banner-title">Please connect an API key first</p>
+        <p class="connect-banner-sub">Add an ElevenLabs or Gemini API key in Voice engine settings before generating voice lines.</p>
+      </div>
+      <button class="btn btn-accent btn-small conn-banner-open-btn" type="button">Connect API key</button>
+    </div>
     <div class="segments-header">
       <h2>Voice lines</h2>
       <div class="segments-actions">
-        <button id="addClipBtn" class="btn btn-accent">+ Add line</button>
-        <button id="downloadClipsBtn" class="btn btn-ghost">⬇ Download audio</button>
+        <button id="addClipBtn" class="btn btn-accent"><svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Add line</button>
+        <button id="downloadClipsBtn" class="btn btn-ghost"><svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 4v11m0 0 4-4m-4 4-4-4M5 19h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Download audio</button>
       </div>
     </div>
     <ul id="clipList" class="segment-list"></ul>
-    <p id="clipEmptyState" class="empty-state">No voice lines yet. Tap "+ Add line" to write your first one — no video needed.</p>
+    <p id="clipEmptyState" class="empty-state">No voice lines yet. Tap "Add line" to write your first one — no video needed.</p>
   </section>
 
   <div id="videoModeSection" class="hidden">
@@ -538,13 +759,13 @@ audio.segment-audio { width: 100%; height: 32px; margin-top: 4px; }
 
     <section id="editor" class="editor hidden">
       <div class="stage-header">
-        <button id="changeVideoBtn" class="btn btn-ghost btn-small" type="button">🔄 Change video</button>
+        <button id="changeVideoBtn" class="btn btn-ghost btn-small" type="button"><svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 12a8 8 0 0 1 13.66-5.66M20 12a8 8 0 0 1-13.66 5.66" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M18 3v4h-4M6 21v-4h4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>Change video</button>
       </div>
       <div class="stage"><video id="videoPlayer" controls playsinline></video></div>
 
       <div class="timeline-wrap">
         <div class="timeline-header">
-          <button id="addMarkerBtn" class="btn btn-accent">+ Voiceover at current time</button>
+          <button id="addMarkerBtn" class="btn btn-accent"><svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Voiceover at current time</button>
           <span id="timeReadout" class="time-readout">00:00.0 / 00:00.0</span>
         </div>
         <div id="timeline" class="timeline">
@@ -554,17 +775,61 @@ audio.segment-audio { width: 100%; height: 32px; margin-top: 4px; }
         <p class="hint">Drag either edge of a range to set where the line starts and ends. Drag the middle to move it.</p>
       </div>
 
+      <div id="segmentsConnBanner" class="connect-banner hidden">
+        <span class="connect-banner-icon">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.5.4.85 1 .95 1.65L9.5 17h5l.15-1.55c.1-.65.45-1.25.95-1.65A6 6 0 0 0 12 3Z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+        <div class="connect-banner-body">
+          <p class="connect-banner-title">Please connect an API key first</p>
+          <p class="connect-banner-sub">Add an ElevenLabs or Gemini API key in Voice engine settings before generating voice lines.</p>
+        </div>
+        <button class="btn btn-accent btn-small conn-banner-open-btn" type="button">Connect API key</button>
+      </div>
+
       <div class="segments-header">
         <h2>Voiceover lines</h2>
         <div class="segments-actions">
-          <button id="downloadAudioBtn" class="btn btn-primary">⬇ Download audio</button>
+          <button id="downloadAudioBtn" class="btn btn-primary"><svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 4v11m0 0 4-4m-4 4-4-4M5 19h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>Download audio</button>
         </div>
       </div>
 
       <ul id="segmentList" class="segment-list"></ul>
-      <p id="emptyState" class="empty-state">No voiceover lines yet. Play the video to the spot you need, then tap "+ Voiceover at current time".</p>
+      <p id="emptyState" class="empty-state">No voiceover lines yet. Play the video to the spot you need, then tap "Voiceover at current time".</p>
     </section>
   </div>
+
+  <section id="faqSection" class="panel faq-panel">
+    <h3>
+      <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 17h.01M9.5 9a2.5 2.5 0 0 1 5 0c0 1.5-1.5 2-2 2.5-.4.4-.5.8-.5 1.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/></svg>
+      Frequently asked questions
+    </h3>
+    <div class="faq-list">
+      <details class="faq-item" open>
+        <summary>Is 11API actually free?</summary>
+        <p>Yes. 11API itself doesn't charge anything and has no account or subscription. You bring your own ElevenLabs or Gemini API key, and you only pay whatever that provider charges for the characters or tokens you generate — usually covered by their free tier for light use.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Do I need to sign up or create an account?</summary>
+        <p>No. There's no sign-in anywhere in 11API. You paste your ElevenLabs or Gemini API key into Voice engine settings, and it's saved only in your browser's local storage — never sent anywhere except directly to that provider's API.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Is my video or audio uploaded to a server?</summary>
+        <p>No. Everything runs client-side in your browser. Your video file never leaves your device, and generated voice lines are streamed straight from ElevenLabs or Gemini's API to your browser — 11API has no backend of its own.</p>
+      </details>
+      <details class="faq-item">
+        <summary>What's the difference between ElevenLabs and Gemini for voiceovers?</summary>
+        <p>ElevenLabs generally sounds more natural for narration and offers a large voice library plus voice cloning, while Gemini's text-to-speech is a solid free-tier option with a fixed set of prebuilt voices. 11API lets you switch between the two anytime and keep separate saved API keys for each.</p>
+      </details>
+      <details class="faq-item">
+        <summary>Can I generate voice lines without uploading a video?</summary>
+        <p>Yes — switch to the "Voiceover only" tab. It lets you write and generate any number of standalone voice lines and download them as audio files, with no video timeline involved.</p>
+      </details>
+      <details class="faq-item">
+        <summary>How do I line voice lines up with my video?</summary>
+        <p>Switch to "Video + Voiceover," drop in your video, then play to the moment you want narration and tap "Voiceover at current time." Drag the range's edges on the timeline to adjust exactly when each line starts and ends, then generate and download the audio once you're happy with the timing.</p>
+      </details>
+    </div>
+  </section>
 
   <div id="statusBar" class="status-bar hidden"></div>
 </main>
@@ -592,6 +857,11 @@ const els = {
   elevenConnLabel: document.getElementById('elevenConnLabel'),
   geminiConnDot: document.getElementById('geminiConnDot'),
   geminiConnLabel: document.getElementById('geminiConnLabel'),
+  globalConnBtn: document.getElementById('globalConnBtn'),
+  globalConnText: document.getElementById('globalConnText'),
+  globalConnProvider: document.getElementById('globalConnProvider'),
+  clipsConnBanner: document.getElementById('clipsConnBanner'),
+  segmentsConnBanner: document.getElementById('segmentsConnBanner'),
   settingsToggle: document.getElementById('settingsToggle'),
   settingsPanel: document.getElementById('settingsPanel'),
   provider: document.getElementById('provider'),
@@ -644,6 +914,14 @@ const els = {
   emptyState: document.getElementById('emptyState'),
   downloadAudioBtn: document.getElementById('downloadAudioBtn'),
   statusBar: document.getElementById('statusBar'),
+};
+
+// ---------- Small inline icon set, reused across dynamically-built buttons ----------
+const ICONS = {
+  wand: '<svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 19 19 5M15 5h4v4M9 3 8 5l-2 1 2 1 1 2 1-2 2-1-2-1-1-2ZM19 13l-.8 1.7-1.7.8 1.7.8.8 1.7.8-1.7 1.7-.8-1.7-.8L19 13Z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  trash: '<svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 7h16M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2m-9 0 1 12a2 2 0 0 0 2 2h4a2 2 0 0 0 2-2l1-12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>',
+  play: '<svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 5v14l12-7L7 5Z" fill="currentColor"/></svg>',
+  download: '<svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 4v11m0 0 4-4m-4 4-4-4M5 19h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>',
 };
 
 // ---------- API key manager (multiple saved keys per engine, switchable) ----------
@@ -744,14 +1022,57 @@ function wireKeyManager(provider, e) {
   });
 }
 
+// Tracks each engine's connection state independently so the global indicator/banners
+// can always reflect the currently *active* engine, even after switching providers.
+const connStatus = { elevenlabs: 'unknown', gemini: 'unknown' };
+const PROVIDER_LABEL = { elevenlabs: 'ElevenLabs', gemini: 'Gemini' };
+
 function setConnState(provider, connState) {
   // connState: 'unknown' | 'checking' | 'connected' | 'error'
+  connStatus[provider] = connState;
   const dot = provider === 'elevenlabs' ? els.elevenConnDot : els.geminiConnDot;
   const label = provider === 'elevenlabs' ? els.elevenConnLabel : els.geminiConnLabel;
   dot.className = 'conn-dot' + (connState === 'unknown' ? '' : ' ' + connState);
   const text = { unknown: 'Not connected', checking: 'Checking…', connected: 'Connected', error: 'Connection failed' }[connState];
   label.lastChild.textContent = ` ${text}`;
+  if (provider === els.provider.value) updateGlobalConnIndicator();
 }
+
+// Global bulb indicator in the topbar + the inline "connect your API key" banners —
+// both always reflect whichever engine is currently selected.
+function updateGlobalConnIndicator() {
+  const provider = els.provider.value;
+  const state = connStatus[provider] || 'unknown';
+  const text = { unknown: 'Not connected', checking: 'Checking…', connected: 'Connected', error: 'Connection failed' }[state];
+  els.globalConnBtn.className = 'conn-pill' + (state === 'unknown' ? '' : ' ' + state);
+  els.globalConnText.textContent = text;
+  els.globalConnProvider.textContent = `· ${PROVIDER_LABEL[provider]}`;
+  els.globalConnBtn.title = state === 'connected'
+    ? `Connected to ${PROVIDER_LABEL[provider]} — click to open settings`
+    : 'Not connected — click to add your API key';
+
+  const isConnected = state === 'connected';
+  [els.clipsConnBanner, els.segmentsConnBanner].forEach(banner => {
+    if (!banner) return;
+    banner.classList.toggle('hidden', isConnected);
+  });
+}
+els.globalConnBtn.addEventListener('click', () => openSettingsToConnect());
+
+// Opens Voice engine settings and, if no key is saved yet for the active engine,
+// pops open its "add key" form and focuses the key field so the person can paste one straight away.
+function openSettingsToConnect() {
+  els.settingsPanel.classList.remove('hidden');
+  els.settingsPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  const provider = els.provider.value;
+  if (!getActiveKey(provider)) {
+    const form = provider === 'elevenlabs' ? els.elevenAddKeyForm : els.geminiAddKeyForm;
+    const input = provider === 'elevenlabs' ? els.elevenNewKeyValue : els.geminiNewKeyValue;
+    form.classList.remove('hidden');
+    setTimeout(() => input.focus(), 350);
+  }
+}
+document.querySelectorAll('.conn-banner-open-btn').forEach(btn => btn.addEventListener('click', openSettingsToConnect));
 
 async function validateGeminiKey() {
   const key = getActiveKey('gemini');
@@ -1052,6 +1373,7 @@ function loadSettings() {
 
   toggleProviderFields();
   updateQuotaBadge();
+  updateGlobalConnIndicator();
 }
 function saveSettings() {
   localStorage.setItem(SETTINGS_KEY, JSON.stringify({
@@ -1071,6 +1393,7 @@ function toggleProviderFields() {
   els.elevenFields.classList.toggle('hidden', !isEleven);
   els.geminiFields.classList.toggle('hidden', isEleven);
   updateQuotaBadge();
+  updateGlobalConnIndicator();
 }
 els.provider.addEventListener('change', toggleProviderFields);
 els.settingsToggle.addEventListener('click', () => els.settingsPanel.classList.toggle('hidden'));
@@ -1092,7 +1415,7 @@ if (state.clips.length === 0) addClip();
 // ---------- Notice bar ----------
 // Edit NOTICE_MESSAGE to change what visitors see. Leave it empty ('') to show no notice.
 // Changing the text automatically shows it again even to people who dismissed an older notice.
-const NOTICE_MESSAGE = "please connect your api key before you try to generate anything, elevenlab or gemini.";
+const NOTICE_MESSAGE = "You can now generate voice lines without uploading a video — use the tabs above to switch.";
 if (NOTICE_MESSAGE) {
   const noticeId = 'n_' + NOTICE_MESSAGE.length + '_' + NOTICE_MESSAGE.slice(0, 12).replace(/\s+/g, '');
   if (localStorage.getItem('vo11_dismissed_notice') !== noticeId) {
@@ -1304,16 +1627,23 @@ function removeSegment(id) {
 
 function updateExportAvailability() {
   const readyCount = state.segments.filter(s => s.status === 'ready').length;
-  els.downloadAudioBtn.textContent = readyCount ? `⬇ Download audio (${readyCount})` : '⬇ Download audio';
+  els.downloadAudioBtn.innerHTML = ICONS.download + (readyCount ? ` Download audio (${readyCount})` : ' Download audio');
 }
 
 function renderSegments() {
   els.segmentList.innerHTML = '';
   els.emptyState.classList.toggle('hidden', state.segments.length > 0);
   updateExportAvailability();
-  state.segments.forEach(seg => {
+  state.segments.forEach((seg, i) => {
     const li = document.createElement('li');
     li.className = 'segment'; li.id = `seg-${seg.id}`;
+
+    const topRow = document.createElement('div');
+    topRow.className = 'segment-top-row';
+    const indexBadge = document.createElement('span');
+    indexBadge.className = 'segment-index';
+    indexBadge.textContent = `#${i + 1}`;
+    topRow.append(indexBadge);
 
     // start/end row
     const rangeRow = document.createElement('div');
@@ -1358,16 +1688,16 @@ function renderSegments() {
     controls.className = 'segment-controls';
     const genBtn = document.createElement('button');
     genBtn.className = 'btn btn-accent';
-    genBtn.textContent = seg.status === 'ready' ? 'Regenerate' : 'Generate voice';
+    genBtn.innerHTML = ICONS.wand + (seg.status === 'ready' ? ' Regenerate' : ' Generate voice');
     genBtn.addEventListener('click', () => generateVoice(seg, () => { renderSegments(); renderMarkers(); }));
     const removeBtn = document.createElement('button');
-    removeBtn.className = 'btn btn-danger-ghost'; removeBtn.textContent = 'Remove';
+    removeBtn.className = 'btn btn-danger-ghost'; removeBtn.innerHTML = ICONS.trash + ' Remove';
     removeBtn.addEventListener('click', () => removeSegment(seg.id));
     controls.append(genBtn, removeBtn);
 
     const status = document.createElement('div');
     let statusText = { draft: 'not generated', generating: 'generating…', ready: 'ready', error: 'failed' }[seg.status];
-    let statusClass = 'segment-status' + (seg.status === 'ready' ? ' ready' : seg.status === 'error' ? ' error' : '');
+    let statusClass = 'segment-status' + (seg.status === 'ready' ? ' ready' : seg.status === 'generating' ? ' generating' : seg.status === 'error' ? ' error' : '');
     if (seg.status === 'ready' && seg.duration && seg.duration > (seg.endTime - seg.startTime) + 0.15) {
       statusText += ` — audio is ${seg.duration.toFixed(1)}s, longer than the window`;
       statusClass = 'segment-status warn';
@@ -1377,7 +1707,7 @@ function renderSegments() {
 
     bottomRow.append(controls, status);
 
-    li.append(rangeRow, textarea, ...(audioEl ? [audioEl] : []), bottomRow);
+    li.append(topRow, rangeRow, textarea, ...(audioEl ? [audioEl] : []), bottomRow);
     els.segmentList.appendChild(li);
   });
 }
@@ -1415,7 +1745,7 @@ function removeClip(id) {
 }
 function updateClipDownloadAvailability() {
   const readyCount = state.clips.filter(c => c.status === 'ready').length;
-  els.downloadClipsBtn.textContent = readyCount ? `⬇ Download audio (${readyCount})` : '⬇ Download audio';
+  els.downloadClipsBtn.innerHTML = ICONS.download + (readyCount ? ` Download audio (${readyCount})` : ' Download audio');
 }
 function renderClips() {
   els.clipList.innerHTML = '';
@@ -1426,8 +1756,11 @@ function renderClips() {
     li.className = 'segment'; li.id = `clip-${clip.id}`;
 
     const header = document.createElement('div');
-    header.className = 'duration-tag';
-    header.textContent = `Line ${i + 1}`;
+    header.className = 'segment-top-row';
+    const indexBadge = document.createElement('span');
+    indexBadge.className = 'segment-index';
+    indexBadge.textContent = `Line ${i + 1}`;
+    header.append(indexBadge);
 
     const textarea = document.createElement('textarea');
     textarea.className = 'segment-text';
@@ -1448,16 +1781,16 @@ function renderClips() {
     controls.className = 'segment-controls';
     const genBtn = document.createElement('button');
     genBtn.className = 'btn btn-accent';
-    genBtn.textContent = clip.status === 'ready' ? 'Regenerate' : 'Generate voice';
+    genBtn.innerHTML = ICONS.wand + (clip.status === 'ready' ? ' Regenerate' : ' Generate voice');
     genBtn.addEventListener('click', () => generateVoice(clip, renderClips));
     const removeBtn = document.createElement('button');
-    removeBtn.className = 'btn btn-danger-ghost'; removeBtn.textContent = 'Remove';
+    removeBtn.className = 'btn btn-danger-ghost'; removeBtn.innerHTML = ICONS.trash + ' Remove';
     removeBtn.addEventListener('click', () => removeClip(clip.id));
     controls.append(genBtn, removeBtn);
 
     const status = document.createElement('div');
     const statusText = { draft: 'not generated', generating: 'generating…', ready: 'ready', error: 'failed' }[clip.status];
-    status.className = 'segment-status' + (clip.status === 'ready' ? ' ready' : clip.status === 'error' ? ' error' : '');
+    status.className = 'segment-status' + (clip.status === 'ready' ? ' ready' : clip.status === 'generating' ? ' generating' : clip.status === 'error' ? ' error' : '');
     status.textContent = statusText;
 
     bottomRow.append(controls, status);
