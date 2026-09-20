@@ -17,7 +17,7 @@
 <meta name="robots" content="index, follow" />
 <link rel="canonical" href="https://11api.site/" />
 <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
-<meta name="theme-color" content="#121319" />
+<meta name="theme-color" content="#ffffff" />
 
 <!-- Open Graph / Facebook, LinkedIn, Discord, etc. -->
 <meta property="og:type" content="website" />
@@ -36,7 +36,7 @@
 <meta name="twitter:image" content="https://11api.site/og-image.png" />
 
 <!-- Favicon -->
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23e8a75c'/%3E%3Ctext x='16' y='22' font-family='Arial, sans-serif' font-weight='700' font-size='15' text-anchor='middle' fill='%23221507'%3E11%3C/text%3E%3C/svg%3E" />
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230e0e10'/%3E%3Ctext x='16' y='22' font-family='Arial, sans-serif' font-weight='700' font-size='15' text-anchor='middle' fill='%23ffffff'%3E11%3C/text%3E%3C/svg%3E" />
 
 <!-- Structured data: describes this page as a free web tool to search engines -->
 <script type="application/ld+json">
@@ -117,25 +117,27 @@
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #121319;
-  --bg-raised: #1a1c24;
-  --bg-inset: #0c0d12;
-  --bg-hover: #23252f;
-  --line: #2a2c37;
-  --line-soft: #212330;
-  --text: #edeef2;
-  --text-dim: #8c8fa1;
-  --text-faint: #56596a;
-  --accent: #e8a75c;
-  --accent-strong: #f3b876;
-  --accent-ink: #221507;
-  --accent-soft: rgba(232, 167, 92, .14);
-  --ready: #55c99b;
-  --ready-ink: #052318;
-  --ready-soft: rgba(85, 201, 155, .14);
-  --danger: #e6685c;
-  --danger-soft: rgba(230, 104, 92, .12);
-  --scrub: #6fd3e6;
+  --bg: #ffffff;
+  --bg-raised: #ffffff;
+  --bg-inset: #f7f7f8;
+  --bg-hover: #f1f1f3;
+  --line: #e6e6e9;
+  --line-soft: #ededf0;
+  --text: #0e0e10;
+  --text-dim: #6b6b73;
+  --text-faint: #a3a3ab;
+  --accent: #d88f38;
+  --accent-strong: #b8721f;
+  --accent-ink: #2a1a06;
+  --accent-soft: rgba(216, 143, 56, .10);
+  --ready: #1a9c6c;
+  --ready-ink: #ffffff;
+  --ready-soft: rgba(26, 156, 108, .10);
+  --danger: #d6493b;
+  --danger-soft: rgba(214, 73, 59, .08);
+  --scrub: #0e0e10;
+  --ink: #0e0e10;
+  --ink-soft: #26262a;
   --radius: 9px;
   --radius-lg: 14px;
   --font-display: 'Sora', system-ui, sans-serif;
@@ -150,8 +152,8 @@
 html, body { margin: 0; width: 100%; overflow-x: hidden; }
 body {
   background:
-    radial-gradient(900px 420px at 15% -10%, rgba(232, 167, 92, .07), transparent 60%),
-    radial-gradient(700px 380px at 100% 0%, rgba(111, 211, 230, .05), transparent 55%),
+    radial-gradient(900px 420px at 15% -10%, rgba(216, 143, 56, .05), transparent 60%),
+    radial-gradient(700px 380px at 100% 0%, rgba(14, 14, 16, .025), transparent 55%),
     var(--bg);
   color: var(--text); min-height: 100vh;
 }
@@ -165,7 +167,7 @@ body {
 
 .topbar {
   display: flex; justify-content: space-between; align-items: center;
-  padding: 13px 22px; border-bottom: 1px solid var(--line); background: rgba(26, 28, 36, .82);
+  padding: 13px 22px; border-bottom: 1px solid var(--line); background: rgba(255, 255, 255, .82);
   backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
   flex-wrap: wrap; gap: 10px; position: sticky; top: 0; z-index: 20;
   animation: fadeSlideUp .5s cubic-bezier(.2,.8,.2,1) both;
@@ -173,8 +175,8 @@ body {
 .brand { display: flex; align-items: center; gap: 11px; }
 .brand-mark {
   font-family: var(--font-mono); font-size: 12px; font-weight: 600; letter-spacing: .02em;
-  color: var(--accent-ink); background: linear-gradient(135deg, var(--accent-strong), var(--accent));
-  padding: 4px 8px; border-radius: 6px; box-shadow: 0 2px 10px rgba(232, 167, 92, .25);
+  color: #fff; background: var(--ink);
+  padding: 4px 8px; border-radius: 6px;
 }
 .brand-name { font-family: var(--font-display); font-size: 15.5px; font-weight: 600; letter-spacing: -.01em; margin: 0; }
 .icon-btn {
@@ -195,7 +197,7 @@ main { max-width: 960px; margin: 0 auto; padding: 22px 20px 100px; width: 100%; 
 .panel {
   background: var(--bg-raised); border: 1px solid var(--line); border-radius: var(--radius-lg);
   padding: 20px; margin-bottom: 20px; animation: fadeSlideUp .35s ease both;
-  box-shadow: 0 6px 24px rgba(0,0,0,.18);
+  box-shadow: 0 1px 2px rgba(14,14,16,.04), 0 8px 24px rgba(14,14,16,.05);
 }
 .panel h3 {
   margin: 0 0 14px; font-family: var(--font-display); font-size: 14px; color: var(--text); font-weight: 700;
@@ -265,17 +267,20 @@ main { max-width: 960px; margin: 0 auto; padding: 22px 20px 100px; width: 100%; 
 
 /* ---------- Notice bar ---------- */
 .notice-bar {
-  display: flex; align-items: center; gap: 12px; justify-content: center;
-  background: linear-gradient(135deg, rgba(232,167,92,.16), rgba(111,211,230,.10));
-  border-bottom: 1px solid var(--line); padding: 10px 44px 10px 20px; position: relative;
-  font-size: 13px; color: var(--text); text-align: center; animation: fadeSlideUp .35s ease both;
+  display: flex; align-items: flex-start; gap: 12px;
+  background: var(--accent-soft); border: 1px solid rgba(216, 143, 56, .3);
+  border-radius: var(--radius-lg); padding: 14px 16px;
+  margin-bottom: 20px; animation: fadeSlideUp .35s ease both;
+}
+.notice-bar .icon { flex-shrink: 0; margin-top: 1px; }
+.notice-bar-text {
+  flex: 1; min-width: 0; font-size: 13.5px; color: var(--text); line-height: 1.55; text-align: left;
 }
 .notice-close {
-  position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
-  background: transparent; border: none; color: var(--text-dim); font-size: 17px;
-  line-height: 1; cursor: pointer; padding: 4px 7px; border-radius: 6px;
+  flex-shrink: 0; background: transparent; border: none; color: var(--text-dim);
+  line-height: 1; cursor: pointer; padding: 4px; border-radius: 6px; margin: -4px -4px -4px 0;
 }
-.notice-close:hover { color: var(--text); background: rgba(255,255,255,.08); }
+.notice-close:hover { color: var(--text); background: rgba(14,14,16,.06); }
 
 /* ---------- Mode tabs ---------- */
 .mode-tabs {
@@ -289,8 +294,8 @@ main { max-width: 960px; margin: 0 auto; padding: 22px 20px 100px; width: 100%; 
 }
 .mode-tab:hover { color: var(--text); }
 .mode-tab.active {
-  background: linear-gradient(135deg, var(--accent-strong), var(--accent)); color: var(--accent-ink);
-  box-shadow: 0 3px 12px rgba(232, 167, 92, .25);
+  background: var(--ink); color: #fff;
+  box-shadow: 0 1px 2px rgba(14,14,16,.12);
 }
 
 /* ---------- Connection indicator ---------- */
@@ -335,7 +340,7 @@ video { width: 100%; max-height: 55vh; display: block; background: black; }
 }
 .playhead {
   position: absolute; top: 0; bottom: 0; width: 2px; background: var(--scrub); left: 0; pointer-events: none; z-index: 1;
-  box-shadow: 0 0 8px rgba(111, 211, 230, .7); transition: left .05s linear;
+  box-shadow: 0 0 6px rgba(14,14,16,.35); transition: left .05s linear;
 }
 .marker-layer { position: absolute; inset: 0; }
 
@@ -369,19 +374,21 @@ video { width: 100%; max-height: 55vh; display: block; background: black; }
 .checkbox { font-size: 12px; color: var(--text-dim); display: flex; align-items: center; gap: 6px; }
 
 .btn {
-  border: none; border-radius: var(--radius); padding: 10px 16px; font-size: 13px; font-weight: 600;
+  border: none; border-radius: 999px; padding: 10px 18px; font-size: 13px; font-weight: 600;
   cursor: pointer; transition: transform .1s, box-shadow .15s, opacity .12s, background .15s; touch-action: manipulation; white-space: nowrap;
 }
-.btn:hover { opacity: .93; }
+.btn:hover { opacity: .88; }
 .btn:active { transform: scale(.96); }
-.btn:disabled { opacity: .4; cursor: not-allowed; transform: none; }
-.btn-accent { background: linear-gradient(135deg, var(--accent-strong), var(--accent)); color: var(--accent-ink); box-shadow: 0 3px 12px rgba(232, 167, 92, .22); }
-.btn-primary { background: linear-gradient(135deg, #6bd6ab, var(--ready)); color: var(--ready-ink); box-shadow: 0 3px 12px rgba(85, 201, 155, .22); }
-.btn-ghost { background: var(--bg-inset); border: 1px solid var(--line); color: var(--text); }
-.btn-ghost:hover { border-color: var(--accent); background: var(--bg-hover); }
+.btn:disabled { opacity: .35; cursor: not-allowed; transform: none; }
+.btn-accent { background: var(--ink); color: #fff; box-shadow: 0 1px 2px rgba(14,14,16,.15); }
+.btn-accent:hover { opacity: 1; background: var(--ink-soft); }
+.btn-primary { background: var(--ink); color: #fff; box-shadow: 0 1px 2px rgba(14,14,16,.15); }
+.btn-primary:hover { opacity: 1; background: var(--ink-soft); }
+.btn-ghost { background: #fff; border: 1px solid var(--line); color: var(--text); }
+.btn-ghost:hover { opacity: 1; border-color: var(--text-faint); background: var(--bg-hover); }
 .btn-danger-ghost { background: transparent; border: 1px solid var(--line); color: var(--danger); }
-.btn-danger-ghost:hover { border-color: var(--danger); background: var(--danger-soft); }
-.btn-small { padding: 6px 10px; font-size: 11.5px; }
+.btn-danger-ghost:hover { opacity: 1; border-color: var(--danger); background: var(--danger-soft); }
+.btn-small { padding: 7px 13px; font-size: 11.5px; }
 
 .segment-list { list-style: none; margin: 14px 0 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
 
@@ -411,10 +418,6 @@ video { width: 100%; max-height: 55vh; display: block; background: black; }
 
 .segment-bottom-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
 .segment-controls { display: flex; gap: 8px; flex-wrap: wrap; }
-.segment-status { font-size: 11px; color: var(--text-dim); transition: color .2s; }
-.segment-status.ready { color: var(--ready); }
-.segment-status.error { color: var(--danger); }
-.segment-status.warn { color: var(--accent); }
 audio.segment-audio { width: 100%; height: 32px; margin-top: 4px; }
 
 .empty-state { color: var(--text-dim); font-size: 13px; margin-top: 18px; text-align: center; }
@@ -422,7 +425,7 @@ audio.segment-audio { width: 100%; height: 32px; margin-top: 4px; }
 .status-bar {
   position: fixed; bottom: 18px; left: 50%; transform: translateX(-50%);
   background: var(--bg-raised); border: 1px solid var(--line); padding: 11px 18px; border-radius: var(--radius);
-  font-size: 13px; box-shadow: 0 12px 32px rgba(0,0,0,.4); max-width: 92vw; text-align: center; z-index: 30;
+  font-size: 13px; box-shadow: 0 12px 32px rgba(14,14,16,.18); max-width: 92vw; text-align: center; z-index: 30;
   animation: fadeSlideUp .25s cubic-bezier(.2,.8,.2,1) both;
 }
 .status-bar.error { border-color: var(--danger); color: var(--danger); padding-right: 36px; }
@@ -431,7 +434,7 @@ audio.segment-audio { width: 100%; height: 32px; margin-top: 4px; }
   position: absolute; top: 6px; right: 6px; background: transparent; border: none; color: inherit;
   font-size: 15px; line-height: 1; cursor: pointer; padding: 5px 7px; border-radius: 5px; opacity: .8;
 }
-.status-close:hover { opacity: 1; background: rgba(255,255,255,.06); }
+.status-close:hover { opacity: 1; background: rgba(14,14,16,.06); }
 
 /* ---------- Icons ---------- */
 .icon { width: 15px; height: 15px; flex-shrink: 0; display: inline-block; vertical-align: -3px; }
@@ -460,7 +463,7 @@ audio.segment-audio { width: 100%; height: 32px; margin-top: 4px; }
 /* ---------- Connect-API banner (inline, above voice lines) ---------- */
 .connect-banner {
   display: flex; align-items: center; gap: 12px; background: var(--accent-soft);
-  border: 1px solid rgba(232, 167, 92, .35); border-radius: var(--radius-lg); padding: 13px 16px;
+  border: 1px solid rgba(216, 143, 56, .3); border-radius: var(--radius-lg); padding: 13px 16px;
   margin-bottom: 16px; animation: popIn .3s cubic-bezier(.2,.8,.2,1) both;
 }
 .connect-banner-icon {
@@ -479,15 +482,15 @@ audio.segment-audio { width: 100%; height: 32px; margin-top: 4px; }
   color: var(--text-dim); font-family: var(--font-display); letter-spacing: .01em;
 }
 .segment-status::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
-.segment-status.ready { color: var(--ready); background: var(--ready-soft); border-color: rgba(85,201,155,.3); }
-.segment-status.error { color: var(--danger); background: var(--danger-soft); border-color: rgba(230,104,92,.3); }
-.segment-status.warn { color: var(--accent); background: var(--accent-soft); border-color: rgba(232,167,92,.3); }
+.segment-status.ready { color: var(--ready); background: var(--ready-soft); border-color: rgba(26,156,108,.3); }
+.segment-status.error { color: var(--danger); background: var(--danger-soft); border-color: rgba(214,73,59,.3); }
+.segment-status.warn { color: var(--accent); background: var(--accent-soft); border-color: rgba(216,143,56,.3); }
 .segment-status.generating::before { animation: barPulse 1s ease infinite; }
 
 /* ---------- Segment index badge + panel section icon ---------- */
 .segment-index {
   font-family: var(--font-mono); font-size: 11px; color: var(--accent); background: var(--accent-soft);
-  border: 1px solid rgba(232,167,92,.3); border-radius: 6px; padding: 3px 8px; font-weight: 600;
+  border: 1px solid rgba(216,143,56,.3); border-radius: 6px; padding: 3px 8px; font-weight: 600;
 }
 .segment-top-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 .panel h3 { display: flex; align-items: center; gap: 9px; }
@@ -513,6 +516,14 @@ audio.segment-audio { width: 100%; height: 32px; margin-top: 4px; }
 }
 .faq-item[open] summary::after { transform: translateY(-30%) rotate(-135deg); }
 .faq-item p { margin: 0 0 14px; font-size: 13px; color: var(--text-dim); line-height: 1.6; max-width: 68ch; }
+
+/* ---------- Footer ---------- */
+.site-footer {
+  border-top: 1px solid var(--line); padding: 28px 20px; text-align: center;
+  font-size: 12.5px; color: var(--text-faint); max-width: 960px; margin: 0 auto;
+}
+.site-footer a { color: var(--text-dim); text-decoration: none; }
+.site-footer a:hover { color: var(--text); }
 
 /* ---------- Responsive ---------- */
 @media (max-width: 640px) {
@@ -554,6 +565,7 @@ audio.segment-audio { width: 100%; height: 32px; margin-top: 4px; }
   </div>
   <div class="topbar-right">
     <span id="quotaBadge" class="quota-badge hidden"></span>
+    <a href="/blog/" class="icon-btn" style="display:inline-flex;align-items:center;text-decoration:none;">Blog</a>
     <button id="globalConnBtn" class="conn-pill" type="button" title="API connection status — click to open settings">
       <svg class="icon bulb-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.5.4.85 1 .95 1.65L9.5 17h5l.15-1.55c.1-.65.45-1.25.95-1.65A6 6 0 0 0 12 3Z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
@@ -572,15 +584,15 @@ audio.segment-audio { width: 100%; height: 32px; margin-top: 4px; }
   </div>
 </header>
 
-<div id="noticeBar" class="notice-bar hidden">
-  <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="color:var(--accent-strong)"><path d="M12 8v5M12 16h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/></svg>
-  <span id="noticeText"></span>
-  <button id="noticeCloseBtn" class="notice-close" type="button" aria-label="Dismiss notice">
-    <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-  </button>
-</div>
-
 <main>
+
+  <div id="noticeBar" class="notice-bar hidden">
+    <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="color:var(--accent-strong)"><path d="M12 8v5M12 16h.01" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/></svg>
+    <span id="noticeText" class="notice-bar-text"></span>
+    <button id="noticeCloseBtn" class="notice-close" type="button" aria-label="Dismiss notice">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+    </button>
+  </div>
 
   <p class="page-intro">Turn text into natural-sounding speech right in your browser. 11API connects directly to your own <strong>ElevenLabs</strong> or <strong>Gemini</strong> API key to generate voice lines, then lets you line each one up against your video's timeline — no uploads, no account, and nothing ever touches a server in between.</p>
 
@@ -833,6 +845,11 @@ audio.segment-audio { width: 100%; height: 32px; margin-top: 4px; }
 
   <div id="statusBar" class="status-bar hidden"></div>
 </main>
+
+<footer class="site-footer">
+  <a href="/blog/">Blog</a> · <a href="/about.html">About</a> · <a href="/privacy.html">Privacy Policy</a>
+  <div style="margin-top:6px;">© 2026 11API — free, browser-based AI voiceover tool</div>
+</footer>
 
 <script type="module">
 import JSZip from "https://cdn.jsdelivr.net/npm/jszip@3.10.1/+esm";
