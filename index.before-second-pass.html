@@ -11,7 +11,7 @@
   gtag('config', 'G-8FKBP2K8J4');
 </script>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 <title>11API — Free AI Voiceover Generator & Video Voiceover Timeline</title>
 <meta name="description" content="Generate AI voiceovers with ElevenLabs or Gemini and line them up with your video timeline — free, browser-based, no upload, no sign-in. Bring your own API key." />
 <meta name="robots" content="index, follow" />
@@ -679,74 +679,6 @@ body { -webkit-font-smoothing: antialiased; }
   .mode-tab { font-size: 11.5px; }
   .timeline-scroll .timeline { min-width: 620px; }
 }
-
-/* ---------- Second-pass polish ---------- */
-body { background: radial-gradient(1000px 420px at 0% -8%, rgba(91,70,232,.08), transparent 62%), radial-gradient(820px 420px at 100% 2%, rgba(14,14,16,.028), transparent 58%), var(--bg); }
-.topbar { box-shadow: 0 1px 0 rgba(14,14,16,.02), 0 10px 28px rgba(14,14,16,.04); }
-.brand-mark { width: 32px; height: 32px; padding: 0; display: inline-flex; align-items: center; justify-content: center; background: linear-gradient(135deg, var(--accent), var(--accent-strong)); color: #fff; border-radius: 9px; box-shadow: 0 7px 18px rgba(91,70,232,.22); }
-.brand-mark svg { width: 23px; height: 23px; }
-.brand-name { font-size: 16px; letter-spacing: -.025em; }
-.topbar-link { font-weight: 600; }
-.tool-hero { position: relative; padding: 34px 10px 26px; }
-.tool-hero::before { content: ""; position: absolute; inset: -8px -10px auto; height: 170px; z-index: -1; background: radial-gradient(280px 130px at 50% 0%, rgba(91,70,232,.11), transparent 70%); pointer-events: none; }
-.tool-hero h2 { max-width: 800px; }
-.first-run-strip { max-width: 720px; margin: 18px auto 0; padding: 9px 12px; border: 1px solid var(--line); background: rgba(255,255,255,.72); backdrop-filter: blur(8px); border-radius: 999px; display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap; font-size: 11.5px; color: var(--text-dim); }
-.first-run-step { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
-.first-run-step b { width: 20px; height: 20px; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; background: var(--bg-inset); border: 1px solid var(--line); color: var(--text-faint); font-family: var(--font-mono); font-size: 10px; }
-.first-run-step.active { color: var(--text); font-weight: 600; }
-.first-run-step.active b { background: var(--accent-soft); color: var(--accent-strong); border-color: rgba(91,70,232,.24); }
-.first-run-line { width: 18px; height: 1px; background: var(--line); }
-.panel, .dropzone, .segment { box-shadow: 0 1px 2px rgba(14,14,16,.03), 0 10px 26px rgba(14,14,16,.045); }
-.panel { padding: 22px; }
-.panel h3 { padding-bottom: 12px; }
-.settings-section { background: linear-gradient(180deg, #fafafb, #f7f7f8); }
-.field input, .field select, .segment-text, .time-field input { background: #fff; }
-.field input:hover, .field select:hover, .segment-text:hover, .time-field input:hover { border-color: #d8d8de; }
-.btn { min-height: 42px; }
-.btn:disabled, button[disabled] { opacity: .5; cursor: not-allowed; transform: none !important; }
-.mode-tab { min-height: 46px; }
-.dropzone { border-color: #dcdce3; background: linear-gradient(180deg, rgba(247,247,248,.72), rgba(255,255,255,.96)); }
-.dropzone:hover { box-shadow: 0 0 0 3px var(--accent-soft); }
-.timeline-scroll { border-radius: calc(var(--radius) + 1px); overscroll-behavior-x: contain; scroll-snap-type: x proximity; scrollbar-color: var(--line) transparent; }
-.timeline { box-shadow: inset 0 1px 0 rgba(255,255,255,.7); }
-.segment { border-color: #dedee4; }
-.segment:hover { border-color: #d2d2da; }
-.segment-text { box-shadow: inset 0 1px 2px rgba(14,14,16,.025); }
-.faq-panel { margin-bottom: 0; }
-.mobile-action-dock { display: none; }
-@media (max-width: 640px) {
-  body { padding-bottom: env(safe-area-inset-bottom); }
-  .topbar { padding: 9px 12px; }
-  .topbar-right { box-shadow: 0 14px 34px rgba(14,14,16,.12); border-color: #dddde4; }
-  main { padding-bottom: 118px; }
-  .tool-hero { padding: 24px 2px 18px; }
-  .tool-hero::before { height: 130px; }
-  .hero-trust { gap: 7px 14px; }
-  .first-run-strip { border-radius: 16px; padding: 10px; gap: 7px 9px; justify-content: flex-start; font-size: 10.5px; text-align: left; }
-  .first-run-line { display: none; }
-  .first-run-step { width: calc(50% - 5px); white-space: normal; }
-  .first-run-step:last-child { width: 100%; }
-  .panel { padding: 15px; border-radius: 16px; }
-  .settings-section { padding: 13px; }
-  .mode-tabs { position: sticky; top: 69px; z-index: 10; box-shadow: 0 8px 20px rgba(14,14,16,.06); }
-  .dropzone { min-height: 205px; }
-  video { max-height: 52vh; }
-  .segment-list { gap: 10px; }
-  .segment { padding: 13px; }
-  .segment-controls .btn, .segments-actions .btn { min-height: 46px; }
-  .mobile-action-dock { display: grid; grid-template-columns: minmax(0,1.2fr) minmax(0,.8fr); gap: 8px; position: fixed; left: 12px; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom)); z-index: 25; padding: 8px; border: 1px solid rgba(221,221,229,.95); border-radius: 16px; background: rgba(255,255,255,.92); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); box-shadow: 0 16px 38px rgba(14,14,16,.16); }
-  .mobile-action-dock .btn { width: 100%; min-height: 48px; }
-  .status-bar { z-index: 40; bottom: calc(82px + env(safe-area-inset-bottom)); }
-}
-@media (max-width: 400px) {
-  .brand-mark { width: 30px; height: 30px; }
-  .brand-name { font-size: 15px; }
-  .first-run-step { width: 100%; }
-  .mode-tab { min-height: 50px; }
-  .mode-tab .icon { display: none; }
-  .mobile-action-dock { left: 9px; right: 9px; }
-}
-
 </style>
 
 </head>
@@ -754,9 +686,9 @@ body { background: radial-gradient(1000px 420px at 0% -8%, rgba(91,70,232,.08), 
 
 <header class="topbar">
   <div class="brand">
-    <span class="brand-mark" aria-hidden="true"><svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 14V10M9 18V6M14 22V2M19 18V6M24 14V10" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg></span>
+    <span class="brand-mark" aria-hidden="true">11</span>
     <h1 class="brand-name">11API</h1>
-    <span class="brand-sub">AI voiceover studio</span>
+    <span class="brand-sub">voiceover timeline</span>
   </div>
   <button id="mobileMenuToggle" class="mobile-menu-toggle" type="button" aria-expanded="false" aria-controls="toolMenu" aria-label="Open menu">
     <span></span><span></span><span></span>
@@ -796,13 +728,6 @@ body { background: radial-gradient(1000px 420px at 0% -8%, rgba(91,70,232,.08), 
     <p class="page-intro">Turn text into natural-sounding speech right in your browser. 11API connects directly to your own <strong>ElevenLabs</strong> or <strong>Gemini</strong> API key to generate voice lines, then lets you line each one up against your video's timeline — no uploads, no account, and nothing ever touches a server in between.</p>
     <div class="hero-trust" aria-label="11API benefits">
       <span>✓ No sign-up</span><span>✓ Your video stays on-device</span><span>✓ Bring your own API key</span>
-    </div>
-    <div class="first-run-strip" role="note" aria-label="Getting started">
-      <span class="first-run-step active"><b>1</b> Connect a key</span>
-      <span class="first-run-line" aria-hidden="true"></span>
-      <span class="first-run-step"><b>2</b> Add a voice line</span>
-      <span class="first-run-line" aria-hidden="true"></span>
-      <span class="first-run-step"><b>3</b> Generate &amp; download</span>
     </div>
   </section>
 
@@ -1055,10 +980,6 @@ body { background: radial-gradient(1000px 420px at 0% -8%, rgba(91,70,232,.08), 
     </div>
   </section>
 
-  <div id="mobileActionDock" class="mobile-action-dock" aria-label="Quick actions">
-    <button id="mobileAddAction" class="btn btn-accent" type="button"><svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>Add line</span></button>
-    <button id="mobileSettingsAction" class="btn btn-ghost" type="button"><svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" stroke="currentColor" stroke-width="1.7"/><path d="M19.4 13.5a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V19.4a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1.08-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H4.6a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 6.2 8.6a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 10.5 4.2h.09A1.65 1.65 0 0 0 12.1 3v-.09a2 2 0 1 1 4 0V3a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l.06.06a1.65 1.65 0 0 0 .33.82v.09c.26.63.85 1.06 1.51 1.06h.09a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg><span>Settings</span></button>
-  </div>
   <div id="statusBar" class="status-bar hidden"></div>
 </main>
 
@@ -1174,29 +1095,7 @@ const els = {
   emptyState: document.getElementById('emptyState'),
   downloadAudioBtn: document.getElementById('downloadAudioBtn'),
   statusBar: document.getElementById('statusBar'),
-  mobileAddAction: document.getElementById('mobileAddAction'),
-  mobileSettingsAction: document.getElementById('mobileSettingsAction'),
 };
-
-function updateMobileActionDock() {
-  if (!els.mobileAddAction) return;
-  const inVideoMode = state.mode === 'video';
-  const label = els.mobileAddAction.querySelector('span');
-  if (label) label.textContent = inVideoMode ? 'Add at current time' : 'Add line';
-  els.mobileAddAction.setAttribute('aria-label', inVideoMode ? 'Add voiceover at current video time' : 'Add a voice line');
-}
-if (els.mobileAddAction) {
-  els.mobileAddAction.addEventListener('click', () => {
-    if (state.mode === 'video' && els.addMarkerBtn) els.addMarkerBtn.click();
-    else if (els.addClipBtn) els.addClipBtn.click();
-  });
-}
-if (els.mobileSettingsAction) {
-  els.mobileSettingsAction.addEventListener('click', () => {
-    if (els.settingsPanel.classList.contains('hidden')) els.settingsToggle.click();
-    els.settingsPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  });
-}
 
 // ---------- Small inline icon set, reused across dynamically-built buttons ----------
 const ICONS = {
@@ -1689,10 +1588,9 @@ function setMode(mode) {
   els.voiceoverOnlySection.classList.toggle('hidden', mode !== 'voiceover');
   els.videoModeSection.classList.toggle('hidden', mode !== 'video');
 }
-els.tabVoiceoverOnly.addEventListener('click', () => { setMode('voiceover'); updateMobileActionDock(); });
-els.tabVideoTimeline.addEventListener('click', () => { setMode('video'); updateMobileActionDock(); });
+els.tabVoiceoverOnly.addEventListener('click', () => setMode('voiceover'));
+els.tabVideoTimeline.addEventListener('click', () => setMode('video'));
 setMode('voiceover');
-updateMobileActionDock();
 if (state.clips.length === 0) addClip();
 
 // ---------- Notice bar ----------

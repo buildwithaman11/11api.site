@@ -1,0 +1,19 @@
+11API responsive update
+
+Updated index.html to improve phone and tablet usability while preserving the existing app logic.
+
+Highlights:
+- Added a compact mobile navigation menu for Blog, API connection, Share, and Voice engine settings.
+- Added a clearer hero/header section for the tool.
+- Improved mobile spacing, typography, inputs, selects, and touch targets.
+- Stacked provider/API settings cleanly on narrow screens.
+- Made action groups full-width and touch-friendly on mobile.
+- Wrapped the timeline in a horizontal scroller on small screens so the timeline stays usable instead of being squeezed.
+- Improved voice-line editor controls and status layout for phones.
+- Improved video sizing and upload/dropzone presentation on mobile.
+- Added an ultra-small breakpoint for 320–400px devices.
+- Shifted the accent system toward the purple/indigo direction of the new mockup.
+
+Validation:
+- HTML tag-balance check passed across the site.
+- Main index.html JavaScript syntax check passed with Node.js.
