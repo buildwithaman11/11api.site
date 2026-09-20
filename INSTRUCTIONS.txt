@@ -3,51 +3,46 @@
 
 This folder is a complete, ready-to-upload copy of your entire site —
 the tool, the blog, and every supporting SEO/AdSense file. Everything
-in here is current as of Sep 20, 2026.
+in here is current as of Sep 20, 2026, including the new footer that
+now appears on EVERY page with:
+
+  - Facebook, Instagram, TikTok, and Email icons (glow their brand
+    colour on hover)
+  - Your contact email, shown as visible text
+  - Navigation links (Blog / About / Privacy Policy)
+
+This footer/contact update satisfies Google AdSense's requirement
+that visitors can find a way to contact you on every page of the site.
 
 
 WHAT'S IN THIS FOLDER
 ----------------------
 
 index.html          → The main tool (Voiceover / Video + Voiceover)
-about.html           → About page
+about.html           → About page — now includes a full "Get in touch"
+                        section with your email + all three social links
 privacy.html          → Privacy Policy page
-robots.txt            → Tells search engines they're allowed to crawl the site
-sitemap.xml            → Lists every page for Google to index
-CNAME                    → Keeps your custom domain (11api.site) working on GitHub Pages
-.nojekyll                 → Stops GitHub from mis-processing files it shouldn't touch
-og-image.png                → The preview image shown when the site is shared on social media
+robots.txt              → Tells search engines they're allowed to crawl the site
+sitemap.xml               → Lists every page for Google to index
+CNAME                       → Keeps your custom domain (11api.site) working
+.nojekyll                     → Stops GitHub from mis-processing files
+og-image.png                    → Preview image for social shares
 
-blog/blog.css                 → Shared design used by every blog page
-blog/index.html                 → Blog homepage (lists all posts)
-blog/how-to-write-natural-sounding-voiceover-scripts.html   → Your first blog post
-
-
-HOW EVERYTHING FITS TOGETHER
-------------------------------
-
-- index.html links to /blog/, /about.html, and /privacy.html in its
-  top bar and footer.
-- about.html and privacy.html link back to the tool and the blog.
-- blog/index.html lists every post and links to each one; each post
-  links back to the blog homepage and the tool.
-- sitemap.xml lists every page above so Google knows they exist.
-- robots.txt points search engines to sitemap.xml.
-
-None of this needs a server, a database, or a build step — it's all
-plain files that GitHub Pages serves directly.
+blog/blog.css                     → Shared design used by every blog page
+blog/index.html                     → Blog homepage (lists all posts)
+blog/how-to-write-natural-sounding-voiceover-scripts.html   → First post
 
 
 HOW TO UPLOAD THIS — STEP BY STEP
 ------------------------------------
 
-1. Go to github.com and open your repository (the one already
-   connected to 11api.site).
+1. Go to github.com and open your repository (the one connected to
+   11api.site).
 
-2. Click "Add file" → "Upload files" (top right of the file list).
+2. Click "Add file" -> "Upload files".
 
-3. From this folder, drag in these 8 files ALL AT ONCE, straight into
-   the repo's root (top level — do not put them in any subfolder):
+3. Drag in these 8 files ALL AT ONCE, into the repo's ROOT (top
+   level — not inside any subfolder):
 
      index.html
      about.html
@@ -58,65 +53,59 @@ HOW TO UPLOAD THIS — STEP BY STEP
      .nojekyll
      og-image.png
 
-   GitHub will warn you that some of these already exist and will be
-   REPLACED — that's expected and correct. Let it replace them.
+   GitHub will say these already exist and will be REPLACED — that's
+   correct, let it overwrite them.
 
-   NOTE: ".nojekyll" has no visible name in some file pickers because
-   it starts with a dot — if your computer hides it, turn on
-   "show hidden files" in your file explorer, or check the box for
-   "show hidden files" in the upload window if GitHub offers one.
+   NOTE: ".nojekyll" starts with a dot, so it may be hidden on your
+   computer. Turn on "show hidden files" in your file explorer if
+   you don't see it, to make sure it actually gets uploaded.
 
-4. Scroll down, type a commit message like "Full site update",
-   and click "Commit changes".
+4. Commit with a message like "Add contact footer + social links".
 
-5. Now do the blog folder separately. Click "Add file" → "Upload
-   files" again. This time, drag in the ENTIRE "blog" folder from
-   this download (not just the files inside it) — GitHub will
-   automatically recreate the blog/ folder structure for you.
-
-   If your browser only lets you drag individual files (not whole
-   folders), instead type "blog/" at the start of the file path box
-   GitHub shows before you upload, for each of these three files:
+5. Now upload the blog folder. Click "Add file" -> "Upload files"
+   again, and drag in the whole "blog" folder from this download —
+   GitHub recreates the folder structure automatically. If your
+   browser only accepts individual files, type "blog/" at the start
+   of the path for each of these three, one at a time:
 
      blog/blog.css
      blog/index.html
      blog/how-to-write-natural-sounding-voiceover-scripts.html
 
-6. Commit that too, with a message like "Update blog".
+6. Commit that too.
 
-7. Wait about a minute, then check these load correctly in your
-   browser (all should show your actual site, not a 404):
+7. Wait about a minute, then check every page loads AND scroll to
+   the bottom of each one to confirm the new footer with social
+   icons appears:
 
      https://11api.site/
      https://11api.site/about.html
      https://11api.site/privacy.html
-     https://11api.site/robots.txt
-     https://11api.site/sitemap.xml
      https://11api.site/blog/
      https://11api.site/blog/how-to-write-natural-sounding-voiceover-scripts.html
 
-8. Click through the footer links on the homepage (Blog, About,
-   Privacy Policy) to confirm nothing is broken.
+8. Hover over each social icon in the footer — Facebook should glow
+   blue, Instagram pink, TikTok cyan/pink, and the mail icon red.
+   Click each one to confirm it opens the right profile / email app.
 
 
 IF SOMETHING LOOKS WRONG
 ---------------------------
 
-- Page shows old content → hard-refresh your browser (Ctrl+Shift+R
-  or Cmd+Shift+R) — GitHub Pages can take a minute or two to update,
-  and your browser may be showing a cached copy.
-- A page 404s → double check it landed in the right folder (root
-  files in root, blog files inside blog/) and that the filename
-  matches exactly, including lowercase letters.
-- Styling looks broken on a blog/about/privacy page → make sure
-  blog/blog.css actually uploaded successfully to the blog/ folder,
-  since all three of those pages load their design from that one file.
+- Page shows old content -> hard-refresh (Ctrl+Shift+R / Cmd+Shift+R)
+  since GitHub Pages and your browser can both cache the old version
+  for a minute or two.
+- Icons show as plain unstyled links or broken -> confirm blog/blog.css
+  uploaded correctly (about.html and privacy.html both depend on it).
+- A page 404s -> check it's in the right folder and the filename is
+  exactly right, including lowercase letters.
 
 
 WHAT'S STILL LEFT TO DO (not included in this folder)
 ---------------------------------------------------------
 
-- Submitting the AdSense application itself (the site is now ready
-  for it — Privacy Policy, About page, and real content are in place)
-- Writing more blog posts (ask any time — happy to draft more)
-- Anything you want redesigned or added to the tool itself
+- Submitting the AdSense application itself — the site now meets
+  every checklist item (Privacy Policy, About page, findable contact
+  info, real content, sitemap)
+- Writing more blog posts (ask any time)
+- Anything else you want redesigned or added
