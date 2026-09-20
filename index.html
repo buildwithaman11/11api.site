@@ -317,10 +317,10 @@ main { max-width: 960px; margin: 0 auto; padding: 22px 20px 100px; width: 100%; 
 .dropzone:hover { border-color: var(--accent); background: var(--bg-raised); transform: translateY(-2px); }
 .dropzone.dragover { border-color: var(--scrub); background: var(--bg-raised); transform: scale(1.01); }
 .dropzone-icon {
-  width: 40px; height: 40px; margin: 0 auto 14px; color: var(--accent);
+  width: 32px; height: 32px; margin: 0 auto 12px; color: var(--accent);
   display: flex; align-items: center; justify-content: center;
 }
-.dropzone-icon svg { width: 100%; height: 100%; }
+.dropzone-icon svg { width: 30px; height: 30px; max-width: 100%; max-height: 100%; }
 .dropzone-title { font-family: var(--font-display); font-size: 16px; font-weight: 600; margin: 0 0 6px; }
 .dropzone-sub { font-size: 13px; color: var(--text-dim); margin: 0; }
 
@@ -437,9 +437,10 @@ audio.segment-audio { width: 100%; height: 32px; margin-top: 4px; }
 .status-close:hover { opacity: 1; background: rgba(14,14,16,.06); }
 
 /* ---------- Icons ---------- */
-.icon { width: 15px; height: 15px; flex-shrink: 0; display: inline-block; vertical-align: -3px; }
+.icon { width: 14px; height: 14px; flex-shrink: 0; display: inline-block; vertical-align: -3px; }
 .btn .icon, .icon-btn .icon { vertical-align: -2.5px; margin-right: 1px; }
 .mode-tab .icon { vertical-align: -3px; margin-right: 5px; }
+.icon, .icon svg { max-width: 100%; max-height: 100%; }
 
 /* ---------- Global connection pill (topbar) ---------- */
 .conn-pill {
@@ -532,7 +533,7 @@ audio.segment-audio { width: 100%; height: 32px; margin-top: 4px; }
   border-radius: 50%; border: 1px solid var(--line); color: var(--text-faint); background: #fff;
   transition: color .2s ease, border-color .2s ease, box-shadow .25s ease, transform .15s ease;
 }
-.social-icon svg { width: 17px; height: 17px; }
+.social-icon svg { width: 16px; height: 16px; max-width: 100%; max-height: 100%; }
 .social-icon:hover { transform: translateY(-2px) scale(1.05); }
 .social-icon.fb:hover { color: #1877F2; border-color: #1877F2; box-shadow: 0 0 18px 2px rgba(24,119,242,.45); }
 .social-icon.ig:hover { color: #E4405F; border-color: #E4405F; box-shadow: 0 0 18px 2px rgba(228,64,95,.4), 0 0 26px 6px rgba(247,183,51,.18); }
@@ -684,7 +685,7 @@ body { -webkit-font-smoothing: antialiased; }
 body { background: radial-gradient(1000px 420px at 0% -8%, rgba(91,70,232,.08), transparent 62%), radial-gradient(820px 420px at 100% 2%, rgba(14,14,16,.028), transparent 58%), var(--bg); }
 .topbar { box-shadow: 0 1px 0 rgba(14,14,16,.02), 0 10px 28px rgba(14,14,16,.04); }
 .brand-mark { width: 32px; height: 32px; padding: 0; display: inline-flex; align-items: center; justify-content: center; background: linear-gradient(135deg, var(--accent), var(--accent-strong)); color: #fff; border-radius: 9px; box-shadow: 0 7px 18px rgba(91,70,232,.22); }
-.brand-mark svg { width: 23px; height: 23px; }
+.brand-mark svg { width: 19px; height: 19px; max-width: 100%; max-height: 100%; }
 .brand-name { font-size: 16px; letter-spacing: -.025em; }
 .topbar-link { font-weight: 600; }
 .tool-hero { position: relative; padding: 34px 10px 26px; }
@@ -747,6 +748,49 @@ body { background: radial-gradient(1000px 420px at 0% -8%, rgba(91,70,232,.08), 
   .mobile-action-dock { left: 9px; right: 9px; }
 }
 
+/* ---------- Third-pass editor UX ---------- */
+.timeline-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.timeline-actions .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
+.segment { position: relative; overflow: hidden; }
+.segment::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 3px; background: transparent; transition: background .18s ease; }
+.segment.active { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.segment.active::before { background: var(--accent); }
+.segment-top-row { min-height: 36px; }
+.segment-top-left, .segment-top-right { display: flex; align-items: center; gap: 8px; min-width: 0; }
+.segment-top-right { margin-left: auto; }
+.segment-preview-btn { min-width: 42px; padding-inline: 10px; }
+.segment-preview-btn .icon { margin-right: 0; }
+.segment-preview-btn.is-playing { background: var(--ink); color: #fff; border-color: var(--ink); }
+.generate-btn { min-width: 150px; }
+.btn-spinner { width: 14px; height: 14px; border: 2px solid currentColor; border-right-color: transparent; border-radius: 50%; display: inline-block; animation: spin .7s linear infinite; vertical-align: -2px; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.marker-range.active { background: var(--accent); border-color: var(--accent-strong); box-shadow: 0 0 0 2px var(--accent-soft); }
+.marker-range.active::after { color: var(--accent-strong); font-weight: 700; }
+.timeline-header { align-items: flex-end; }
+.timeline-header .time-readout { padding-bottom: 8px; }
+@media (max-width: 640px) {
+  .timeline-header { align-items: stretch; }
+  .timeline-actions { display: grid; grid-template-columns: minmax(0,1.2fr) minmax(0,.8fr); width: 100%; }
+  .timeline-actions .btn { width: 100%; min-height: 48px; }
+  .timeline-header .time-readout { padding: 2px 1px 0; align-self: center; }
+  .segment { padding: 14px; }
+  .segment-top-row { gap: 7px; }
+  .segment-top-left, .segment-top-right { gap: 6px; }
+  .segment-index { flex: 0 0 auto; }
+  .segment-status { max-width: 100%; }
+  .segment-preview-btn { min-height: 42px; }
+  .segment-preview-btn span { display: none; }
+  .generate-btn { min-width: 0; }
+  .segment-controls { grid-template-columns: minmax(0,1.35fr) minmax(0,.65fr); }
+  .segment-controls .btn:first-child { grid-column: auto; }
+}
+@media (max-width: 400px) {
+  .timeline-actions { grid-template-columns: 1fr; }
+  .timeline-actions .btn { min-height: 46px; }
+  .segment-controls { grid-template-columns: 1fr; }
+  .segment-top-right { margin-left: auto; }
+  .segment-status { font-size: 10px; padding-inline: 8px; }
+}
 </style>
 
 </head>
@@ -987,7 +1031,10 @@ body { background: radial-gradient(1000px 420px at 0% -8%, rgba(91,70,232,.08), 
 
       <div class="timeline-wrap">
         <div class="timeline-header">
-          <button id="addMarkerBtn" class="btn btn-accent"><svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Voiceover at current time</button>
+          <div class="timeline-actions">
+            <button id="addMarkerBtn" class="btn btn-accent"><svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Add line here</button>
+            <button id="previewActiveBtn" class="btn btn-ghost" type="button" disabled><svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 5v14l12-7L7 5Z" fill="currentColor"/></svg>Preview selected</button>
+          </div>
           <span id="timeReadout" class="time-readout">00:00.0 / 00:00.0</span>
         </div>
         <div class="timeline-scroll" aria-label="Timeline. Swipe horizontally on mobile.">
@@ -1077,7 +1124,7 @@ body { background: radial-gradient(1000px 420px at 0% -8%, rgba(91,70,232,.08), 
 <script type="module">
 import JSZip from "https://cdn.jsdelivr.net/npm/jszip@3.10.1/+esm";
 
-const state = { mode: 'voiceover', videoFile: null, duration: 0, segments: [], clips: [] };
+const state = { mode: 'voiceover', videoFile: null, duration: 0, segments: [], clips: [], activeSegmentId: null };
 
 const mobileMenuToggle = document.getElementById('mobileMenuToggle');
 const toolMenu = document.getElementById('toolMenu');
@@ -1166,6 +1213,7 @@ const els = {
   editor: document.getElementById('editor'),
   video: document.getElementById('videoPlayer'),
   addMarkerBtn: document.getElementById('addMarkerBtn'),
+  previewActiveBtn: document.getElementById('previewActiveBtn'),
   timeReadout: document.getElementById('timeReadout'),
   timeline: document.getElementById('timeline'),
   playhead: document.getElementById('playhead'),
@@ -1810,6 +1858,7 @@ els.video.addEventListener('timeupdate', () => {
   els.playhead.style.left = pct + '%';
   els.timeReadout.textContent = `${fmtTime(els.video.currentTime)} / ${fmtTime(state.duration || 0)}`;
   checkSegmentPlayback();
+  updateActiveSegmentHighlight();
 });
 els.timeline.addEventListener('click', e => {
   if (!state.duration || e.target !== els.timeline && e.target !== els.markerLayer) return;
@@ -1818,6 +1867,7 @@ els.timeline.addEventListener('click', e => {
   els.video.currentTime = clamp(pct * state.duration, 0, state.duration);
 });
 els.addMarkerBtn.addEventListener('click', () => { if (state.duration) addSegment(els.video.currentTime); });
+if (els.previewActiveBtn) els.previewActiveBtn.addEventListener('click', () => { if (state.activeSegmentId) previewSegment(state.activeSegmentId); });
 
 function timeFromClientX(clientX) {
   const rect = els.timeline.getBoundingClientRect();
@@ -1832,10 +1882,11 @@ function renderMarkers() {
     const endPct = state.duration ? (seg.endTime / state.duration) * 100 : 0;
 
     const range = document.createElement('div');
-    range.className = 'marker-range' + (seg.status === 'ready' ? ' ready' : '');
+    range.className = 'marker-range' + (seg.status === 'ready' ? ' ready' : '') + (state.activeSegmentId === seg.id ? ' active' : '');
     range.style.left = startPct + '%';
     range.style.width = Math.max(0.6, endPct - startPct) + '%';
     range.dataset.label = `${fmtTime(seg.startTime)}–${fmtTime(seg.endTime)}`;
+    range.dataset.segmentId = seg.id;
     range.title = seg.text ? seg.text.slice(0, 60) : 'empty line';
 
     const handleStart = document.createElement('div');
@@ -1859,6 +1910,7 @@ function bindRangeDrag(range, handleStart, handleEnd, seg) {
   }
 
   function startDrag(handle, mode, e) {
+    selectSegment(seg.id);
     e.stopPropagation();
     e.preventDefault();
     handle.setPointerCapture(e.pointerId);
@@ -1896,15 +1948,52 @@ function bindRangeDrag(range, handleStart, handleEnd, seg) {
 }
 
 // ---------- Segments ----------
+function selectSegment(id) {
+  state.activeSegmentId = id || null;
+  updateActiveSegmentHighlight();
+  if (els.previewActiveBtn) els.previewActiveBtn.disabled = !state.activeSegmentId || !state.duration;
+}
+
+function updateActiveSegmentHighlight() {
+  const active = state.segments.find(s => state.activeSegmentId === s.id);
+  document.querySelectorAll('.segment[id^="seg-"]').forEach(el => el.classList.toggle('active', !!active && el.id === `seg-${active.id}`));
+  document.querySelectorAll('.marker-range').forEach(el => {
+    const isActive = !!active && el.dataset.segmentId === active.id;
+    el.classList.toggle('active', isActive);
+  });
+  if (els.previewActiveBtn) els.previewActiveBtn.disabled = !active || !state.duration;
+}
+
+function previewSegment(id) {
+  const seg = state.segments.find(s => s.id === id);
+  if (!seg || !state.duration) return;
+  selectSegment(seg.id);
+  els.video.currentTime = clamp(seg.startTime, 0, state.duration);
+  els.video.play().catch(() => {});
+  document.getElementById(`seg-${seg.id}`)?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
 function addSegment(startTime) {
-  const endTime = clamp(startTime + 3, startTime + 0.5, state.duration || startTime + 3);
-  const seg = { id: crypto.randomUUID(), startTime, endTime, text: '', blob: null, url: null, duration: null, status: 'draft', audioEl: null, played: false };
+  const safeStart = clamp(startTime || 0, 0, state.duration || Math.max(0, startTime || 0));
+  const endTime = clamp(safeStart + 3, safeStart + 0.5, state.duration || safeStart + 3);
+  const seg = { id: crypto.randomUUID(), startTime: safeStart, endTime, text: '', blob: null, url: null, duration: null, status: 'draft', audioEl: null, played: false };
   state.segments.push(seg);
   state.segments.sort((a, b) => a.startTime - b.startTime);
+  state.activeSegmentId = seg.id;
   renderSegments(); renderMarkers();
+  requestAnimationFrame(() => {
+    const card = document.getElementById(`seg-${seg.id}`);
+    card?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    card?.querySelector('.segment-text')?.focus();
+  });
 }
 function removeSegment(id) {
+  const index = state.segments.findIndex(s => s.id === id);
   state.segments = state.segments.filter(s => s.id !== id);
+  if (state.activeSegmentId === id) {
+    const replacement = state.segments[Math.max(0, index - 1)] || state.segments[0];
+    state.activeSegmentId = replacement?.id || null;
+  }
   renderSegments(); renderMarkers();
 }
 
@@ -1923,10 +2012,33 @@ function renderSegments() {
 
     const topRow = document.createElement('div');
     topRow.className = 'segment-top-row';
+    const topLeft = document.createElement('div');
+    topLeft.className = 'segment-top-left';
     const indexBadge = document.createElement('span');
     indexBadge.className = 'segment-index';
     indexBadge.textContent = `#${i + 1}`;
-    topRow.append(indexBadge);
+    topLeft.append(indexBadge);
+
+    const topRight = document.createElement('div');
+    topRight.className = 'segment-top-right';
+    const statusTop = document.createElement('span');
+    statusTop.className = 'segment-status' + (seg.status === 'ready' ? ' ready' : seg.status === 'generating' ? ' generating' : seg.status === 'error' ? ' error' : '');
+    statusTop.textContent = { draft: 'Draft', generating: 'Generating', ready: 'Ready', error: 'Failed' }[seg.status];
+    const previewBtn = document.createElement('button');
+    previewBtn.type = 'button';
+    previewBtn.className = 'btn btn-ghost btn-small segment-preview-btn';
+    previewBtn.setAttribute('aria-label', `Preview voiceover line ${i + 1}`);
+    previewBtn.innerHTML = ICONS.play + '<span>Preview</span>';
+    previewBtn.addEventListener('click', () => previewSegment(seg.id));
+    topRight.append(statusTop, previewBtn);
+    topRow.append(topLeft, topRight);
+    topRow.addEventListener('click', e => {
+      if (!e.target.closest('button, input, textarea, audio, select')) selectSegment(seg.id);
+    });
+    li.addEventListener('click', e => {
+      if (!e.target.closest('button, input, textarea, audio, select')) selectSegment(seg.id);
+    });
+    if (state.activeSegmentId === seg.id) li.classList.add('active');
 
     // start/end row
     const rangeRow = document.createElement('div');
@@ -1970,8 +2082,13 @@ function renderSegments() {
     const controls = document.createElement('div');
     controls.className = 'segment-controls';
     const genBtn = document.createElement('button');
-    genBtn.className = 'btn btn-accent';
-    genBtn.innerHTML = ICONS.wand + (seg.status === 'ready' ? ' Regenerate' : ' Generate voice');
+    genBtn.className = 'btn btn-accent generate-btn';
+    if (seg.status === 'generating') {
+      genBtn.disabled = true;
+      genBtn.innerHTML = '<span class="btn-spinner" aria-hidden="true"></span> Generating voice…';
+    } else {
+      genBtn.innerHTML = ICONS.wand + (seg.status === 'ready' ? ' Regenerate' : ' Generate voice');
+    }
     genBtn.addEventListener('click', () => generateVoice(seg, () => { renderSegments(); renderMarkers(); }));
     const removeBtn = document.createElement('button');
     removeBtn.className = 'btn btn-danger-ghost'; removeBtn.innerHTML = ICONS.trash + ' Remove';
@@ -1993,6 +2110,7 @@ function renderSegments() {
     li.append(topRow, rangeRow, textarea, ...(audioEl ? [audioEl] : []), bottomRow);
     els.segmentList.appendChild(li);
   });
+  updateActiveSegmentHighlight();
 }
 
 function makeTimeField(labelText, value, onChange, onNow) {
@@ -2021,6 +2139,11 @@ function addClip() {
   const clip = { id: crypto.randomUUID(), text: '', blob: null, url: null, duration: null, status: 'draft' };
   state.clips.push(clip);
   renderClips();
+  requestAnimationFrame(() => {
+    const card = document.getElementById(`clip-${clip.id}`);
+    card?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    card?.querySelector('.segment-text')?.focus();
+  });
 }
 function removeClip(id) {
   state.clips = state.clips.filter(c => c.id !== id);
@@ -2063,8 +2186,13 @@ function renderClips() {
     const controls = document.createElement('div');
     controls.className = 'segment-controls';
     const genBtn = document.createElement('button');
-    genBtn.className = 'btn btn-accent';
-    genBtn.innerHTML = ICONS.wand + (clip.status === 'ready' ? ' Regenerate' : ' Generate voice');
+    genBtn.className = 'btn btn-accent generate-btn';
+    if (clip.status === 'generating') {
+      genBtn.disabled = true;
+      genBtn.innerHTML = '<span class="btn-spinner" aria-hidden="true"></span> Generating voice…';
+    } else {
+      genBtn.innerHTML = ICONS.wand + (clip.status === 'ready' ? ' Regenerate' : ' Generate voice');
+    }
     genBtn.addEventListener('click', () => generateVoice(clip, renderClips));
     const removeBtn = document.createElement('button');
     removeBtn.className = 'btn btn-danger-ghost'; removeBtn.innerHTML = ICONS.trash + ' Remove';
