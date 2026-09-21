@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>I Added Voice Pinning, Language &amp; Emotion Selection to 11API | 21 September 2026</title>
+
+  <meta name="description" content="I added voice pinning, language selection, and emotion selection to 11API, my AI voiceover tool using ElevenLabs and Gemini TTS.">
+
+  <meta name="author" content="Aman">
+  <meta name="robots" content="index, follow, max-image-preview:large">
+
+  <link rel="canonical" href="https://11api.site/blog/11api-voice-pinning-language-emotion-selection.html">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="I Added Voice Pinning, Language &amp; Emotion Selection to 11API">
+  <meta property="og:description" content="I added voice pinning, language selection, and emotion selection to 11API, my AI voiceover side project.">
+  <meta property="og:url" content="https://11api.site/blog/11api-voice-pinning-language-emotion-selection.html">
+  <meta property="og:site_name" content="11API">
+  <meta property="article:author" content="Aman">
+  <meta property="article:published_time" content="2026-09-21">
+
+  <!-- Twitter / X -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="I Added Voice Pinning, Language &amp; Emotion Selection to 11API">
+  <meta name="twitter:description" content="A new 11API update with voice pinning, language selection, and emotion selection for AI voiceovers.">
+
+  <!-- BlogPosting Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "I Added Voice Pinning, Language & Emotion Selection to 11API",
+    "description": "I added voice pinning, language selection, and emotion selection to 11API, my AI voiceover side project.",
+    "datePublished": "2026-09-21",
+    "dateModified": "2026-09-21",
+
+    "author": {
+      "@type": "Person",
+      "name": "Aman"
+    },
+
+    "publisher": {
+      "@type": "Organization",
+      "name": "11API",
+      "url": "https://11api.site/"
+    },
+
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "https://11api.site/blog/11api-voice-pinning-language-emotion-selection.html"
+    },
+
+    "about": [
+      {
+        "@type": "Thing",
+        "name": "AI voiceover"
+      },
+      {
+        "@type": "Thing",
+        "name": "ElevenLabs"
+      },
+      {
+        "@type": "Thing",
+        "name": "Gemini TTS"
+      }
+    ]
+  }
+  </script>
+
+  <!-- Use your existing blog stylesheet -->
+  <link rel="stylesheet" href="blog.css">
+</head>
+
+<body>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container">
+
+      <a href="https://11api.site/" class="logo">
+        11API
+      </a>
+
+      <nav aria-label="Main navigation">
+        <a href="https://11api.site/">Home</a>
+        <a href="/blog/">Blog</a>
+      </nav>
+
+    </div>
+  </header>
+
+
+  <!-- Article -->
+  <main class="article-page">
+
+    <article class="article">
+
+      <header class="article-header">
+
+        <p class="article-date">
+          21 September 2026
+        </p>
+
+        <h1>
+          I Added Voice Pinning, Language &amp; Emotion Selection to 11API
+        </h1>
+
+        <p class="article-author">
+          By <a href="https://11api.site/">Aman</a>
+        </p>
+
+      </header>
+
+
+      <div class="article-content">
+
+        <p>
+          Hi, my name is Aman. I am a BCA student, and
+          <a href="https://11api.site/">11API</a>
+          is my side project.
+        </p>
+
+        <p>
+          I built
+          <a href="https://11api.site/">11API</a>
+          because I wanted to use
+          <strong>ElevenLabs and Gemini TTS in one place</strong>
+          to create voiceovers for my videos. I don't really like using my own
+          voice for videos, so I wanted a simple way to create AI voiceovers
+          and use them with my videos.
+        </p>
+
+        <p>
+          I am building
+          <a href="https://11api.site/">11API</a>
+          step by step, and whenever I add something new, I want to share
+          what I added and how it works here.
+        </p>
+
+
+        <h2>New features added today</h2>
+
+        <p>
+          Today, <strong>21 September 2026</strong>, I added three new features
+          to the
+          <a href="https://11api.site/">11API</a>
+          voice selection system.
+        </p>
+
+
+        <h3>1. Pin your favorite voices</h3>
+
+        <p>
+          You can now <strong>pin or mark any voice you like</strong>.
+        </p>
+
+        <p>
+          If you find a voice that you want to use again later, you can pin it
+          so you can find it more easily instead of searching through all the
+          available voices again.
+        </p>
+
+
+        <h3>2. Select the language for your voiceover</h3>
+
+        <p>
+          You can now <strong>select the language you want to generate your
+          voiceover in</strong>.
+        </p>
+
+        <p>
+          This makes it easier to find and use voices for different languages
+          instead of having to search through every voice manually.
+        </p>
+
+
+        <h3>3. Select the emotion of the voice</h3>
+
+        <p>
+          You can also now <strong>select the emotion you want for your
+          voiceover</strong>.
+        </p>
+
+        <p>
+          Depending on the type of video I'm making, I might want a voice that
+          sounds different, so I wanted to make it easier to choose a voice
+          based on the emotion I need.
+        </p>
+
+
+        <h2>Why I added these features</h2>
+
+        <p>
+          When I was using AI voice tools myself, I noticed that finding the
+          right voice could take more time than I wanted.
+        </p>
+
+        <p>
+          I wanted
+          <a href="https://11api.site/">11API</a>
+          to make that process simpler.
+        </p>
+
+        <p>
+          Now I can find a voice, pin the ones I like, choose the language,
+          and select the type of emotion I want before creating the voiceover.
+        </p>
+
+        <p>
+          This is a small update, but I think it makes the voice selection
+          process much easier.
+        </p>
+
+        <p>
+          I'll keep improving
+          <a href="https://11api.site/">11API</a>
+          as I use it myself and find things that could be better.
+        </p>
+
+        <p>
+          <strong>More updates coming soon.</strong>
+        </p>
+
+      </div>
+
+
+      <!-- Social Media -->
+      <section class="article-social" aria-label="Social media">
+
+        <h2>Follow 11API</h2>
+
+        <p>
+          I'm building
+          <a href="https://11api.site/">11API</a>
+          and sharing new features and development updates as I go.
+          You can follow me here:
+        </p>
+
+        <div class="social-links">
+
+          <!-- Replace these with your real social media URLs -->
+
+          <a
+            href="YOUR_X_PROFILE_URL"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            X
+          </a>
+
+          <a
+            href="YOUR_GITHUB_PROFILE_URL"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            GitHub
+          </a>
+
+          <a
+            href="YOUR_LINKEDIN_PROFILE_URL"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            LinkedIn
+          </a>
+
+          <a
+            href="YOUR_INSTAGRAM_PROFILE_URL"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Instagram
+          </a>
+
+          <a
+            href="YOUR_YOUTUBE_CHANNEL_URL"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            YouTube
+          </a>
+
+        </div>
+
+      </section>
+
+
+      <!-- Back to Blog -->
+      <div class="article-footer">
+
+        <a href="/blog/">
+          ← Back to 11API Blog
+        </a>
+
+      </div>
+
+    </article>
+
+  </main>
+
+
+  <!-- Footer -->
+  <footer class="site-footer">
+
+    <div class="container">
+
+      <p>
+        © 2026
+        <a href="https://11api.site/">11API</a>.
+        Built by Aman.
+      </p>
+
+      <nav aria-label="Footer navigation">
+
+        <a href="https://11api.site/">
+          11API
+        </a>
+
+        <a href="/blog/">
+          Blog
+        </a>
+
+        <a href="/privacy.html">
+          Privacy
+        </a>
+
+      </nav>
+
+    </div>
+
+  </footer>
+
+</body>
+</html>
