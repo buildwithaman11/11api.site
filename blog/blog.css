@@ -170,9 +170,9 @@ footer.site-footer a:hover { color: var(--accent); }
 .footer-contact a { font-weight: 650; }
 
 @media (max-width: 680px) {
-  .topbar { padding: 10px 14px; }
-  .topbar-right { width: 100%; display: grid; grid-template-columns: .75fr .75fr 1.35fr; gap: 6px; }
-  .topbar-right .nav-link, .topbar-right .btn-pill { width: 100%; text-align: center; }
+  .topbar { padding: 10px 14px; flex-wrap: nowrap; gap: 8px; }
+  .topbar-right { width: auto; margin-left: auto; display: flex; align-items: center; gap: 4px; min-width: 0; }
+  .topbar-right .nav-link, .topbar-right .btn-pill { width: auto; min-height: 36px; padding: 7px 9px; text-align: center; font-size: 11.5px; }
   main { padding: 30px 16px 70px; }
   .blog-hero { padding: 20px; margin-bottom: 16px; }
   .blog-hero h1 { font-size: 28px; }
