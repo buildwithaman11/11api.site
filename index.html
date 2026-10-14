@@ -116,6 +116,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
 <style>
+
 :root {
   --bg: #ffffff;
   --bg-raised: #ffffff;
@@ -332,23 +333,31 @@ main { max-width: 960px; margin: 0 auto; padding: 22px 20px 100px; width: 100%; 
 .stage { background: black; border-radius: var(--radius-lg); overflow: hidden; line-height: 0; animation: fadeSlideUp .4s ease both; }
 video { width: 100%; max-height: 55vh; display: block; background: black; }
 
+/* ---------- Video transport + timeline controls ---------- */
+.transport-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:10px;padding:9px 10px;background:var(--bg-raised);border:1px solid var(--line);border-radius:12px;box-shadow:0 4px 14px rgba(14,14,16,.05)}
+.transport-main,.transport-options{display:flex;align-items:center;gap:6px}.transport-main{min-width:0}.transport-options{justify-content:flex-end}.transport-btn{height:34px;min-width:34px;padding:0 10px;border:1px solid var(--line);border-radius:8px;background:#fff;color:var(--text);font-size:11.5px;font-weight:700;cursor:pointer}.transport-btn:hover{background:var(--bg-hover);border-color:var(--text-faint)}.transport-play{width:38px;border-color:var(--ink);background:var(--ink);color:#fff;font-size:14px}.transport-play:hover{background:var(--ink-soft);color:#fff}.transport-time{font-family:var(--font-mono);font-size:11px;color:var(--text-dim);margin-left:5px;white-space:nowrap}.transport-select{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--text-dim);font-weight:700}.transport-select select{height:34px;border:1px solid var(--line);border-radius:8px;background:#fff;padding:0 7px;font-size:11px;color:var(--text)}.transport-volume{display:flex;align-items:center;gap:5px;padding:0 4px}.transport-volume input{width:78px;accent-color:var(--accent)}
+.timeline-tools{display:flex;align-items:center;gap:7px;margin-bottom:8px}.timeline-tool-label{font-size:11px;font-weight:700;color:var(--text);margin-right:auto}.timeline-tool-btn{height:30px;min-width:30px;border:1px solid var(--line);border-radius:7px;background:#fff;color:var(--text);font-size:12px;font-weight:700;cursor:pointer}.timeline-tool-btn:hover{background:var(--bg-hover)}.timeline-fit{padding:0 9px;font-size:10px}.timeline-tools input[type=range]{width:82px;accent-color:var(--accent)}.zoom-label{font:10px var(--font-mono);color:var(--text-faint);width:22px}
+.timeline-ruler{position:absolute;left:0;right:0;top:0;height:22px;border-bottom:1px solid var(--line);pointer-events:none;background:repeating-linear-gradient(to right,transparent 0,transparent calc(10% - 1px),rgba(14,14,16,.07) calc(10% - 1px),rgba(14,14,16,.07) 10%)}
+.timeline-ruler span{position:absolute;top:5px;transform:translateX(-50%);font:8px var(--font-mono);color:var(--text-faint);white-space:nowrap}
+.playhead-handle{position:absolute;top:0;left:50%;transform:translate(-50%,-1px);width:11px;height:11px;border-radius:50%;background:var(--scrub);box-shadow:0 1px 3px rgba(0,0,0,.22)}
+@media (max-width:640px){.transport-bar{flex-direction:column;align-items:stretch}.transport-main,.transport-options{justify-content:space-between}.transport-options{width:100%}.transport-volume{flex:1}.transport-volume input{width:100%}.transport-btn{height:40px}.transport-play{width:42px}.timeline-tools{gap:5px}.timeline-tools input[type=range]{width:70px}.timeline-fit{padding:0 8px}}
 .timeline-wrap { margin-top: 18px; }
 .timeline-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; flex-wrap: wrap; gap: 8px; }
 .time-readout { font-family: var(--font-mono); font-size: 12px; color: var(--text-dim); letter-spacing: .01em; }
 
 .timeline {
-  position: relative; height: 68px; background: var(--bg-inset);
+  position: relative; height: 86px; background: var(--bg-inset);
   border: 1px solid var(--line); border-radius: var(--radius); cursor: pointer;
   touch-action: none; overflow: hidden;
 }
 .playhead {
-  position: absolute; top: 0; bottom: 0; width: 2px; background: var(--scrub); left: 0; pointer-events: none; z-index: 1;
+  position: absolute; top: 0; bottom: 0; width: 2px; background: var(--scrub); left: 0; pointer-events: none; z-index: 5;
   box-shadow: 0 0 6px rgba(14,14,16,.35); transition: left .05s linear;
 }
 .marker-layer { position: absolute; inset: 0; }
 
 .marker-range {
-  position: absolute; top: 10px; bottom: 10px; min-width: 14px;
+  position: absolute; top: 28px; bottom: 9px; min-width: 14px;
   background: var(--accent-soft); border: 1px solid var(--accent);
   border-radius: 5px; cursor: grab; animation: popIn .25s cubic-bezier(.2,.8,.2,1) both;
   transition: background .2s, border-color .2s;
@@ -356,7 +365,7 @@ video { width: 100%; max-height: 55vh; display: block; background: black; }
 .marker-range:active { cursor: grabbing; }
 .marker-range.ready { background: var(--ready-soft); border-color: var(--ready); animation: popIn .25s cubic-bezier(.2,.8,.2,1) both, barPulse 1.6s ease .25s 1; }
 .marker-range::after {
-  content: attr(data-label); position: absolute; top: -20px; left: 0;
+  content: attr(data-label); position: absolute; top: -18px; left: 0;
   font-size: 10px; color: var(--text-dim); white-space: nowrap; font-family: var(--font-mono);
 }
 .handle {
@@ -794,8 +803,458 @@ body { background: radial-gradient(1000px 420px at 0% -8%, rgba(91,70,232,.08), 
   .segment-top-right { margin-left: auto; }
   .segment-status { font-size: 10px; padding-inline: 8px; }
 }
+
 </style>
 
+
+<style id="ui-cleanup-v4">
+/* 11API UI cleanup: reduce front-loaded text, tighten hierarchy, and improve mobile touch targets. */
+:root{
+  --ui-space-1:6px;
+  --ui-space-2:10px;
+  --ui-space-3:14px;
+  --ui-space-4:18px;
+  --ui-space-5:24px;
+  --ui-space-6:32px;
+}
+html{overflow-x:hidden}
+body{overflow-x:hidden}
+main{width:100%;max-width:1120px;margin:0 auto}
+.tool-hero{
+  padding:42px 16px 26px;
+  text-align:center;
+}
+.tool-hero::before{height:190px;inset:-12px 0 auto}
+.hero-kicker{
+  display:inline-flex;
+  padding:6px 10px;
+  font-size:10px;
+  letter-spacing:.045em;
+}
+.tool-hero h2{
+  margin:16px auto 12px;
+  max-width:760px;
+  font-size:clamp(38px,5.2vw,58px);
+  line-height:1.02;
+  letter-spacing:-.045em;
+}
+.tool-hero h2 span{color:var(--accent)}
+.page-intro{
+  max-width:620px;
+  margin:0 auto;
+  font-size:16px;
+  line-height:1.6;
+  color:var(--text-dim);
+}
+.hero-trust{
+  max-width:620px;
+  margin:18px auto 0;
+  display:flex;
+  justify-content:center;
+  gap:8px 22px;
+  flex-wrap:wrap;
+  font-size:12px;
+  color:var(--text-dim);
+}
+.hero-trust span{white-space:nowrap}
+.first-run-strip{
+  max-width:560px;
+  margin:20px auto 0;
+  padding:7px 12px;
+  border-radius:14px;
+  gap:8px;
+  font-size:11px;
+}
+.first-run-step b{width:22px;height:22px}
+.mode-tabs{
+  max-width:760px;
+  margin:0 auto 22px;
+  padding:4px;
+  border-radius:14px;
+  background:var(--bg-inset);
+}
+.mode-tab{
+  min-height:44px;
+  font-size:13px;
+  border-radius:10px;
+}
+.segments-header{
+  margin-bottom:14px;
+}
+.segments-header h2{
+  font-size:20px;
+  letter-spacing:-.02em;
+}
+.segments-actions{
+  gap:8px;
+}
+.segments-actions .btn{
+  min-height:42px;
+  border-radius:11px;
+}
+.btn{
+  border-radius:11px;
+  font-weight:650;
+  letter-spacing:-.01em;
+}
+.btn-accent,.btn-primary{
+  box-shadow:0 5px 14px rgba(91,70,232,.14);
+}
+.segment-list{gap:12px}
+.segment{
+  border-radius:16px;
+  padding:16px;
+}
+.segment-text{
+  border-radius:12px;
+}
+.field input,.field select,.voice-search-wrap input,.time-field input{
+  border-radius:11px;
+}
+.panel{
+  border-radius:16px;
+}
+.settings-section{
+  border-radius:14px;
+}
+.mobile-action-dock{
+  border-radius:14px;
+  padding:6px;
+  gap:6px;
+}
+.mobile-action-dock .btn{
+  min-height:44px;
+  border-radius:10px;
+}
+@media (max-width:700px){
+  main{padding-inline:14px}
+  .tool-hero{
+    padding:24px 2px 20px;
+  }
+  .tool-hero::before{height:120px}
+  .tool-hero h2{
+    font-size:clamp(32px,9.5vw,43px);
+    line-height:1.06;
+    max-width:390px;
+    margin-top:14px;
+  }
+  .page-intro{
+    max-width:390px;
+    font-size:15px;
+    line-height:1.55;
+  }
+  .hero-trust{
+    margin-top:14px;
+    gap:6px 14px;
+    font-size:11px;
+  }
+  .first-run-strip{
+    margin-top:16px;
+    max-width:390px;
+    padding:8px;
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:6px;
+    border-radius:13px;
+  }
+  .first-run-step{
+    width:auto!important;
+    justify-content:center;
+    white-space:nowrap;
+    font-size:10px;
+  }
+  .first-run-step b{width:20px;height:20px}
+  .first-run-line{display:none}
+  .mode-tabs{
+    margin-bottom:18px;
+    position:static;
+    box-shadow:none;
+  }
+  .mode-tab{
+    min-height:46px;
+    font-size:12px;
+  }
+  .segments-header{
+    align-items:center;
+    margin-bottom:12px;
+  }
+  .segments-header h2{font-size:19px}
+  .segments-actions{
+    display:flex;
+    width:auto;
+  }
+  .segments-actions .btn{
+    min-height:40px;
+    padding-inline:13px;
+  }
+  .segments-actions .btn:first-child{
+    font-size:0;
+    width:42px;
+    padding:0;
+  }
+  .segments-actions .btn:first-child .icon{
+    display:none;
+  }
+  .segments-actions .btn:first-child::after{
+    content:"+";
+    font-size:20px;
+    line-height:1;
+  }
+  .segments-actions .btn:nth-child(2){
+    font-size:11px;
+  }
+  .segment{
+    padding:14px;
+  }
+  .segment-text{
+    min-height:110px;
+  }
+}
+@media (max-width:480px){
+  main{padding-inline:10px}
+  .tool-hero{padding-top:20px}
+  .hero-kicker{font-size:9px}
+  .tool-hero h2{
+    font-size:32px;
+    max-width:350px;
+  }
+  .page-intro{
+    font-size:14px;
+    max-width:350px;
+  }
+  .hero-trust{
+    display:flex;
+    max-width:350px;
+    justify-content:center;
+  }
+  .hero-trust span:nth-child(3){display:none}
+  .first-run-strip{
+    display:flex;
+    justify-content:space-between;
+    max-width:350px;
+  }
+  .first-run-step{font-size:9.5px}
+  .first-run-step b{margin-right:1px}
+  .mode-tabs{width:100%}
+  .mode-tab{font-size:11.5px}
+  .segments-header{
+    gap:8px;
+  }
+  .segments-actions .btn:nth-child(2){
+    font-size:0;
+    width:42px;
+    padding:0;
+  }
+  .segments-actions .btn:nth-child(2) .icon{display:none}
+  .segments-actions .btn:nth-child(2)::after{
+    content:"↓";
+    font-size:18px;
+  }
+  .mobile-action-dock{
+    left:10px;
+    right:10px;
+    bottom:calc(10px + env(safe-area-inset-bottom));
+  }
+  .mobile-action-dock .btn{
+    min-height:46px;
+  }
+}
+</style>
+
+<style id="eleven-inspired-app-v1">
+/* 11API app-style redesign — inspired by modern creator workspaces, not a pixel copy. */
+:root{
+  --app-bg:#f7f7f8; --app-panel:#fff; --app-ink:#111114; --app-muted:#707078;
+  --app-line:#e6e6eb; --app-soft:#f1f1f4; --app-accent:#5b46e8; --app-accent-2:#4934cf;
+  --app-radius:16px;
+}
+body{background:var(--app-bg)!important;color:var(--app-ink)!important;}
+.topbar{background:rgba(255,255,255,.9)!important;border-bottom:1px solid var(--app-line)!important;box-shadow:0 1px 0 rgba(0,0,0,.02);}
+.brand-sub{display:none!important}.brand-mark{border-radius:9px!important;background:#111114!important;box-shadow:none!important}
+.topbar-right{gap:5px}.conn-pill{border-radius:999px!important;background:#f5f5f7!important;border:1px solid var(--app-line)!important}
+.tool-hero.app-home{max-width:860px;margin:18px auto 24px;padding:30px 22px 20px;text-align:center;background:transparent;border:0;box-shadow:none}
+.app-home .hero-kicker{margin-bottom:10px}.app-home h2{font-size:clamp(28px,5vw,40px)!important;letter-spacing:-.045em!important;margin:0!important}.app-home .page-intro{margin:8px auto 22px!important;color:var(--app-muted)!important;font-size:14px!important}
+.creation-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;max-width:720px;margin:0 auto;text-align:left}
+.creation-card{appearance:none;border:1px solid var(--app-line);background:#fff;border-radius:16px;padding:18px;display:grid;grid-template-columns:42px 1fr 20px;gap:13px;align-items:center;text-align:left;cursor:pointer;min-height:92px;transition:.18s ease;box-shadow:0 4px 18px rgba(20,20,30,.035)}
+.creation-card:hover{transform:translateY(-2px);border-color:#d2cff6;box-shadow:0 10px 28px rgba(30,25,80,.08)}
+.creation-card.featured{border-color:rgba(91,70,232,.24);background:linear-gradient(180deg,#fff,#fbfaff)}
+.creation-icon{width:42px;height:42px;border-radius:12px;background:#f0eefc;color:var(--app-accent);display:grid;place-items:center}.creation-icon svg{width:21px;height:21px}
+.creation-card strong{display:block;font-size:14px;line-height:1.25}.creation-card small{display:block;color:var(--app-muted);font-size:11.5px;margin-top:4px;line-height:1.4}.creation-arrow{color:#9a9aa2;font-size:20px}
+.app-trust{margin-top:14px!important}.app-trust span{font-size:11px!important}
+.workspace-heading{display:flex;align-items:center;justify-content:space-between;margin:10px 0 12px;padding:0 2px}.workspace-heading h2{margin:2px 0 0;font-size:20px;letter-spacing:-.025em}.workspace-eyebrow{font-size:9px;font-weight:800;letter-spacing:.12em;color:#9999a2}.workspace-home-btn{border:1px solid var(--app-line);background:#fff;color:#55555e;border-radius:9px;padding:7px 11px;font-size:11px;font-weight:650;cursor:pointer}
+.mode-tabs{background:#fff!important;border:1px solid var(--app-line)!important;border-radius:12px!important;padding:4px!important;box-shadow:none!important;gap:3px!important}.mode-tab{border-radius:8px!important;min-height:38px!important}.mode-tab.active{background:#111114!important;color:#fff!important;box-shadow:0 3px 10px rgba(0,0,0,.08)!important}
+.panel,.segment,.dropzone,.editor,.timeline-wrap,.connect-banner,.faq-panel{border-radius:16px!important;border-color:var(--app-line)!important;box-shadow:0 4px 18px rgba(20,20,30,.025)!important}
+.segments-header{margin-top:18px}.segments-header h2{font-size:16px!important;letter-spacing:-.02em}.btn{border-radius:10px!important}.btn-accent,.btn-primary{box-shadow:none!important}
+/* Settings become contextual instead of occupying the whole page. */
+@media (min-width:641px){#settingsPanel{max-height:72vh;overflow:auto;position:fixed;right:20px;top:74px;width:min(620px,calc(100vw - 40px));z-index:60;background:#fff;box-shadow:0 24px 70px rgba(20,20,30,.18)!important;border:1px solid #dddde5!important}.app-home{padding-top:34px!important}}
+@media (max-width:640px){
+  main{padding:16px 12px 110px!important}.topbar{padding:9px 12px!important;min-height:56px!important}.conn-pill{max-width:150px!important}.app-home{margin:4px auto 16px!important;padding:22px 2px 10px!important}.app-home h2{font-size:28px!important}.creation-grid{grid-template-columns:1fr;gap:9px}.creation-card{min-height:78px;padding:14px}.creation-icon{width:38px;height:38px}.creation-card small{font-size:11px}.app-trust{display:flex!important;justify-content:center!important;gap:12px!important}.workspace-heading{margin-top:12px}.workspace-heading h2{font-size:18px}.mode-tabs{position:sticky;top:64px;z-index:18}.mode-tab{font-size:11px!important}.panel{border-radius:15px!important}
+  #settingsPanel{position:fixed!important;left:0;right:0;bottom:0;top:auto!important;width:100%!important;max-height:82vh;overflow:auto;z-index:80;border-radius:22px 22px 0 0!important;margin:0!important;box-shadow:0 -16px 50px rgba(0,0,0,.18)!important;padding-bottom:calc(22px + env(safe-area-inset-bottom))!important}
+  #settingsPanel::before{content:"";display:block;width:38px;height:4px;border-radius:99px;background:#d8d8de;margin:0 auto 14px}
+}
+@media (max-width:430px){.app-trust span:nth-child(2){display:none}.creation-card{grid-template-columns:38px 1fr 16px}.creation-icon{width:38px;height:38px}}
+</style>
+
+
+<style id="elevenlabs-style-v2">
+:root{--v2-text:#151515;--v2-muted:#77777d;--v2-line:#e7e7e9;--v2-bg:#fff;--v2-soft:#f7f7f8;--v2-black:#111318;--v2-radius:18px}
+.topbar{display:none!important}.app-shell-v2{display:block;background:#fff;min-height:calc(100vh - 62px);color:var(--v2-text)}
+.app-screen-v2{display:none;min-height:calc(100vh - 62px)}.app-screen-v2.active{display:block}
+.app-shell-v2{width:100vw;margin-left:calc(50% - 50vw)}.app-header-v2{height:64px;border-bottom:1px solid var(--v2-line);display:flex;align-items:center;justify-content:space-between;padding:0 24px;position:sticky;top:0;background:rgba(255,255,255,.96);backdrop-filter:blur(14px);z-index:30}.app-header-v2>strong{font-size:16px;font-weight:650;letter-spacing:-.02em}.app-head-actions-v2{display:flex;align-items:center;gap:10px}.app-icon-v2{border:0;background:transparent;width:38px;height:38px;border-radius:11px;font-size:22px;color:#303038;display:grid;place-items:center;cursor:pointer}.app-icon-v2:hover{background:#f4f4f5}.profile-v2{width:34px;height:34px;border-radius:50%;border:3px solid #f0f0f2;background:#17181d;color:#fff;font-weight:700;display:grid;place-items:center}
+.home-v2{max-width:700px;margin:0 auto;padding:112px 24px 80px;text-align:center}.home-v2 h1{font-size:44px;line-height:1.08;letter-spacing:-.055em;font-weight:500;margin:0 0 40px}.create-bar-v2{height:66px;border:1px solid #dddde1;border-radius:999px;box-shadow:0 2px 5px rgba(0,0,0,.05);display:flex;align-items:center;gap:12px;padding:8px 10px 8px 12px;text-align:left}.create-orb-v2{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,#f55,#ffa64d);color:#fff;font-size:12px;font-weight:800}.create-plus-v2,.create-mic-v2{border:0;background:transparent;font-size:28px;color:#111;cursor:pointer}.create-placeholder-v2{font-size:20px;color:#8b8b90;flex:1}.create-chip-v2{background:#f1f1f2;border-radius:999px;padding:7px 12px;font-size:13px;font-weight:600}.create-send-v2{width:48px;height:48px;border:0;border-radius:50%;background:#b5b5b8;color:#fff;font-size:28px;cursor:pointer}.tool-grid-v2{display:grid;grid-template-columns:repeat(4,1fr);gap:32px 18px;margin:76px 20px 60px}.tool-grid-v2 button{border:0;background:transparent;display:flex;flex-direction:column;align-items:center;gap:10px;color:#111;font-size:15px;cursor:pointer}.tool-grid-v2 i{font-style:normal;width:66px;height:66px;border:1px solid #e7e7e9;border-radius:18px;display:grid;place-items:center;font-size:26px;color:#777;box-shadow:0 2px 5px rgba(0,0,0,.03)}.tool-grid-v2 button:hover i{background:#f8f8f8}.home-card-v2{border-radius:24px;background:linear-gradient(135deg,#f3f3f3,#e7e7e9);padding:28px;text-align:left}.home-card-kicker-v2{font-size:11px;letter-spacing:.12em;color:#666;font-weight:800}.home-card-v2 strong{display:block;font-size:25px;letter-spacing:-.03em;margin:8px 0}.home-card-v2 p{color:#666;margin:0 0 18px}.home-card-v2 button{border:0;border-radius:999px;background:#111;color:#fff;padding:11px 16px;font-weight:650;cursor:pointer}
+.app-drawer-v2{position:fixed;z-index:100;left:0;top:0;bottom:0;width:min(360px,88vw);background:#fff;transform:translateX(-102%);transition:transform .22s ease;box-shadow:16px 0 50px rgba(0,0,0,.15);padding:20px 14px;display:flex;flex-direction:column}.app-drawer-v2.open{transform:translateX(0)}.drawer-head-v2{display:flex;justify-content:space-between;align-items:center;padding:2px 10px 26px}.drawer-brand-v2{display:flex;align-items:center;gap:10px;font-size:20px}.drawer-mark-v2{width:34px;height:34px;border-radius:9px;background:#111;color:#fff;display:grid;place-items:center;font-size:11px;font-weight:800}.drawer-nav-v2{display:flex;flex-direction:column;gap:4px}.drawer-item-v2{border:0;background:transparent;text-align:left;padding:12px 14px;border-radius:14px;font-size:16px;color:#737378;display:flex;align-items:center;gap:13px;cursor:pointer}.drawer-item-v2 span{width:23px;text-align:center;font-size:20px}.drawer-item-v2 b{margin-left:auto;font-weight:400}.drawer-item-v2.active,.drawer-item-v2:hover{background:#f3f3f4;color:#111}.drawer-section-title-v2{padding:28px 14px 10px;color:#888;font-size:13px}.drawer-muted-v2 .drawer-item-v2{font-size:15px}.drawer-spacer-v2{flex:1}.drawer-foot-v2{padding:15px;border:1px solid #eee;border-radius:14px;color:#666;font-size:12px;line-height:1.5}.drawer-foot-v2 small{color:#999}.dot-v2{display:inline-block;width:7px;height:7px;border-radius:50%;background:#39a85a;margin-right:6px}.app-backdrop-v2{display:none;position:fixed;inset:0;background:rgba(0,0,0,.22);z-index:90}.app-backdrop-v2.show{display:block}
+.tts-v2{max-width:720px;margin:0 auto;padding:30px 30px 50px;min-height:calc(100vh - 126px);display:flex;flex-direction:column}.voice-pill-v2{width:100%;height:62px;border:1px solid #dedee2;background:#fff;border-radius:16px;display:flex;align-items:center;gap:10px;padding:0 17px;font-size:18px;text-align:left;cursor:pointer}.voice-pill-v2 span:nth-child(2){flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.voice-dot-v2{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#392a52,#d68b57);flex:0 0 auto}.tts-composer-v2{padding-top:28px;flex:1;min-height:360px}.tts-composer-v2 textarea{width:100%;height:300px;border:0;outline:0;resize:none;font:inherit;font-size:24px;line-height:1.4;color:#666;background:transparent}.tts-composer-v2 textarea::placeholder{color:#999}.add-speaker-v2{border:0;background:transparent;font-size:17px;padding:12px;cursor:pointer;color:#111;display:block;margin:0 auto}.starter-v2 h3{font-size:17px;color:#777;font-weight:500;margin:0 0 12px}.chips-v2{display:flex;flex-wrap:wrap;gap:9px}.chips-v2 button{background:#fff;border:1px solid #dddde1;border-radius:12px;padding:10px 13px;font-size:14px;cursor:pointer}.tts-bottom-v2{margin-top:28px}.tts-tools-v2{display:flex;gap:8px;margin-bottom:10px}.tts-tools-v2 button{height:48px;border:1px solid #dddde1;background:#fff;border-radius:15px;padding:0 16px;font-size:14px;color:#666;cursor:pointer}.tts-tools-v2 button:nth-child(2),.tts-tools-v2 button:nth-child(3){width:54px;padding:0;font-size:20px}.tts-generate-v2{width:100%;height:58px;border:0;border-radius:16px;background:#b0b0b2;color:#fff;font-size:17px;font-weight:650;cursor:pointer}.tts-generate-v2.ready{background:#111}.tts-meta-v2{display:flex;justify-content:space-between;color:#888;font-size:13px;padding:12px 4px}.tts-audio-v2 audio{width:100%;margin-top:8px}
+.video-mount-v2{padding:20px}.video-mount-v2 #videoModeSection{display:block!important}.video-mount-v2 #videoModeSection>.editor{max-width:1200px;margin:0 auto}.video-mount-v2 .dropzone{max-width:760px;margin:40px auto}.video-mount-v2 .stage{border-radius:20px;overflow:hidden;background:#111}.video-mount-v2 video{max-height:65vh}.video-mount-v2 .timeline-wrap{margin-top:18px}.video-mount-v2 .timeline-tools{background:#f7f7f8;border:1px solid #e5e5e7;border-radius:14px;padding:8px}.video-mount-v2 .transport-bar{border:1px solid #e5e5e7;border-radius:14px;margin-top:10px;background:#fff}.video-mount-v2 .segments-header{margin-top:24px}.video-mount-v2 .segment{border-radius:16px}.video-mount-v2 .segment-text{font-size:16px}
+.legacy-front-v2,.legacy-front-v2~.mode-tabs{display:none!important}.legacy-settings-v2{position:fixed!important;z-index:120!important;left:50%!important;top:50%!important;right:auto!important;bottom:auto!important;transform:translate(-50%,-50%)!important;width:min(680px,calc(100vw - 28px))!important;max-height:82vh!important;border-radius:24px!important;overflow:auto!important;box-shadow:0 28px 90px rgba(0,0,0,.22)!important;margin:0!important}.legacy-function-v2{margin:0!important}.app-shell-v2 .legacy-function-v2{display:none!important}.legacy-function-v2#voiceoverOnlySection{display:none!important}.app-shell-v2 .legacy-function-v2.v2-visible{display:block!important}.settings-shade-v2{display:none;position:fixed;inset:0;z-index:110;background:rgba(0,0,0,.28)}.settings-shade-v2.show{display:block}
+main:has(.app-shell-v2){max-width:none!important;width:100%!important;margin:0!important;padding:0!important;}
+.app-shell-v2{min-height:100vh!important;width:100%!important;margin:0!important;overflow-x:hidden;}
+.app-screen-v2{min-height:100vh!important;}
+.app-header-v2{top:0!important;}
+.app-icon-v2 svg{width:20px;height:20px;display:block;}
+.app-icon-v2:focus-visible,.profile-v2:focus-visible,.drawer-item-v2:focus-visible,.create-bar-v2 button:focus-visible,.tool-grid-v2 button:focus-visible,.voice-pill-v2:focus-visible,.tts-tools-v2 button:focus-visible,.tts-generate-v2:focus-visible{outline:2px solid #5b46e8;outline-offset:2px;}
+.settings-close-v2{margin-left:auto;border:0;background:#f3f3f4;color:#555;border-radius:10px;width:34px;height:34px;display:grid;place-items:center;font-size:21px;cursor:pointer;}
+.settings-close-v2:hover{background:#e9e9eb;color:#111;}
+.legacy-settings-v2 h3.settings-title-v2{display:flex;align-items:center;gap:10px;margin-top:0;}
+.legacy-settings-v2 h3.settings-title-v2 .settings-close-v2{margin-left:auto;}
+#faqSection.legacy-faq-v2{display:none!important;}
+.faq-v2{max-width:760px;margin:0 auto;padding:34px 24px 80px;}
+.faq-v2 h1{font-size:34px;line-height:1.12;letter-spacing:-.045em;font-weight:550;margin:12px 0 10px;}
+.faq-v2 .faq-intro{color:#77777d;margin:0 0 28px;font-size:14px;}
+.faq-v2 details{border-top:1px solid #e7e7e9;padding:18px 0;}
+.faq-v2 details:last-child{border-bottom:1px solid #e7e7e9;}
+.faq-v2 summary{cursor:pointer;font-size:16px;font-weight:650;list-style:none;padding-right:30px;position:relative;}
+.faq-v2 summary::-webkit-details-marker{display:none;}
+.faq-v2 summary:after{content:'+';position:absolute;right:2px;top:-2px;font-size:22px;color:#999;}
+.faq-v2 details[open] summary:after{content:'−';}
+.faq-v2 details p{color:#666;line-height:1.7;font-size:14px;margin:10px 0 0;max-width:68ch;}
+@media(max-width:640px){.app-header-v2{top:0!important;height:60px;padding:0 14px}.app-shell-v2{min-height:100vh!important}.home-v2{padding:88px 22px 50px}.home-v2 h1{font-size:38px;margin-bottom:34px}.create-bar-v2{height:62px}.create-placeholder-v2{font-size:17px}.create-chip-v2{display:none}.tool-grid-v2{margin:62px 4px 50px;gap:30px 10px}.tool-grid-v2 i{width:56px;height:56px;border-radius:16px}.tool-grid-v2 button{font-size:13px}.home-card-v2{border-radius:22px;padding:22px}.home-card-v2 strong{font-size:21px}.tts-v2{padding:22px 22px calc(30px + env(safe-area-inset-bottom));min-height:calc(100vh - 60px)}.voice-pill-v2{height:56px;font-size:17px}.tts-composer-v2{min-height:330px;padding-top:20px}.tts-composer-v2 textarea{height:280px;font-size:20px}.starter-v2 h3{font-size:16px}.tts-bottom-v2{margin-top:22px}.tts-tools-v2 button{height:48px}.tts-generate-v2{height:56px}.legacy-settings-v2{left:0!important;right:0!important;top:auto!important;bottom:0!important;transform:none!important;width:100%!important;max-height:86vh!important;border-radius:24px 24px 0 0!important;padding-bottom:calc(18px + env(safe-area-inset-bottom))!important}.legacy-settings-v2 h3{font-size:20px!important}.legacy-settings-v2 .hint{display:none}.legacy-settings-v2 .settings-section{border-radius:14px!important}.legacy-settings-v2:before{content:"";display:block;width:44px;height:4px;border-radius:99px;background:#ddd;margin:0 auto 14px}.video-mount-v2{padding:10px}.video-mount-v2 .editor{padding:0!important}.video-mount-v2 .timeline-scroll .timeline{min-width:620px}.video-mount-v2 .segments-header{align-items:stretch}.video-mount-v2 .segments-actions{display:grid}.video-mount-v2 .segments-actions .btn{width:100%}.faq-v2{padding:28px 20px 60px}.faq-v2 h1{font-size:30px}.faq-v2 summary{font-size:15px}}.home-v2{padding:104px 22px 50px}.home-v2 h1{font-size:38px;margin-bottom:36px}.create-bar-v2{height:62px}.create-placeholder-v2{font-size:17px}.create-chip-v2{display:none}.tool-grid-v2{margin:70px 4px 50px;gap:32px 10px}.tool-grid-v2 i{width:58px;height:58px;border-radius:17px}.tool-grid-v2 button{font-size:14px}.home-card-v2{border-radius:22px;padding:22px}.home-card-v2 strong{font-size:21px}.tts-v2{padding:30px 30px calc(30px + env(safe-area-inset-bottom));min-height:calc(100vh - 120px)}.voice-pill-v2{height:58px;font-size:17px}.tts-composer-v2{min-height:360px;padding-top:25px}.tts-composer-v2 textarea{height:300px;font-size:21px}.starter-v2 h3{font-size:17px}.tts-bottom-v2{margin-top:24px}.tts-tools-v2 button{height:50px}.tts-generate-v2{height:58px}.legacy-settings-v2{left:0!important;right:0!important;top:auto!important;bottom:0!important;transform:none!important;width:100%!important;max-height:82vh!important;border-radius:24px 24px 0 0!important;padding-bottom:calc(18px + env(safe-area-inset-bottom))!important}.legacy-settings-v2 h3{font-size:20px!important}.legacy-settings-v2 .hint{display:none}.legacy-settings-v2 .settings-section{border-radius:14px!important}.legacy-settings-v2:before{content:"";display:block;width:44px;height:4px;border-radius:99px;background:#ddd;margin:0 auto 14px}.video-mount-v2{padding:10px}.video-mount-v2 .editor{padding:0!important}.video-mount-v2 .timeline-scroll .timeline{min-width:620px}.video-mount-v2 .segments-header{align-items:stretch}.video-mount-v2 .segments-actions{display:grid}.video-mount-v2 .segments-actions .btn{width:100%}}
+</style>
+
+
+<style id="final-mobile-cleanup-v4">
+/* Final mobile cleanup: the app shell owns navigation; no floating legacy action dock. */
+#mobileActionDock{display:none!important;}
+@media(max-width:640px){
+  main{padding-bottom:24px!important;}
+}
+/* V5 feedback: unobtrusive bottom-right toast instead of a centered modal. */
+.status-bar{
+  left:auto!important;
+  top:auto!important;
+  right:18px!important;
+  bottom:18px!important;
+  transform:none!important;
+  z-index:1000!important;
+  width:max-content;
+  max-width:min(88vw,420px);
+  min-width:180px;
+  padding:13px 42px 13px 16px;
+  border-radius:14px;
+  background:rgba(255,255,255,.98);
+  box-shadow:0 16px 45px rgba(0,0,0,.18);
+  backdrop-filter:blur(16px);
+  -webkit-backdrop-filter:blur(16px);
+}
+.status-bar.error{border-color:#d64a3a!important;color:#b52e21!important;}
+.status-bar.success{border-color:#3c9b67!important;color:#247a4d!important;}
+.status-close{top:7px;right:7px;}
+/* V5 home + multi-line TTS polish. */
+.create-bar-v5{cursor:text;gap:12px;}
+.create-bar-v5 input{min-width:0;flex:1;border:0;outline:0;background:transparent;color:#17171a;font:inherit;font-size:18px;}
+.create-bar-v5 input::placeholder{color:#8b8b90;}
+.create-bar-v5 .create-send-v2{flex:0 0 auto;background:#111318;font-size:25px;line-height:1;}
+.tool-grid-v5{grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:54px;margin-bottom:24px;}
+.tool-grid-v5 button{gap:11px;}
+.tool-grid-v5 i{width:74px;height:74px;border-radius:20px;background:#fff;}
+.tts-composer-v2{display:flex;flex-direction:column;}
+.tts-extra-line-v4{position:relative;margin-top:18px;padding-top:18px;border-top:1px solid var(--v2-line);order:2;}
+.tts-extra-line-v4 textarea{width:100%;min-height:150px;resize:vertical;border:0;outline:0;background:transparent;color:var(--v2-text);font:inherit;font-size:19px;line-height:1.55;padding:8px 42px 8px 0;}
+.tts-extra-line-v4 textarea::placeholder{color:#a1a1a6;}
+.tts-line-label-v4{font-size:11px;color:#99999f;font-weight:650;margin-bottom:4px;}
+.tts-line-actions-v4{display:flex;justify-content:flex-end;gap:7px;margin-top:3px;}
+.tts-line-actions-v4 button{border:1px solid var(--v2-line);background:#fff;border-radius:9px;padding:7px 10px;font-size:11px;font-weight:650;color:#555;cursor:pointer;}
+.tts-line-actions-v4 button.generate{background:#111318;color:#fff;border-color:#111318;}
+.add-speaker-v2{order:99;margin-top:20px!important;border:1px solid #dddde1!important;border-radius:13px!important;padding:11px 16px!important;background:#fff!important;color:#222!important;font-weight:650;}
+@media(max-width:640px){
+  .status-bar{right:12px!important;bottom:calc(12px + env(safe-area-inset-bottom))!important;max-width:calc(100vw - 24px);min-width:0;width:auto;}
+  .home-v2{padding-left:18px;padding-right:18px;}
+  .home-v2 h1{font-size:38px;margin-bottom:30px;}
+  .create-bar-v5{height:60px;padding-left:10px;}
+  .create-bar-v5 input{font-size:16px;}
+  .create-orb-v2{width:38px;height:38px;}
+  .create-bar-v5 .create-send-v2{width:44px;height:44px;font-size:23px;}
+  .tool-grid-v5{gap:14px;margin:44px 0 34px;}
+  .tool-grid-v5 i{width:68px;height:68px;border-radius:18px;font-size:24px;}
+  .tool-grid-v5 button{font-size:14px;}
+  .tts-extra-line-v4 textarea{font-size:18px;min-height:130px;}
+}
+</style>
+
+
+<style id="v5-final-overrides">
+.mobile-action-dock{display:none!important;}
+@media(max-width:640px){main{padding-bottom:24px!important;}.app-shell-v2{min-height:calc(100vh - 64px);}}
+</style>
+
+<style id="v6-ui-polish">
+/* V6 — simplify the new app UI and make Voice Settings a true contextual sheet. */
+.settings-shade-v2{background:rgba(17,18,24,.38)!important;backdrop-filter:blur(2px)}
+.legacy-settings-v2{background:#fff!important;color:#151515!important;border:1px solid #ececef!important}
+.legacy-settings-v2 .settings-title-v2{position:sticky;top:0;z-index:4;background:rgba(255,255,255,.96);backdrop-filter:blur(12px);padding:18px 20px!important;margin:0!important;border-bottom:1px solid #ededf0!important;font-size:22px!important;letter-spacing:-.035em!important}
+.legacy-settings-v2 .settings-title-v2 .icon{width:21px;height:21px;color:#6b57dc}
+.legacy-settings-v2 .settings-section{background:#fff!important;border:0!important;border-bottom:1px solid #ededf0!important;border-radius:0!important;padding:18px 20px!important;margin:0!important}
+.legacy-settings-v2 .settings-section:last-of-type{border-bottom:0!important}
+.legacy-settings-v2 .settings-section-title{font-size:11px!important;letter-spacing:.09em!important;color:#6660cf!important;margin:0 0 10px!important}
+.legacy-settings-v2 .field{min-width:0!important}
+.legacy-settings-v2 .field label{font-size:12px!important;color:#777780!important;margin-bottom:7px!important}
+.legacy-settings-v2 select,.legacy-settings-v2 input[type="text"],.legacy-settings-v2 input[type="password"],.legacy-settings-v2 input[type="search"]{min-height:48px!important;border:1px solid #dedee3!important;border-radius:14px!important;background:#fff!important;font-size:15px!important;color:#17171b!important;box-shadow:none!important}
+.legacy-settings-v2 select:focus,.legacy-settings-v2 input:focus{border-color:#b9b2ee!important;box-shadow:0 0 0 3px rgba(91,70,232,.08)!important;outline:none!important}
+.legacy-settings-v2 .key-row-header{margin:0 0 8px!important}
+.legacy-settings-v2 .conn-indicator{font-size:12px!important;color:#777780!important}
+.legacy-settings-v2 .key-select-row{display:grid!important;grid-template-columns:minmax(0,1fr) auto auto!important;gap:7px!important;align-items:center!important}
+.legacy-settings-v2 .key-select-row select{min-width:0!important}
+.legacy-settings-v2 .btn{border-radius:12px!important;min-height:44px!important;font-size:13px!important;font-weight:650!important}
+.legacy-settings-v2 .btn-small{padding:0 13px!important}
+.legacy-settings-v2 #elevenLoadVoicesBtn{margin-top:9px!important;border:1px solid #dedee3!important;background:#f7f7f8!important;color:#202026!important}
+.legacy-settings-v2 .voice-picker-head{grid-template-columns:minmax(0,1fr) auto!important;align-items:end!important}
+.legacy-settings-v2 .voice-picker-head>.btn{min-width:92px!important}
+.legacy-settings-v2 .voice-filter-grid{grid-template-columns:1fr 1fr auto!important;gap:7px!important;margin-top:9px!important}
+.legacy-settings-v2 .voice-filter select{min-height:42px!important;border-radius:11px!important}
+.legacy-settings-v2 .voice-filter-btn{min-height:42px!important;border-radius:11px!important}
+.legacy-settings-v2 .voice-list{max-height:250px!important;border:1px solid #e5e5e9!important;border-radius:14px!important;margin-top:9px!important}
+.legacy-settings-v2 .voice-card{padding:11px 12px!important}
+.legacy-settings-v2 .voice-picker-footer{margin-top:9px!important}
+.legacy-settings-v2 .hint{display:none!important}
+.legacy-settings-v2 .quota-box{margin:0 20px 18px!important;border-radius:14px!important}
+/* TTS: keep the workspace focused on writing + generation. */
+.starter-v2{display:none!important}
+.tts-tools-v2{justify-content:flex-end!important}
+.tts-tools-v2 button{width:48px!important;padding:0!important;border-radius:13px!important;color:#666!important}
+.tts-tools-v2 button:hover{background:#f6f6f7!important;color:#111!important}
+.tts-composer-v2 textarea{color:#222!important}
+.tts-composer-v2 textarea::placeholder{color:#a1a1a7!important}
+@media(max-width:640px){
+  .legacy-settings-v2{width:100%!important;max-height:88vh!important;border-radius:24px 24px 0 0!important}
+  .legacy-settings-v2 .settings-title-v2{padding:15px 18px!important;font-size:20px!important}
+  .legacy-settings-v2 .settings-section{padding:15px 18px!important}
+  .legacy-settings-v2 .key-select-row{grid-template-columns:minmax(0,1fr) auto!important}
+  .legacy-settings-v2 .key-select-row .btn-danger-ghost{grid-column:2}
+  .legacy-settings-v2 #elevenLoadVoicesBtn{width:100%!important}
+  .legacy-settings-v2 .voice-picker-head{grid-template-columns:1fr!important;gap:7px!important}
+  .legacy-settings-v2 .voice-picker-head>.btn{width:100%!important}
+  .legacy-settings-v2 .voice-filter-grid{grid-template-columns:1fr 1fr!important}
+  .legacy-settings-v2 .voice-filter-btn{grid-column:1 / -1!important}
+  .legacy-settings-v2 .voice-list{max-height:220px!important}
+  .tts-v2{padding-top:20px!important}
+  .tts-composer-v2{min-height:390px!important}
+  .tts-composer-v2 textarea{height:320px!important;font-size:20px!important}
+}
+</style>
+
+
+<style id="v7-product-polish">
+.home-v2 h1{font-weight:520}.home-card-v2{display:none!important}.tool-grid-v5 svg{width:25px;height:25px}.tool-grid-v5 i{display:grid;place-items:center}.tool-grid-v5 button:focus-visible,.voice-pill-v2:focus-visible,.tts-generate-v2:focus-visible{outline:3px solid rgba(91,70,232,.18);outline-offset:3px}.create-bar-v5{background:#fff}.create-bar-v5 input{font-size:17px}.create-bar-v5 .create-send-v2{background:#111318}.advanced-voice-v7{margin-top:12px;border-top:1px solid #ededf0;padding-top:12px}.advanced-voice-v7 summary{cursor:pointer;font-size:13px;font-weight:650;color:#3d3d44;list-style:none}.advanced-voice-v7 summary::-webkit-details-marker{display:none}.advanced-voice-v7 summary:after{content:'+';float:right;color:#999;font-size:18px;line-height:12px}.advanced-voice-v7[open] summary:after{content:'−'}.advanced-grid-v7{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}.advanced-grid-v7 label{font-size:12px;color:#666;display:grid;gap:7px}.advanced-grid-v7 label span{float:right;color:#333;font-weight:700}.advanced-grid-v7 input[type=range]{width:100%;accent-color:#111}.advanced-voice-v7 p{font-size:11px;color:#999;margin:10px 0 0}.tts-history-sheet-v7{display:none;position:fixed;inset:0;z-index:150}.tts-history-sheet-v7.show{display:block}.tts-history-backdrop-v7{position:absolute;inset:0;background:rgba(17,18,24,.34);backdrop-filter:blur(2px)}.tts-history-panel-v7{position:absolute;left:50%;bottom:0;transform:translateX(-50%);width:min(680px,100%);max-height:76vh;overflow:auto;background:#fff;border-radius:24px 24px 0 0;padding:10px 20px calc(22px + env(safe-area-inset-bottom));box-shadow:0 -20px 70px rgba(0,0,0,.18)}.sheet-handle-v7{width:42px;height:4px;border-radius:99px;background:#ddd;margin:2px auto 12px}.tts-history-head-v7{display:flex;align-items:center;justify-content:space-between;padding-bottom:10px;border-bottom:1px solid #ededf0;font-size:18px}.tts-history-list-v7{padding-top:8px}.history-empty-v7{padding:32px 10px;text-align:center;color:#999;font-size:14px}.history-item-v7{padding:13px 0;border-bottom:1px solid #f0f0f2}.history-item-v7 strong{display:block;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.history-item-v7 small{display:block;color:#999;margin:4px 0 8px}.history-item-v7 audio{width:100%;height:38px}.voice-picker-focus-v7{box-shadow:0 0 0 3px rgba(91,70,232,.12);border-radius:14px}.@media(max-width:640px){.advanced-grid-v7{grid-template-columns:1fr}.home-v2{padding-top:96px}.home-v2 h1{font-size:39px;margin-bottom:30px}.tool-grid-v5{margin-top:48px;margin-bottom:10px}.tts-history-panel-v7{max-height:82vh;padding-left:18px;padding-right:18px}.tts-composer-v2 textarea{min-height:240px}.tts-line-actions-v4{position:sticky;bottom:4px;background:rgba(255,255,255,.94);padding-top:6px}}
+</style>
 </head>
 <body>
 
@@ -826,6 +1285,90 @@ body { background: radial-gradient(1000px 420px at 0% -8%, rgba(91,70,232,.08), 
   </div>
 </header>
 
+<!-- 11API app shell v2: mobile-first creator workspace -->
+<div id="appShell" class="app-shell-v2">
+  <div id="appBackdrop" class="app-backdrop-v2"></div>
+  <aside id="appDrawer" class="app-drawer-v2" aria-hidden="true">
+    <div class="drawer-head-v2">
+      <div class="drawer-brand-v2"><span class="drawer-mark-v2">11</span><strong>11API</strong></div>
+      <button id="drawerCloseV2" class="app-icon-v2" type="button" aria-label="Close menu">×</button>
+    </div>
+    <nav class="drawer-nav-v2">
+      <button class="drawer-item-v2 active" data-nav="home"><span>⌂</span> Home</button>
+      <button class="drawer-item-v2" data-nav="tts"><span>◒</span> Text to Speech</button>
+      <button class="drawer-item-v2" data-nav="video"><span>▣</span> Video Voiceover</button>
+      <button class="drawer-item-v2" data-nav="voices"><span>◉</span> Voices <b>+</b></button>
+      <button class="drawer-item-v2" data-nav="timeline"><span>⌁</span> Timeline</button>
+    </nav>
+    <div class="drawer-section-title-v2">Your tools</div>
+    <nav class="drawer-nav-v2 drawer-muted-v2">
+      <button class="drawer-item-v2" data-nav="tts"><span>◌</span> ElevenLabs</button>
+      <button class="drawer-item-v2" data-nav="tts"><span>✦</span> Gemini</button>
+      <button class="drawer-item-v2" data-nav="settings"><span>⚙</span> Voice settings</button>
+      <button class="drawer-item-v2" data-nav="faq"><span>?</span> Help & FAQ</button>
+    </nav>
+    <div class="drawer-spacer-v2"></div>
+    <div class="drawer-foot-v2"><span class="dot-v2"></span> 100% browser-based<br><small>Your files stay on your device</small></div>
+  </aside>
+
+  <section class="app-screen-v2 active" id="screenHomeV2">
+    <div class="app-header-v2">
+      <button id="menuOpenV2" class="app-icon-v2" type="button" aria-label="Open menu"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></button>
+      <strong>Home</strong>
+      <div class="app-head-actions-v2"><button id="shareV2" class="app-icon-v2" type="button" aria-label="Share 11API"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 12l8-5M8 12l8 5M17 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM17 21a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM7 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></button><button id="profileV2" class="profile-v2" type="button" aria-label="Open settings">A</button></div>
+    </div>
+    <div class="home-v2">
+      <h1>Create your<br>voiceover</h1>
+      <div class="create-bar-v2 create-bar-v5" id="createBarV2">
+        <span class="create-orb-v2">11</span>
+        <input id="createPromptV5" type="text" autocomplete="off" placeholder="What should your voiceover say?" aria-label="Start a voiceover" />
+        <button id="createSendV2" class="create-send-v2" type="button" aria-label="Start voiceover">→</button>
+      </div>
+      <div class="tool-grid-v2 tool-grid-v5">
+        <button data-nav="tts"><i aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="9" y="4" width="6" height="11" rx="3" stroke="currentColor" stroke-width="1.7"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3M9 21h6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></i><span>Speech</span></button>
+        <button data-nav="video"><i aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="2.5" stroke="currentColor" stroke-width="1.7"/><path d="m10 9 5 3-5 3V9Z" fill="currentColor"/></svg></i><span>Video</span></button>
+        <button data-nav="settings"><i aria-hidden="true"><svg viewBox="0 0 24 24" fill="none"><path d="M12 15.2a3.2 3.2 0 1 0 0-6.4 3.2 3.2 0 0 0 0 6.4Z" stroke="currentColor" stroke-width="1.7"/><path d="m19.1 13.4 1.1.8-1.7 2.9-1.3-.5a7.8 7.8 0 0 1-1.6.9l-.2 1.4h-3.4l-.2-1.4a7.8 7.8 0 0 1-1.6-.9l-1.3.5-1.7-2.9 1.1-.8a7.7 7.7 0 0 1 0-1.8l-1.1-.8 1.7-2.9 1.3.5a7.8 7.8 0 0 1 1.6-.9l.2-1.4h3.4l.2 1.4a7.8 7.8 0 0 1 1.6.9l1.3-.5 1.7 2.9-1.1.8a7.7 7.7 0 0 1 0 1.8Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg></i><span>Settings</span></button>
+      </div>
+      <div class="home-card-v2"><span class="home-card-kicker-v2">11API WORKSPACE</span><strong>Voiceovers that fit your video.</strong><p>Generate speech, place lines on the timeline, and export — right in your browser.</p><button data-nav="video">Open Video Voiceover →</button></div>
+    </div>
+  </section>
+
+  <section class="app-screen-v2" id="screenTtsV2">
+    <div class="app-header-v2"><button id="ttsBackV2" class="app-icon-v2" type="button" aria-label="Back"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button><strong>Text to Speech</strong><div class="app-head-actions-v2"><button class="app-icon-v2 share-v2" type="button" aria-label="Share 11API"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M8 12l8-5M8 12l8 5M17 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM17 21a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM7 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></button><button class="profile-v2 profile-settings-v2" type="button" aria-label="Open settings">A</button></div></div>
+    <div class="tts-v2">
+      <button id="voicePillV2" class="voice-pill-v2" type="button"><span class="voice-dot-v2"></span><span id="voicePillNameV2">Select a voice</span><span>›</span></button>
+      <div id="ttsComposerV2" class="tts-composer-v2">
+        <textarea id="ttsInputV2" placeholder="Write what you want the voice to say..."></textarea>
+        <button id="addSpeakerV2" class="add-speaker-v2" type="button"><b>＋</b> Add voice line</button>
+      </div>
+      <div class="tts-bottom-v2"><div class="tts-tools-v2"><button id="ttsSettingsV2" type="button" aria-label="Voice engine settings"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" stroke="currentColor" stroke-width="1.7"/></svg></button><button id="ttsHistoryV2" type="button" aria-label="Generated audio"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12a7 7 0 1 0 2-4.9M5 5v4h4M12 8v5l3 2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div><button id="ttsGenerateV2" class="tts-generate-v2" type="button">Generate speech</button><div class="tts-meta-v2"><span id="ttsStatusV2">Bring your own API key</span><span id="ttsCountV2">0 / 5,000</span></div></div>
+      <div id="ttsAudioV2" class="tts-audio-v2"></div>
+    </div>
+  </section>
+
+  <section class="app-screen-v2" id="screenFaqV2">
+    <div class="app-header-v2"><button id="faqBackV2" class="app-icon-v2" type="button" aria-label="Back"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button><strong>Help &amp; FAQ</strong><div class="app-head-actions-v2"><button class="profile-v2 profile-settings-v2" type="button" aria-label="Open settings">A</button></div></div>
+    <div class="faq-v2">
+      <h1>Help &amp; FAQ</h1>
+      <p class="faq-intro">Quick answers about 11API, API keys, privacy, voice generation, and video voiceovers.</p>
+      <details open><summary>Is 11API actually free?</summary><p>Yes. 11API itself does not charge for the tool. You bring your own ElevenLabs or Gemini API key, and provider usage is subject to that provider's pricing and limits.</p></details>
+      <details><summary>Do I need an account?</summary><p>No. 11API is browser-based and does not require an 11API account. Your provider keys are stored in your browser's local storage.</p></details>
+      <details><summary>Does my video get uploaded?</summary><p>No. Video editing and playback happen in your browser. Your video file is not uploaded to an 11API server.</p></details>
+      <details><summary>Can I use both ElevenLabs and Gemini?</summary><p>Yes. Choose the provider in Voice engine settings and keep separate keys for each provider.</p></details>
+      <details><summary>Can I generate voice without a video?</summary><p>Yes. Use Text to Speech from the home screen or drawer to create standalone voice lines without uploading a video.</p></details>
+      <details><summary>How does the timeline work?</summary><p>Upload a video, add voiceover lines at the playhead, then drag clips or their edges to position and trim them. The timeline also includes playback, scrubbing, zoom, and fit controls.</p></details>
+    </div>
+  </section>
+
+  <section class="app-screen-v2" id="screenVideoV2">
+    <div class="app-header-v2"><button id="videoBackV2" class="app-icon-v2" type="button" aria-label="Back"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button><strong>Video Voiceover</strong><div class="app-head-actions-v2"><button id="videoSettingsV2" class="app-icon-v2" type="button" aria-label="Voice engine settings"><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" stroke="currentColor" stroke-width="1.7"/><path d="M19.4 13.5a1.65 1.65 0 0 0 .33 1.82l.06.06" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></button><button class="profile-v2">A</button></div></div>
+    <div id="videoMountV2" class="video-mount-v2"></div>
+  </section>
+
+  <div id="ttsHistorySheetV7" class="tts-history-sheet-v7" aria-hidden="true"><div class="tts-history-backdrop-v7"></div><section class="tts-history-panel-v7" role="dialog" aria-modal="true" aria-labelledby="ttsHistoryTitleV7"><div class="sheet-handle-v7"></div><div class="tts-history-head-v7"><strong id="ttsHistoryTitleV7">Recent audio</strong><button id="ttsHistoryCloseV7" class="app-icon-v2" type="button" aria-label="Close">×</button></div><div id="ttsHistoryListV7" class="tts-history-list-v7"></div></section></div>
+  <div id="settingsShadeV2" class="settings-shade-v2"></div>
+</div>
+
 <main>
 
   <div id="noticeBar" class="notice-bar hidden">
@@ -836,29 +1379,32 @@ body { background: radial-gradient(1000px 420px at 0% -8%, rgba(91,70,232,.08), 
     </button>
   </div>
 
-  <section class="tool-hero" aria-labelledby="toolHeroTitle">
-    <div class="hero-kicker"><span class="hero-kicker-dot"></span> Browser-based AI voiceover studio</div>
-    <h2 id="toolHeroTitle">Create voiceovers, then place them exactly where they belong.</h2>
-    <p class="page-intro">Turn text into natural-sounding speech right in your browser. 11API connects directly to your own <strong>ElevenLabs</strong> or <strong>Gemini</strong> API key to generate voice lines, then lets you line each one up against your video's timeline — no uploads, no account, and nothing ever touches a server in between.</p>
-    <div class="hero-trust" aria-label="11API benefits">
-      <span>✓ No sign-up</span><span>✓ Your video stays on-device</span><span>✓ Bring your own API key</span>
+  <section class="tool-hero app-home legacy-front-v2" aria-labelledby="toolHeroTitle">
+    <div class="hero-kicker"><span class="hero-kicker-dot"></span> 11API workspace</div>
+    <h2 id="toolHeroTitle">What would you like to create?</h2>
+    <p class="page-intro">Create natural AI voiceovers, then sync them precisely to your video.</p>
+    <div class="creation-grid" aria-label="Create with 11API">
+      <button class="creation-card" id="launchTts" type="button">
+        <span class="creation-icon"><svg viewBox="0 0 24 24" fill="none"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Z" stroke="currentColor" stroke-width="1.7"/><path d="M19 11a7 7 0 0 1-14 0M12 18v3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg></span>
+        <span><strong>Text to Speech</strong><small>Write text and generate a voice</small></span><span class="creation-arrow">→</span>
+      </button>
+      <button class="creation-card featured" id="launchVideo" type="button">
+        <span class="creation-icon"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M3 9h18M8 5 6 9M13 5l-2 4M18 5l-2 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span>
+        <span><strong>Video Voiceover</strong><small>Sync AI voice lines to your video</small></span><span class="creation-arrow">→</span>
+      </button>
     </div>
-    <div class="first-run-strip" role="note" aria-label="Getting started">
-      <span class="first-run-step active"><b>1</b> Connect a key</span>
-      <span class="first-run-line" aria-hidden="true"></span>
-      <span class="first-run-step"><b>2</b> Add a voice line</span>
-      <span class="first-run-line" aria-hidden="true"></span>
-      <span class="first-run-step"><b>3</b> Generate &amp; download</span>
+    <div class="hero-trust app-trust" aria-label="11API benefits">
+      <span>✓ No account</span><span>✓ Your API key</span><span>✓ Browser-based</span>
     </div>
   </section>
 
-  <section id="settingsPanel" class="panel hidden">
-    <h3><svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" stroke="currentColor" stroke-width="1.7"/><path d="M19.4 13.5a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V19.4a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1.08-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H4.6a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 6.2 8.6a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 10.5 4.2h.09A1.65 1.65 0 0 0 12.1 3v-.09a2 2 0 1 1 4 0V3a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.09c.26.63.85 1.06 1.51 1.06h.09a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>Voice engine settings</h3>
+  <section id="settingsPanel" class="panel hidden legacy-settings-v2">
+    <h3 class="settings-title-v2"><svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" stroke="currentColor" stroke-width="1.7"/><path d="M19.4 13.5a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V19.4a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1.08-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H4.6a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 6.2 8.6a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 10.5 4.2h.09A1.65 1.65 0 0 0 12.1 3v-.09a2 2 0 1 1 4 0V3a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.09c.26.63.85 1.06 1.51 1.06h.09a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>Voice settings<button id="settingsCloseV2" class="settings-close-v2" type="button" aria-label="Close settings">×</button></h3>
     <div class="settings-section">
-      <p class="settings-section-title">Engine</p>
+      <p class="settings-section-title">Voice engine</p>
       <div class="field-row">
         <div class="field">
-          <label for="provider">Which engine generates your voice</label>
+          <label for="provider">Choose your voice provider</label>
           <select id="provider">
             <option value="elevenlabs">ElevenLabs</option>
             <option value="gemini">Gemini</option>
@@ -869,13 +1415,13 @@ body { background: radial-gradient(1000px 420px at 0% -8%, rgba(91,70,232,.08), 
 
     <div id="elevenFields">
       <div class="settings-section">
-        <p class="settings-section-title">ElevenLabs API key</p>
+        <p class="settings-section-title">API connection</p>
         <div class="key-row-header">
           <span id="elevenConnLabel" class="conn-indicator"><span id="elevenConnDot" class="conn-dot"></span> Not connected</span>
         </div>
         <div class="field-row">
           <div class="field">
-            <label for="elevenKeySelect">Saved keys — switch anytime, no sign-in needed</label>
+            <label for="elevenKeySelect">API key</label>
             <div class="key-select-row">
               <select id="elevenKeySelect"><option value="">No keys saved — add one</option></select>
               <button id="elevenAddKeyBtn" class="btn btn-ghost btn-small" type="button">+ Add</button>
@@ -884,7 +1430,7 @@ body { background: radial-gradient(1000px 420px at 0% -8%, rgba(91,70,232,.08), 
           </div>
           <div class="field" style="max-width:190px">
             <label>&nbsp;</label>
-            <button id="elevenLoadVoicesBtn" class="btn btn-ghost" type="button" style="width:100%">Load voices &amp; models</button>
+            <button id="elevenLoadVoicesBtn" class="btn btn-ghost" type="button" style="width:100%">Refresh voices</button>
           </div>
         </div>
         <div id="elevenAddKeyForm" class="add-key-form hidden">
@@ -901,7 +1447,8 @@ body { background: radial-gradient(1000px 420px at 0% -8%, rgba(91,70,232,.08), 
         <div class="field-row">
           <div class="field"><label for="elevenModelSelect">Model</label><select id="elevenModelSelect"></select></div>
         </div>
-        <div class="voice-picker-head"><div><label for="elevenVoiceSearch">Voice</label><div class="voice-search-wrap"><span aria-hidden="true">⌕</span><input id="elevenVoiceSearch" type="search" placeholder="Search voices…" autocomplete="off"></div></div><button id="elevenPreviewBtn" class="btn btn-ghost btn-small" type="button">▶ Preview</button></div>
+        <details class="advanced-voice-v7"><summary>Advanced voice controls</summary><div class="advanced-grid-v7"><label>Stability <span id="elevenStabilityValue">0.50</span><input id="elevenStability" type="range" min="0" max="1" step="0.01" value="0.50"></label><label>Similarity <span id="elevenSimilarityValue">0.75</span><input id="elevenSimilarity" type="range" min="0" max="1" step="0.01" value="0.75"></label></div><p>Use the defaults for a balanced, natural result.</p></details>
+        <div class="voice-picker-head"><div><label for="elevenVoiceSearch">Choose a voice</label><div class="voice-search-wrap"><span aria-hidden="true">⌕</span><input id="elevenVoiceSearch" type="search" placeholder="Search voices…" autocomplete="off"></div></div><button id="elevenPreviewBtn" class="btn btn-ghost btn-small" type="button">▶ Preview</button></div>
         <div class="voice-filter-grid"><label class="voice-filter">Language<select id="elevenLanguageFilter"><option value="">All languages</option></select></label><label class="voice-filter">Emotion<select id="elevenEmotionFilter"><option value="">Any emotion</option></select></label><button id="elevenPinnedFilter" class="voice-filter-btn" type="button" aria-pressed="false">☆ Pinned</button></div>
         <div id="elevenVoiceList" class="voice-list" role="listbox" aria-label="ElevenLabs voices"><div class="voice-list-empty">Load voices to browse your available voices.</div></div>
         <input id="elevenVoiceSelect" type="hidden" value="">
@@ -920,13 +1467,13 @@ body { background: radial-gradient(1000px 420px at 0% -8%, rgba(91,70,232,.08), 
 
     <div id="geminiFields" class="hidden">
       <div class="settings-section">
-        <p class="settings-section-title">Gemini API key</p>
+        <p class="settings-section-title">API connection</p>
         <div class="key-row-header">
           <span id="geminiConnLabel" class="conn-indicator"><span id="geminiConnDot" class="conn-dot"></span> Not connected</span>
         </div>
         <div class="field-row">
           <div class="field">
-            <label for="geminiKeySelect">Saved keys — switch anytime, no sign-in needed</label>
+            <label for="geminiKeySelect">API key</label>
             <div class="key-select-row">
               <select id="geminiKeySelect"><option value="">No keys saved — add one</option></select>
               <button id="geminiAddKeyBtn" class="btn btn-ghost btn-small" type="button">+ Add</button>
@@ -946,7 +1493,7 @@ body { background: radial-gradient(1000px 420px at 0% -8%, rgba(91,70,232,.08), 
       <div class="settings-section voice-picker-section">
         <p class="settings-section-title">Voice &amp; model</p>
         <div class="field-row"><div class="field"><label for="geminiModelSelect">Model</label><select id="geminiModelSelect"><option value="gemini-2.5-flash-preview-tts">Flash — fast &amp; cheaper</option><option value="gemini-2.5-pro-preview-tts">Pro — higher quality</option></select></div></div>
-        <div class="voice-picker-head"><div><label for="geminiVoiceSearch">Voice</label><div class="voice-search-wrap"><span aria-hidden="true">⌕</span><input id="geminiVoiceSearch" type="search" placeholder="Search voices…" autocomplete="off"></div></div><button id="geminiPreviewBtn" class="btn btn-ghost btn-small" type="button">▶ Preview</button></div>
+        <div class="voice-picker-head"><div><label for="geminiVoiceSearch">Choose a voice</label><div class="voice-search-wrap"><span aria-hidden="true">⌕</span><input id="geminiVoiceSearch" type="search" placeholder="Search voices…" autocomplete="off"></div></div><button id="geminiPreviewBtn" class="btn btn-ghost btn-small" type="button">▶ Preview</button></div>
         <div class="voice-filter-grid"><label class="voice-filter">Language<select id="geminiLanguageFilter"><option value="">All languages</option></select></label><label class="voice-filter">Emotion<select id="geminiEmotionFilter"><option value="">Any emotion</option></select></label><button id="geminiPinnedFilter" class="voice-filter-btn" type="button" aria-pressed="false">☆ Pinned</button></div>
         <div id="geminiVoiceList" class="voice-list" role="listbox" aria-label="Gemini voices"></div>
         <input id="geminiVoiceSelect" type="hidden" value="">
@@ -963,7 +1510,9 @@ body { background: radial-gradient(1000px 420px at 0% -8%, rgba(91,70,232,.08), 
     <p class="hint">Keys are saved only in this browser's local storage and sent directly to each provider's API — never to any server of ours (there isn't one). Save as many keys per engine as you like and switch the active one anytime.</p>
   </section>
 
-  <div class="mode-tabs">
+  <div class="workspace-heading legacy-front-v2"><div><span class="workspace-eyebrow">CREATE</span><h2 id="workspaceTitle">Text to Speech</h2></div><button id="workspaceHomeBtn" class="workspace-home-btn" type="button">Home</button></div>
+
+  <div class="mode-tabs legacy-front-v2">
     <button id="tabVoiceoverOnly" class="mode-tab active" type="button" data-mode="voiceover">
       <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Z" stroke="currentColor" stroke-width="1.7"/><path d="M19 11a7 7 0 0 1-14 0M12 18v3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>Voiceover only
     </button>
@@ -972,7 +1521,7 @@ body { background: radial-gradient(1000px 420px at 0% -8%, rgba(91,70,232,.08), 
     </button>
   </div>
 
-  <section id="voiceoverOnlySection" class="voiceover-only">
+  <section id="voiceoverOnlySection" class="voiceover-only legacy-function-v2">
     <div id="clipsConnBanner" class="connect-banner hidden">
       <span class="connect-banner-icon">
         <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.5.4.85 1 .95 1.65L9.5 17h5l.15-1.55c.1-.65.45-1.25.95-1.65A6 6 0 0 0 12 3Z" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -994,7 +1543,7 @@ body { background: radial-gradient(1000px 420px at 0% -8%, rgba(91,70,232,.08), 
     <p id="clipEmptyState" class="empty-state">No voice lines yet. Tap "Add line" to write your first one — no video needed.</p>
   </section>
 
-  <div id="videoModeSection" class="hidden">
+  <div id="videoModeSection" class="hidden legacy-function-v2">
     <section id="dropzone" class="dropzone">
       <input type="file" id="videoInput" accept="video/*" hidden />
       <div class="dropzone-inner">
@@ -1012,7 +1561,20 @@ body { background: radial-gradient(1000px 420px at 0% -8%, rgba(91,70,232,.08), 
       <div class="stage-header">
         <button id="changeVideoBtn" class="btn btn-ghost btn-small" type="button"><svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 12a8 8 0 0 1 13.66-5.66M20 12a8 8 0 0 1-13.66 5.66" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M18 3v4h-4M6 21v-4h4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>Change video</button>
       </div>
-      <div class="stage"><video id="videoPlayer" controls playsinline></video></div>
+      <div class="stage"><video id="videoPlayer" playsinline preload="metadata"></video></div>
+      <div class="transport-bar" aria-label="Video controls">
+        <div class="transport-main">
+          <button id="videoPlayBtn" class="transport-btn transport-play" type="button" aria-label="Play video">▶</button>
+          <button id="videoBackBtn" class="transport-btn" type="button" aria-label="Back 5 seconds">−5</button>
+          <button id="videoForwardBtn" class="transport-btn" type="button" aria-label="Forward 5 seconds">+5</button>
+          <span id="transportTime" class="transport-time">00:00.0 / 00:00.0</span>
+        </div>
+        <div class="transport-options">
+          <label class="transport-select"><span>Speed</span><select id="videoSpeed"><option value="0.5">0.5×</option><option value="0.75">0.75×</option><option value="1" selected>1×</option><option value="1.25">1.25×</option><option value="1.5">1.5×</option><option value="2">2×</option></select></label>
+          <label class="transport-volume" title="Volume"><span>🔊</span><input id="videoVolume" type="range" min="0" max="1" step="0.05" value="1" aria-label="Video volume"></label>
+          <button id="videoMuteBtn" class="transport-btn" type="button" aria-label="Mute video">Mute</button>
+        </div>
+      </div>
 
       <div class="timeline-wrap">
         <div class="timeline-header">
@@ -1022,13 +1584,22 @@ body { background: radial-gradient(1000px 420px at 0% -8%, rgba(91,70,232,.08), 
           </div>
           <span id="timeReadout" class="time-readout">00:00.0 / 00:00.0</span>
         </div>
+        <div class="timeline-tools">
+          <span class="timeline-tool-label">Timeline</span>
+          <button id="zoomOutBtn" class="timeline-tool-btn" type="button" aria-label="Zoom out">−</button>
+          <input id="timelineZoom" type="range" min="1" max="4" step="0.5" value="1" aria-label="Timeline zoom">
+          <button id="zoomInBtn" class="timeline-tool-btn" type="button" aria-label="Zoom in">+</button>
+          <button id="zoomFitBtn" class="timeline-tool-btn timeline-fit" type="button">Fit</button>
+          <span id="zoomLabel" class="zoom-label">1×</span>
+        </div>
         <div class="timeline-scroll" aria-label="Timeline. Swipe horizontally on mobile.">
           <div id="timeline" class="timeline">
-            <div id="playhead" class="playhead"></div>
+            <div class="timeline-ruler" id="timelineRuler"></div>
+            <div id="playhead" class="playhead"><span class="playhead-handle"></span></div>
             <div id="markerLayer" class="marker-layer"></div>
           </div>
         </div>
-        <p class="hint">Drag either edge of a range to set where the line starts and ends. Drag the middle to move it.</p>
+        <p class="hint">Click or drag the playhead to scrub. Drag a clip to move it, or drag either edge to change its timing.</p>
       </div>
 
       <div id="segmentsConnBanner" class="connect-banner hidden">
@@ -1054,7 +1625,7 @@ body { background: radial-gradient(1000px 420px at 0% -8%, rgba(91,70,232,.08), 
     </section>
   </div>
 
-  <section id="faqSection" class="panel faq-panel">
+  <section id="faqSection" class="panel faq-panel legacy-faq-v2">
     <h3>
       <svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 17h.01M9.5 9a2.5 2.5 0 0 1 5 0c0 1.5-1.5 2-2 2.5-.4.4-.5.8-.5 1.5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/></svg>
       Frequently asked questions
@@ -1087,10 +1658,6 @@ body { background: radial-gradient(1000px 420px at 0% -8%, rgba(91,70,232,.08), 
     </div>
   </section>
 
-  <div id="mobileActionDock" class="mobile-action-dock" aria-label="Quick actions">
-    <button id="mobileAddAction" class="btn btn-accent" type="button"><svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>Add line</span></button>
-    <button id="mobileSettingsAction" class="btn btn-ghost" type="button"><svg class="icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" stroke="currentColor" stroke-width="1.7"/><path d="M19.4 13.5a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V19.4a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1.08-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H4.6a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 6.2 8.6a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 10.5 4.2h.09A1.65 1.65 0 0 0 12.1 3v-.09a2 2 0 1 1 4 0V3a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l.06.06a1.65 1.65 0 0 0 .33.82v.09c.26.63.85 1.06 1.51 1.06h.09a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg><span>Settings</span></button>
-  </div>
   <div id="statusBar" class="status-bar hidden"></div>
 </main>
 
@@ -1211,6 +1778,19 @@ const els = {
   addMarkerBtn: document.getElementById('addMarkerBtn'),
   previewActiveBtn: document.getElementById('previewActiveBtn'),
   timeReadout: document.getElementById('timeReadout'),
+  videoPlayBtn: document.getElementById('videoPlayBtn'),
+  videoBackBtn: document.getElementById('videoBackBtn'),
+  videoForwardBtn: document.getElementById('videoForwardBtn'),
+  videoSpeed: document.getElementById('videoSpeed'),
+  videoVolume: document.getElementById('videoVolume'),
+  videoMuteBtn: document.getElementById('videoMuteBtn'),
+  transportTime: document.getElementById('transportTime'),
+  timelineZoom: document.getElementById('timelineZoom'),
+  zoomOutBtn: document.getElementById('zoomOutBtn'),
+  zoomInBtn: document.getElementById('zoomInBtn'),
+  zoomFitBtn: document.getElementById('zoomFitBtn'),
+  zoomLabel: document.getElementById('zoomLabel'),
+  timelineRuler: document.getElementById('timelineRuler'),
   timeline: document.getElementById('timeline'),
   playhead: document.getElementById('playhead'),
   markerLayer: document.getElementById('markerLayer'),
@@ -1665,6 +2245,12 @@ wireKeyManager('gemini', {
 });
 
 // ---------- Settings persistence ----------
+function updateAdvancedVoiceValues(){
+  const stab=document.getElementById('elevenStability'), sim=document.getElementById('elevenSimilarity');
+  const sv=document.getElementById('elevenStabilityValue'), siv=document.getElementById('elevenSimilarityValue');
+  if(stab && sv) sv.textContent=Number(stab.value).toFixed(2);
+  if(sim && siv) siv.textContent=Number(sim.value).toFixed(2);
+}
 const SETTINGS_KEY = 'vo_timeline_settings_v1';
 function loadSettings() {
   migrateOldKeysIfNeeded();
@@ -1672,6 +2258,10 @@ function loadSettings() {
   try { s = JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}'); } catch {}
   if (s.provider) els.provider.value = s.provider;
   if (s.geminiModel) els.geminiModelSelect.value = s.geminiModel;
+  const stab = document.getElementById('elevenStability'), sim = document.getElementById('elevenSimilarity');
+  if (stab) stab.value = Number.isFinite(Number(s.elevenStability)) ? s.elevenStability : 0.50;
+  if (sim) sim.value = Number.isFinite(Number(s.elevenSimilarity)) ? s.elevenSimilarity : 0.75;
+  updateAdvancedVoiceValues();
 
   renderKeySelect('elevenlabs');
   renderKeySelect('gemini');
@@ -1702,9 +2292,11 @@ function saveSettings() {
     elevenVoiceCustom: els.elevenVoiceCustom.value,
     geminiModel: els.geminiModelSelect.value,
     geminiVoice: els.geminiVoiceSelect.value,
+    elevenStability: Number(document.getElementById('elevenStability')?.value || 0.50),
+    elevenSimilarity: Number(document.getElementById('elevenSimilarity')?.value || 0.75),
   }));
 }
-[els.provider, els.elevenModelSelect, els.elevenVoiceCustom, els.geminiModelSelect, els.geminiVoiceSelect].forEach(el =>
+[els.provider, els.elevenModelSelect, els.elevenVoiceCustom, els.geminiModelSelect, els.geminiVoiceSelect, document.getElementById('elevenStability'), document.getElementById('elevenSimilarity')].filter(Boolean).forEach(el =>
   el.addEventListener('change', saveSettings)
 );
 function toggleProviderFields() {
@@ -1715,7 +2307,27 @@ function toggleProviderFields() {
   updateGlobalConnIndicator();
 }
 els.provider.addEventListener('change', toggleProviderFields);
-els.settingsToggle.addEventListener('click', () => els.settingsPanel.classList.toggle('hidden'));
+
+const workspaceTitle = document.getElementById('workspaceTitle');
+const launchTts = document.getElementById('launchTts');
+const launchVideo = document.getElementById('launchVideo');
+const workspaceHomeBtn = document.getElementById('workspaceHomeBtn');
+const toolHeroHome = document.querySelector('.app-home');
+const workspaceHeading = document.querySelector('.workspace-heading');
+function openWorkspace(mode){
+  if(mode === 'video') els.tabVideoTimeline.click();
+  else els.tabVoiceoverOnly.click();
+  workspaceTitle.textContent = mode === 'video' ? 'Video Voiceover' : 'Text to Speech';
+  document.querySelector('.mode-tabs')?.scrollIntoView({behavior:'smooth',block:'start'});
+}
+launchTts?.addEventListener('click',()=>openWorkspace('voiceover'));
+launchVideo?.addEventListener('click',()=>openWorkspace('video'));
+workspaceHomeBtn?.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+els.settingsToggle.addEventListener('click', () => {
+  els.settingsPanel.classList.toggle('hidden');
+  if(!els.settingsPanel.classList.contains('hidden')) els.settingsPanel.scrollTop=0;
+});
+
 loadSettings();
 renderGeminiVoicePicker();
 renderElevenVoicePicker();
@@ -1728,8 +2340,10 @@ function setMode(mode) {
   els.voiceoverOnlySection.classList.toggle('hidden', mode !== 'voiceover');
   els.videoModeSection.classList.toggle('hidden', mode !== 'video');
 }
-els.tabVoiceoverOnly.addEventListener('click', () => { setMode('voiceover'); updateMobileActionDock(); });
-els.tabVideoTimeline.addEventListener('click', () => { setMode('video'); updateMobileActionDock(); });
+els.tabVoiceoverOnly.addEventListener('click', () => {
+  if (workspaceTitle) workspaceTitle.textContent = 'Text to Speech'; setMode('voiceover'); updateMobileActionDock(); });
+els.tabVideoTimeline.addEventListener('click', () => {
+  if (workspaceTitle) workspaceTitle.textContent = 'Video Voiceover'; setMode('video'); updateMobileActionDock(); });
 setMode('voiceover');
 updateMobileActionDock();
 if (state.clips.length === 0) addClip();
@@ -1841,22 +2455,46 @@ function loadVideo(file) {
   els.editor.classList.remove('hidden');
 }
 
-els.video.addEventListener('loadedmetadata', () => { state.duration = els.video.duration; renderMarkers(); });
+els.video.addEventListener('loadedmetadata', () => { state.duration = els.video.duration; renderMarkers(); renderTimelineRuler(); updateTransport(); });
 
 // ---------- Timeline ----------
+function updateTransport(){
+  const cur=els.video.currentTime||0, dur=state.duration||0;
+  const label=`${fmtTime(cur)} / ${fmtTime(dur)}`;
+  els.timeReadout.textContent=label;
+  if(els.transportTime) els.transportTime.textContent=label;
+  if(els.videoPlayBtn) els.videoPlayBtn.textContent=els.video.paused?'▶':'Ⅱ';
+  if(els.videoPlayBtn) els.videoPlayBtn.setAttribute('aria-label',els.video.paused?'Play video':'Pause video');
+}
+function seekFromClientX(clientX){
+  if(!state.duration) return;
+  const rect=els.timeline.getBoundingClientRect();
+  els.video.currentTime=clamp((clientX-rect.left)/rect.width*state.duration,0,state.duration);
+}
+let scrubbing=false;
 els.video.addEventListener('timeupdate', () => {
   const pct = state.duration ? (els.video.currentTime / state.duration) * 100 : 0;
   els.playhead.style.left = pct + '%';
-  els.timeReadout.textContent = `${fmtTime(els.video.currentTime)} / ${fmtTime(state.duration || 0)}`;
+  updateTransport();
   checkSegmentPlayback();
   updateActiveSegmentHighlight();
 });
-els.timeline.addEventListener('click', e => {
-  if (!state.duration || e.target !== els.timeline && e.target !== els.markerLayer) return;
-  const rect = els.timeline.getBoundingClientRect();
-  const pct = (e.clientX - rect.left) / rect.width;
-  els.video.currentTime = clamp(pct * state.duration, 0, state.duration);
+els.video.addEventListener('play', updateTransport);
+els.video.addEventListener('pause', updateTransport);
+els.video.addEventListener('loadedmetadata', updateTransport);
+if(els.videoPlayBtn) els.videoPlayBtn.addEventListener('click',()=>{ if(els.video.paused) els.video.play().catch(()=>{}); else els.video.pause(); });
+if(els.videoBackBtn) els.videoBackBtn.addEventListener('click',()=>{els.video.currentTime=Math.max(0,(els.video.currentTime||0)-5)});
+if(els.videoForwardBtn) els.videoForwardBtn.addEventListener('click',()=>{els.video.currentTime=Math.min(state.duration||0,(els.video.currentTime||0)+5)});
+if(els.videoSpeed) els.videoSpeed.addEventListener('change',()=>{els.video.playbackRate=Number(els.videoSpeed.value)});
+if(els.videoVolume) els.videoVolume.addEventListener('input',()=>{els.video.volume=Number(els.videoVolume.value);els.video.muted=els.video.volume===0});
+if(els.videoMuteBtn) els.videoMuteBtn.addEventListener('click',()=>{els.video.muted=!els.video.muted;els.videoMuteBtn.textContent=els.video.muted?'Unmute':'Mute'});
+els.timeline.addEventListener('pointerdown', e => {
+  if(!state.duration || e.target.closest('.marker-range')) return;
+  scrubbing=true; els.timeline.setPointerCapture?.(e.pointerId); seekFromClientX(e.clientX);
 });
+els.timeline.addEventListener('pointermove', e => { if(scrubbing) seekFromClientX(e.clientX); });
+els.timeline.addEventListener('pointerup', () => {scrubbing=false});
+els.timeline.addEventListener('pointercancel', () => {scrubbing=false});
 els.addMarkerBtn.addEventListener('click', () => { if (state.duration) addSegment(els.video.currentTime); });
 if (els.previewActiveBtn) els.previewActiveBtn.addEventListener('click', () => { if (state.activeSegmentId) previewSegment(state.activeSegmentId); });
 
@@ -1865,6 +2503,25 @@ function timeFromClientX(clientX) {
   const pct = (clientX - rect.left) / rect.width;
   return clamp(pct * state.duration, 0, state.duration);
 }
+function renderTimelineRuler(){
+  if(!els.timelineRuler || !state.duration) return;
+  const zoom=Number(els.timelineZoom?.value||1);
+  const step=state.duration<=30?5:state.duration<=120?10:30;
+  const parts=[];
+  for(let t=0;t<=state.duration+0.001;t+=step){ const pct=(t/state.duration)*100; parts.push(`<span style="left:${pct}%">${fmtTime(t).replace(/\.0$/,'')}</span>`); }
+  els.timelineRuler.innerHTML=parts.join('');
+  els.zoomLabel.textContent=zoom+'×';
+}
+function applyTimelineZoom(){
+  const z=Number(els.timelineZoom?.value||1);
+  els.timeline.style.minWidth=Math.round(640*z)+'px';
+  renderTimelineRuler();
+  renderMarkers();
+}
+if(els.timelineZoom) els.timelineZoom.addEventListener('input',applyTimelineZoom);
+if(els.zoomOutBtn) els.zoomOutBtn.addEventListener('click',()=>{els.timelineZoom.value=String(Math.max(1,Number(els.timelineZoom.value)-.5));applyTimelineZoom()});
+if(els.zoomInBtn) els.zoomInBtn.addEventListener('click',()=>{els.timelineZoom.value=String(Math.min(4,Number(els.timelineZoom.value)+.5));applyTimelineZoom()});
+if(els.zoomFitBtn) els.zoomFitBtn.addEventListener('click',()=>{els.timelineZoom.value='1';applyTimelineZoom();els.timeline.parentElement.scrollTo({left:0,behavior:'smooth'})});
 
 function renderMarkers() {
   els.markerLayer.innerHTML = '';
@@ -2242,7 +2899,7 @@ async function elevenLabsTTS(text) {
   const resp = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
     method: 'POST',
     headers: { 'xi-api-key': key, 'Content-Type': 'application/json', 'Accept': 'audio/mpeg' },
-    body: JSON.stringify({ text, model_id: els.elevenModelSelect.value || 'eleven_multilingual_v2', voice_settings: { stability: 0.5, similarity_boost: 0.75 } }),
+    body: JSON.stringify({ text, model_id: els.elevenModelSelect.value || 'eleven_multilingual_v2', voice_settings: { stability: Number(document.getElementById('elevenStability')?.value || 0.50), similarity_boost: Number(document.getElementById('elevenSimilarity')?.value || 0.75) } }),
   });
   if (!resp.ok) throw new Error(`ElevenLabs error ${resp.status}: ${await resp.text()}`);
   return await resp.blob();
@@ -2341,5 +2998,182 @@ els.downloadClipsBtn.addEventListener('click', () => downloadAsZip(state.clips, 
   withTimestamps: false, filename: '11api-voice-lines.zip', button: els.downloadClipsBtn,
 }));
 </script>
+
+<script id="elevenlabs-style-v2-js">
+(function(){
+ const $=id=>document.getElementById(id); const shell=$('appShell'); if(!shell)return;
+ const home=$('screenHomeV2'),tts=$('screenTtsV2'),video=$('screenVideoV2'),drawer=$('appDrawer'),backdrop=$('appBackdrop'),settingsShade=$('settingsShadeV2');
+ const voiceOnly=$('voiceoverOnlySection'),videoMode=$('videoModeSection'),settings=$('settingsPanel');
+ const ttsInput=$('ttsInputV2'), ttsGenerate=$('ttsGenerateV2'), ttsAudio=$('ttsAudioV2'), ttsCount=$('ttsCountV2'), ttsStatus=$('ttsStatusV2'), voicePillName=$('voicePillNameV2');
+ let currentClipId=null;
+ function showScreen(name){
+   [home,tts,video].forEach(x=>x.classList.remove('active'));
+   ({home,tts,video}[name]||home).classList.add('active');
+   if(name==='tts'){ $('tabVoiceoverOnly')?.click(); }
+   if(name==='video'){ $('tabVideoTimeline')?.click(); }
+   if(name==='video' && videoMode){videoMode.classList.add('v2-visible'); $('videoMountV2').appendChild(videoMode);}
+   
+   if(name!=='video' && videoMode) videoMode.classList.remove('v2-visible');
+   
+   window.scrollTo({top:0,behavior:'smooth'});
+ }
+ function openDrawer(){drawer.classList.add('open');backdrop.classList.add('show');drawer.setAttribute('aria-hidden','false')}
+ function closeDrawer(){drawer.classList.remove('open');backdrop.classList.remove('show');drawer.setAttribute('aria-hidden','true')}
+ $('menuOpenV2')?.addEventListener('click',openDrawer);$('drawerCloseV2')?.addEventListener('click',closeDrawer);backdrop?.addEventListener('click',closeDrawer);
+ document.querySelectorAll('[data-nav]').forEach(b=>b.addEventListener('click',()=>{const n=b.dataset.nav;closeDrawer();if(n==='home')showScreen('home');else if(n==='tts'||n==='voices')showScreen('tts');else if(n==='video'||n==='timeline')showScreen('video');else if(n==='settings'){settings?.classList.remove('hidden');settingsShade.classList.add('show')}else if(n==='faq'){showScreen('faq');}}));
+ $('createSendV2')?.addEventListener('click',()=>showScreen('tts')); $('createBarV2')?.addEventListener('click',e=>{if(e.target.closest('button')||e.currentTarget===e.target)showScreen('tts')});
+ $('ttsBackV2')?.addEventListener('click',()=>showScreen('home'));$('videoBackV2')?.addEventListener('click',()=>showScreen('home'));$('workspaceHomeBtn')?.addEventListener('click',()=>showScreen('home'));
+ $('videoSettingsV2')?.addEventListener('click',()=>{});
+ settingsShade?.addEventListener('click',()=>{settings?.classList.add('hidden');settingsShade.classList.remove('show')});
+ $('ttsSettingsV2')?.addEventListener('click',()=>{});
+ $('voicePillV2')?.addEventListener('click',()=>{});
+ // keep the actual functional clip list hidden but mirror its first clip into the clean composer
+ function syncComposer(){
+   const list=$('clipList'); if(!list)return;
+   const items=[...list.children];
+   if(!items.length){ $('addClipBtn')?.click(); return; }
+   const item=items[0], ta=item.querySelector('.segment-text');
+   currentClipId=item.id.replace('clip-','');
+   if(ta && ttsInput && document.activeElement!==ttsInput) ttsInput.value=ta.value;
+   const status=item.querySelector('.segment-status'); if(status) ttsStatus.textContent=status.textContent==='ready'?'Ready to play':'Bring your own API key';
+   const audio=item.querySelector('audio'); ttsAudio.innerHTML=''; if(audio) ttsAudio.appendChild(audio.cloneNode(true));
+   const chars=ttsInput?.value?.length||0; ttsCount.textContent=chars+' / 5,000';
+   const voice=(document.querySelector('#elevenVoiceSearch')?.value||'').trim(); if(voice) voicePillName.textContent=voice;
+ }
+ function getFirstClip(){const item=$('clipList')?.firstElementChild; return item?{item,ta:item.querySelector('.segment-text'),gen:item.querySelector('.generate-btn')}:null}
+ ttsInput?.addEventListener('input',()=>{const c=getFirstClip();if(c&&c.ta){c.ta.value=ttsInput.value;c.ta.dispatchEvent(new Event('input',{bubbles:true}));}ttsCount.textContent=(ttsInput.value.length)+' / 5,000';ttsGenerate.classList.toggle('ready',!!ttsInput.value.trim())});
+ ttsGenerate?.addEventListener('click',()=>{const c=getFirstClip();if(!c){$('addClipBtn')?.click();setTimeout(()=>ttsGenerate.click(),50);return}c.ta.value=ttsInput.value;c.ta.dispatchEvent(new Event('input',{bubbles:true}));c.gen?.click();setTimeout(syncComposer,80)});
+ const createPrompt=$('createPromptV5');
+ function startPromptVoiceover(){
+   const text=(createPrompt?.value||'').trim();
+   showScreen('tts');
+   if(text && ttsInput){ ttsInput.value=text; ttsInput.dispatchEvent(new Event('input',{bubbles:true})); setTimeout(()=>ttsInput.focus(),120); }
+ }
+ $('createSendV2')?.addEventListener('click',e=>{e.stopPropagation();startPromptVoiceover();});
+ createPrompt?.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();startPromptVoiceover();}});
+ document.querySelectorAll('.chips-v2 button').forEach(b=>b.addEventListener('click',()=>{ttsInput.value=b.dataset.fill||'';ttsInput.dispatchEvent(new Event('input',{bubbles:true}));ttsInput.focus()}));
+ function addTtsLineV4(){
+   const before=$('clipList')?.children.length||0;
+   $('addClipBtn')?.click();
+   setTimeout(()=>{
+     const items=[...($('clipList')?.children||[])];
+     if(items.length<=before) return;
+     const index=items.length-1;
+     const hidden=items[index];
+     const hiddenTa=hidden?.querySelector('.segment-text');
+     if(!hiddenTa) return;
+     const host=$('ttsComposerV2');
+     const addButton=$('addSpeakerV2');
+     if(!host || !addButton) return;
+     const line=document.createElement('div');
+     line.className='tts-extra-line-v4';
+     line.dataset.clipIndex=String(index);
+     line.dataset.clipId=hidden.id || "";
+     line.innerHTML=`<div class="tts-line-label-v4">Voice line ${index+1}</div><textarea placeholder="Write the next voice line..."></textarea><div class="tts-line-actions-v4"><button type="button" class="remove-line">Remove</button><button type="button" class="generate">Generate voice</button></div>`;
+     const ta=line.querySelector('textarea');
+     ta.addEventListener('input',()=>{
+       hiddenTa.value=ta.value;
+       hiddenTa.dispatchEvent(new Event('input',{bubbles:true}));
+     });
+     line.querySelector('.generate').addEventListener('click',()=>hidden.querySelector('.generate-btn')?.click());
+     line.querySelector('.remove-line').addEventListener('click',()=>{
+       hidden.querySelector('.btn-danger-ghost')?.click();
+       line.remove();
+       showStatus(`Voice line ${index+1} removed`,'success');
+     });
+     // Always keep the Add voice line control after every generated/added line.
+     host.insertBefore(line, addButton);
+     ta.focus();
+     requestAnimationFrame(()=>line.scrollIntoView({behavior:'smooth',block:'center'}));
+     showStatus(`Voice line ${index+1} added`,'success');
+   },80);
+ }
+ $('addSpeakerV2')?.addEventListener('click',addTtsLineV4);
+ // Settings button in original header now opens sheet instead of scrolling.
+ const originalSettings=$('settingsToggle'); originalSettings?.addEventListener('click',e=>{e.preventDefault();settings?.classList.remove('hidden');settingsShade.classList.add('show')});
+ function openSettings(){ settings?.classList.remove('hidden'); settingsShade?.classList.add('show'); if(settings) settings.scrollTop=0; }
+ function closeSettings(){ settings?.classList.add('hidden'); settingsShade?.classList.remove('show'); }
+ function shareApp(){ const shareData={title:'11API — AI Voiceover Studio',text:'Generate AI voiceovers and sync them to video with 11API.',url:location.href}; if(navigator.share) navigator.share(shareData).catch(()=>{}); else if(navigator.clipboard) navigator.clipboard.writeText(location.href).then(()=>showStatus('Link copied','success')).catch(()=>{}); }
+ function updateVoicePill(){
+   const provider=$('provider')?.value; let name='Select a voice';
+   if(provider==='elevenlabs'){ const id=$('elevenVoiceSelect')?.value; const custom=$('elevenVoiceCustom')?.value?.trim(); const v=elevenVoicesData.find(x=>x.voice_id===id); name=v?.name || custom || 'Select an ElevenLabs voice'; }
+   else { const id=$('geminiVoiceSelect')?.value; const v=typeof GEMINI_VOICES!=='undefined' ? GEMINI_VOICES.find(x=>x.id===id || x.name===id) : null; name=v?.name || id || 'Select a Gemini voice'; }
+   if(voicePillName) voicePillName.textContent=name;
+ }
+ $('settingsCloseV2')?.addEventListener('click',closeSettings);
+ $('profileV2')?.addEventListener('click',openSettings);
+ document.querySelectorAll('.profile-settings-v2').forEach(b=>b.addEventListener('click',openSettings));
+ document.querySelectorAll('#shareV2,.share-v2').forEach(b=>b.addEventListener('click',shareApp));
+ $('faqBackV2')?.addEventListener('click',()=>showScreen('home'));
+ const oldShowScreen=showScreen;
+ showScreen=function(name){
+   const faq=$('screenFaqV2'); [home,tts,video,faq].forEach(x=>x?.classList.remove('active'));
+   ({home,tts,video,faq}[name]||home).classList.add('active');
+   if(name==='tts') $('tabVoiceoverOnly')?.click();
+   if(name==='video') $('tabVideoTimeline')?.click();
+   if(name==='video' && videoMode){videoMode.classList.add('v2-visible'); $('videoMountV2').appendChild(videoMode);}
+   if(name!=='video' && videoMode) videoMode.classList.remove('v2-visible');
+   closeDrawer(); window.scrollTo({top:0,behavior:'smooth'});
+   updateVoicePill();
+ };
+ // Replace the earlier settings handlers with explicit open/close behavior.
+ $('videoSettingsV2')?.addEventListener('click',openSettings);
+ $('ttsSettingsV2')?.addEventListener('click',openSettings);
+ $('voicePillV2')?.addEventListener('click',openSettings);
+ $('ttsHistoryV2')?.addEventListener('click',()=>{ if(ttsAudio?.querySelector('audio')) ttsAudio.scrollIntoView({behavior:'smooth',block:'center'}); else showStatus('Generate a voice line first','info'); });
+ $('ttsEnhanceV2')?.addEventListener('click',()=>{ const ta=$('ttsInputV2'); if(ta){ ta.focus(); if(!ta.value.trim()) ta.value='Write a natural, expressive voiceover for my video.'; ta.dispatchEvent(new Event('input',{bubbles:true})); } });
+ [$('provider'),$('elevenVoiceSelect'),$('elevenVoiceCustom'),$('geminiVoiceSelect')].filter(Boolean).forEach(el=>el.addEventListener('change',updateVoicePill));
+ const observer=new MutationObserver(()=>{syncComposer();updateVoicePill();}); if($('clipList'))observer.observe($('clipList'),{childList:true,subtree:true,characterData:true});
+ 
+ // V7 product polish: contextual voice picker focus, session history, and better home quick start.
+ const historySheet=$('ttsHistorySheetV7'), historyList=$('ttsHistoryListV7');
+ const sessionHistory=[];
+ function renderHistory(){
+   if(!historyList)return;
+   if(!sessionHistory.length){historyList.innerHTML='<div class="history-empty-v7">Generated audio from this session will appear here.</div>';return;}
+   historyList.innerHTML='';
+   sessionHistory.slice().reverse().forEach((h)=>{
+     const item=document.createElement('div'); item.className='history-item-v7';
+     const title=document.createElement('strong'); title.textContent=h.text || 'Voice line';
+     const time=document.createElement('small'); time.textContent=h.time;
+     const audio=document.createElement('audio'); audio.controls=true; audio.src=h.url;
+     item.append(title,time,audio); historyList.appendChild(item);
+   });
+ }
+ function openHistory(){renderHistory();historySheet?.classList.add('show');historySheet?.setAttribute('aria-hidden','false');}
+ function closeHistory(){historySheet?.classList.remove('show');historySheet?.setAttribute('aria-hidden','true');}
+ $('ttsHistoryV2')?.addEventListener('click',openHistory);
+ $('ttsHistoryCloseV7')?.addEventListener('click',closeHistory);
+ historySheet?.querySelector('.tts-history-backdrop-v7')?.addEventListener('click',closeHistory);
+ function rememberGeneratedAudio(){
+   const c=getFirstClip(); if(!c || !c.item?.querySelector('audio') || !c.ta?.value.trim()) return;
+   const audio=c.item.querySelector('audio');
+   if(!audio.src) return;
+   const last=sessionHistory[sessionHistory.length-1];
+   if(last && last.url===audio.src) return;
+   sessionHistory.push({text:c.ta.value.trim(),url:audio.src,time:new Date().toLocaleTimeString([], {hour:'numeric',minute:'2-digit'})});
+   if(sessionHistory.length>10) sessionHistory.shift();
+ }
+ const oldSyncComposerV7=syncComposer;
+ syncComposer=function(){oldSyncComposerV7();rememberGeneratedAudio();};
+ const oldOpenSettingsV7=openSettings;
+ function openVoicePicker(){
+   oldOpenSettingsV7();
+   setTimeout(()=>{
+     const provider=$('provider')?.value;
+     const section=provider==='gemini'?document.querySelector('#geminiFields .voice-picker-section'):document.querySelector('#elevenFields .voice-picker-section');
+     section?.scrollIntoView({behavior:'smooth',block:'start'});
+     section?.classList.add('voice-picker-focus-v7');
+     setTimeout(()=>section?.classList.remove('voice-picker-focus-v7'),900);
+   },80);
+ }
+ $('voicePillV2')?.addEventListener('click',openVoicePicker);
+ document.querySelectorAll('#elevenStability,#elevenSimilarity').forEach(el=>el.addEventListener('input',()=>{updateAdvancedVoiceValues();saveSettings();}));
+ updateAdvancedVoiceValues();
+
+setTimeout(()=>{showScreen('home');syncComposer();updateVoicePill();},80);
+})();
+</script>
+
 </body>
 </html>
